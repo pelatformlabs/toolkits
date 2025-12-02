@@ -1,5 +1,11 @@
 # @pelatform/biome-config
 
+## 0.1.1
+
+### Patch Changes
+
+- [`64ba80a`](https://github.com/devpelatform/toolkits/commit/64ba80a99c55782ed26e31b860bc7050d1dc2d55) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Add new rules and formatting options
+
 ## 0.1.0
 
 ### Minor Changes
