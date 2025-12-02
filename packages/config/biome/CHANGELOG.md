@@ -1,5 +1,16 @@
 # @pelatform/biome-config
 
+## 0.1.2
+
+### Patch Changes
+
+- [`61ff739`](https://github.com/devpelatform/toolkits/commit/61ff73966ec209d3f27d782b2c8bf08955747be0) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - - Simplified and optimized base configuration
+  - Removed React-specific config file (react.jsonc)
+  - Updated line width from 80 to 100 characters
+  - Refined linting rules: removed nursery rules, added correctness rules
+  - Disabled several rules: noUnknownTypeSelector, useUniqueElementIds, noUnusedFunctionParameters, useParseIntRadix, useHookAtTopLevel
+  - Enhanced README documentation
+
 ## 0.1.1
 
 ### Patch Changes

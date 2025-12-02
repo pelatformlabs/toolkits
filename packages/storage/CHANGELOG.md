@@ -1,5 +1,17 @@
 # @pelatform/storage
 
+## 1.0.4
+
+### Patch Changes
+
+- [`61ff739`](https://github.com/devpelatform/toolkits/commit/61ff73966ec209d3f27d782b2c8bf08955747be0) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - - Major code refactoring and cleanup
+  - Improved S3 URL parsing logic (added virtual hosted-style support)
+  - Simplified file validation and helper functions
+  - Enhanced type annotations (explicit parameter types)
+  - Optimized Cloudinary and S3 provider implementations
+  - Reduced code complexity across operations modules
+  - Updated tsup configuration
+
 ## 1.0.3
 
 ### Patch Changes
