@@ -1,0 +1,91 @@
+{
+  "name": "@pelatform/storage",
+  "version": "1.0.2",
+  "description": "Storage utilities for SaaS applications.",
+  "author": "Pelatform",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./s3": {
+      "types": "./dist/s3.d.ts",
+      "default": "./dist/s3.js"
+    },
+    "./cloudinary": {
+      "types": "./dist/cloudinary.d.ts",
+      "default": "./dist/cloudinary.js"
+    },
+    "./helpers": {
+      "types": "./dist/helpers.d.ts",
+      "default": "./dist/helpers.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "clean:all": "rimraf .turbo dist node_modules",
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "types:check": "tsc --noEmit"
+  },
+  "repository": "github:devpelatform/toolkits",
+  "homepage": "https://github.com/devpelatform/toolkits",
+  "bugs": {
+    "url": "https://github.com/devpelatform/toolkits/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "pelatform",
+    "storage",
+    "s3",
+    "cloudinary",
+    "minio",
+    "digitalocean",
+    "supabase"
+  ],
+  "dependencies": {
+    "mime-types": "^3.0.2"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.943.0",
+    "@aws-sdk/s3-request-presigner": "^3.943.0",
+    "@pelatform/tsconfig": "workspace:*",
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "^24.10.1",
+    "cloudinary": "^2.8.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": ">=3.8.0",
+    "@aws-sdk/s3-request-presigner": ">=3.8.0",
+    "cloudinary": ">=2.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-s3": {
+      "optional": true
+    },
+    "@aws-sdk/s3-request-presigner": {
+      "optional": true
+    },
+    "cloudinary": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
+    "*.{md,yml,yaml}": "prettier --write",
+    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
+  }
+}

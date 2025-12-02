@@ -1,6 +1,7 @@
 # @pelatform/biome-config
 
-<a href="https://www.npmjs.com/package/@pelatform/biome-config"><img src="https://img.shields.io/npm/v/@pelatform/biome-config.svg?style=for-the-badge&labelColor=000000" alt="NPM version"></a>
+[![Version](https://img.shields.io/npm/v/@pelatform/biome-config.svg)](https://www.npmjs.com/package/@pelatform/biome-config)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Opinionated [Biome](https://biomejs.dev) configuration for modern TypeScript projects.
 
@@ -51,6 +52,13 @@ Create a `biome.jsonc` file in your project root:
 - Automatic import organization
 - Type imports separated into their own statements
 
+## Links
+
+- [npm Package](https://www.npmjs.com/package/@pelatform/biome-config)
+- [Contributing Guide](../../../CONTRIBUTING.md)
+- [Code of Conduct](../../../CODE_OF_CONDUCT.md)
+- [License](../../../LICENSE)
+
 ## License
 
-MIT License
+MIT © [Pelatform Inc.](../../../LICENSE)

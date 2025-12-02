@@ -1,6 +1,7 @@
 # @pelatform/tsconfig
 
-<a href="https://www.npmjs.com/package/@pelatform/tsconfig"><img alt="NPM version" src="https://img.shields.io/npm/v/@pelatform/tsconfig.svg?style=for-the-badge&labelColor=000000"></a>
+[![Version](https://img.shields.io/npm/v/@pelatform/tsconfig.svg)](https://www.npmjs.com/package/@pelatform/tsconfig)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Common TypeScript configuration.
 
@@ -11,6 +12,13 @@ Configs included:
 - `cf`: Configuration for Cloudflare Workers projects.
 - `vite`: Configuration for Vite/React projects.
 
+## Links
+
+- [npm Package](https://www.npmjs.com/package/@pelatform/tsconfig)
+- [Contributing Guide](../../../CONTRIBUTING.md)
+- [Code of Conduct](../../../CODE_OF_CONDUCT.md)
+- [License](../../../LICENSE)
+
 ## License
 
-MIT License
+MIT © [Pelatform Inc.](../../../LICENSE)
