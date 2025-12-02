@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/email",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Email templates and sending utilities for SaaS applications.",
   "author": "Pelatform",
   "license": "MIT",
