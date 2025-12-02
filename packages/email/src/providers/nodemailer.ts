@@ -11,7 +11,7 @@ import type {
   IEmailProvider,
   NodemailerConfig,
   SendEmailOptions,
-} from "../types.js";
+} from "../types";
 
 /**
  * Nodemailer/SMTP email provider implementation
@@ -102,21 +102,21 @@ export class NodemailerProvider implements IEmailProvider {
         };
       }
 
-      if (!(this.config.smtp.host && this.config.smtp.port)) {
+      if (!this.config.smtp.host || !this.config.smtp.port) {
         return {
           valid: false,
           error: "SMTP host and port are required",
         };
       }
 
-      if (!(this.config.smtp.auth.user && this.config.smtp.auth.pass)) {
+      if (!this.config.smtp.auth.user || !this.config.smtp.auth.pass) {
         return {
           valid: false,
           error: "SMTP authentication credentials are required",
         };
       }
 
-      if (!(this.config.from.email && this.config.from.name)) {
+      if (!this.config.from.email || !this.config.from.name) {
         return {
           valid: false,
           error: "From email and name are required",
@@ -130,8 +130,7 @@ export class NodemailerProvider implements IEmailProvider {
     } catch (error) {
       return {
         valid: false,
-        error:
-          error instanceof Error ? error.message : "SMTP connection failed",
+        error: error instanceof Error ? error.message : "SMTP connection failed",
       };
     }
   }
@@ -212,8 +211,7 @@ export class NodemailerProvider implements IEmailProvider {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+        error: error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }

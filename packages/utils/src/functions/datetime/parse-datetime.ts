@@ -41,8 +41,6 @@ import * as chrono from "chrono-node";
  * ```
  */
 export const parseDateTime = (str: Date | string): Date | null => {
-  if (str instanceof Date) {
-    return str;
-  }
+  if (str instanceof Date) return str;
   return chrono.parseDate(str);
 };

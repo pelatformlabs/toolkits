@@ -3,12 +3,7 @@
  * Provides automatic configuration loading from environment variables
  */
 
-import type {
-  ConfigValidationResult,
-  EmailConfig,
-  NodemailerConfig,
-  ResendConfig,
-} from "./types.js";
+import type { ConfigValidationResult, EmailConfig, NodemailerConfig, ResendConfig } from "./types";
 
 /**
  * Load Resend configuration from environment variables
@@ -53,7 +48,7 @@ export function loadResendConfig(): ResendConfig | null {
   const fromEmail = process.env.PELATFORM_EMAIL_FROM_EMAIL;
   const replyTo = process.env.PELATFORM_EMAIL_REPLY_TO;
 
-  if (!(apiKey && fromName && fromEmail)) {
+  if (!apiKey || !fromName || !fromEmail) {
     return null;
   }
 
@@ -126,7 +121,7 @@ export function loadNodemailerConfig(): NodemailerConfig | null {
   const fromEmail = process.env.PELATFORM_EMAIL_FROM_EMAIL;
   const replyTo = process.env.PELATFORM_EMAIL_REPLY_TO;
 
-  if (!(host && port && user && pass && fromName && fromEmail)) {
+  if (!host || !port || !user || !pass || !fromName || !fromEmail) {
     return null;
   }
 
@@ -139,7 +134,7 @@ export function loadNodemailerConfig(): NodemailerConfig | null {
     replyTo,
     smtp: {
       host,
-      port: Number.parseInt(port, 10),
+      port: parseInt(port, 10),
       secure: secure === "true",
       auth: {
         user,
@@ -259,17 +254,14 @@ export function getEmailEnvVars(): Record<string, string | undefined> {
   envVars.PELATFORM_EMAIL_REPLY_TO = process.env.PELATFORM_EMAIL_REPLY_TO;
 
   // Provider-specific variables (mask secrets)
-  envVars.PELATFORM_EMAIL_RESEND_API_KEY = process.env
-    .PELATFORM_EMAIL_RESEND_API_KEY
+  envVars.PELATFORM_EMAIL_RESEND_API_KEY = process.env.PELATFORM_EMAIL_RESEND_API_KEY
     ? "***"
     : undefined;
   envVars.PELATFORM_EMAIL_SMTP_HOST = process.env.PELATFORM_EMAIL_SMTP_HOST;
   envVars.PELATFORM_EMAIL_SMTP_PORT = process.env.PELATFORM_EMAIL_SMTP_PORT;
   envVars.PELATFORM_EMAIL_SMTP_SECURE = process.env.PELATFORM_EMAIL_SMTP_SECURE;
   envVars.PELATFORM_EMAIL_SMTP_USER = process.env.PELATFORM_EMAIL_SMTP_USER;
-  envVars.PELATFORM_EMAIL_SMTP_PASS = process.env.PELATFORM_EMAIL_SMTP_PASS
-    ? "***"
-    : undefined;
+  envVars.PELATFORM_EMAIL_SMTP_PASS = process.env.PELATFORM_EMAIL_SMTP_PASS ? "***" : undefined;
 
   return envVars;
 }
@@ -307,17 +299,13 @@ export function validateResendEnvVars(): ConfigValidationResult {
   const missing: string[] = [];
   const errors: string[] = [];
 
-  if (
-    !(process.env.PELATFORM_EMAIL_RESEND_API_KEY || process.env.RESEND_API_KEY)
-  ) {
+  if (!process.env.PELATFORM_EMAIL_RESEND_API_KEY && !process.env.RESEND_API_KEY) {
     missing.push("PELATFORM_EMAIL_RESEND_API_KEY or RESEND_API_KEY");
   }
-  if (!(process.env.PELATFORM_EMAIL_FROM_NAME || process.env.EMAIL_FROM_NAME)) {
+  if (!process.env.PELATFORM_EMAIL_FROM_NAME && !process.env.EMAIL_FROM_NAME) {
     missing.push("PELATFORM_EMAIL_FROM_NAME or EMAIL_FROM_NAME");
   }
-  if (
-    !(process.env.PELATFORM_EMAIL_FROM_EMAIL || process.env.EMAIL_FROM_EMAIL)
-  ) {
+  if (!process.env.PELATFORM_EMAIL_FROM_EMAIL && !process.env.EMAIL_FROM_EMAIL) {
     missing.push("PELATFORM_EMAIL_FROM_EMAIL or EMAIL_FROM_EMAIL");
   }
 
@@ -359,32 +347,27 @@ export function validateNodemailerEnvVars(): ConfigValidationResult {
   const missing: string[] = [];
   const errors: string[] = [];
 
-  if (!(process.env.PELATFORM_EMAIL_SMTP_HOST || process.env.SMTP_HOST)) {
+  if (!process.env.PELATFORM_EMAIL_SMTP_HOST && !process.env.SMTP_HOST) {
     missing.push("PELATFORM_EMAIL_SMTP_HOST or SMTP_HOST");
   }
-  if (!(process.env.PELATFORM_EMAIL_SMTP_PORT || process.env.SMTP_PORT)) {
+  if (!process.env.PELATFORM_EMAIL_SMTP_PORT && !process.env.SMTP_PORT) {
     missing.push("PELATFORM_EMAIL_SMTP_PORT or SMTP_PORT");
   }
-  if (!(process.env.PELATFORM_EMAIL_SMTP_USER || process.env.SMTP_USER)) {
+  if (!process.env.PELATFORM_EMAIL_SMTP_USER && !process.env.SMTP_USER) {
     missing.push("PELATFORM_EMAIL_SMTP_USER or SMTP_USER");
   }
-  if (!(process.env.PELATFORM_EMAIL_SMTP_PASS || process.env.SMTP_PASS)) {
+  if (!process.env.PELATFORM_EMAIL_SMTP_PASS && !process.env.SMTP_PASS) {
     missing.push("PELATFORM_EMAIL_SMTP_PASS or SMTP_PASS");
   }
-  if (!(process.env.PELATFORM_EMAIL_FROM_NAME || process.env.EMAIL_FROM_NAME)) {
+  if (!process.env.PELATFORM_EMAIL_FROM_NAME && !process.env.EMAIL_FROM_NAME) {
     missing.push("PELATFORM_EMAIL_FROM_NAME or EMAIL_FROM_NAME");
   }
-  if (
-    !(process.env.PELATFORM_EMAIL_FROM_EMAIL || process.env.EMAIL_FROM_EMAIL)
-  ) {
+  if (!process.env.PELATFORM_EMAIL_FROM_EMAIL && !process.env.EMAIL_FROM_EMAIL) {
     missing.push("PELATFORM_EMAIL_FROM_EMAIL or EMAIL_FROM_EMAIL");
   }
 
   const port = process.env.PELATFORM_EMAIL_SMTP_PORT || process.env.SMTP_PORT;
-  if (
-    port &&
-    (Number.isNaN(Number(port)) || Number(port) < 1 || Number(port) > 65535)
-  ) {
+  if (port && (Number.isNaN(Number(port)) || Number(port) < 1 || Number(port) > 65535)) {
     errors.push("SMTP_PORT must be a valid port number (1-65535)");
   }
 

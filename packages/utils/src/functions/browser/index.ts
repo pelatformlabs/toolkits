@@ -1,6 +1,6 @@
-export * from "./construct-metadata.js";
-export * from "./cookies.js";
-export * from "./get-height.js";
+export * from "./construct-metadata";
+export * from "./cookies";
+export * from "./get-height";
 // export * from './is-click-on-interactive-child';
-export * from "./resize-image.js";
-export * from "./storage.js";
+export * from "./resize-image";
+export * from "./storage";

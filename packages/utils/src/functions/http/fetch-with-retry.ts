@@ -107,9 +107,7 @@ export async function fetchWithRetry(
 
       // If this is the last retry, throw the error
       if (i === maxRetries - 1) {
-        throw new Error(
-          `Failed after ${maxRetries} retries. Last error: ${lastError.message}`,
-        );
+        throw new Error(`Failed after ${maxRetries} retries. Last error: ${lastError.message}`);
       }
 
       // For network errors or timeouts, wait and retry

@@ -1,1 +1,1 @@
-export * from "./format-file-size.js";
+export * from "./format-file-size";

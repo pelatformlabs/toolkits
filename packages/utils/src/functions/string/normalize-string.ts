@@ -3,8 +3,8 @@
  * Provides consistent string formatting by removing special characters and normalizing whitespace
  */
 
-import { isDevelopment } from "../../constants/index.js";
-import { logger } from "../logging/index.js";
+import { isDevelopment } from "../../constants";
+import { logger } from "../logging";
 
 /**
  * Normalizes a string by removing special characters and normalizing whitespace
@@ -39,9 +39,7 @@ import { logger } from "../logging/index.js";
  * ```
  */
 export const normalizeString = (key: string): string => {
-  if (!key) {
-    return "";
-  }
+  if (!key) return "";
 
   const original = key;
   const normalized = key

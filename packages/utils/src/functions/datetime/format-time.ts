@@ -26,7 +26,7 @@
  * formatTime('2023-12-25T14:30:00'); // "2:30 PM"
  * ```
  */
-export const formatTime = (date: Date | string, locale = "en-US"): string => {
+export const formatTime = (date: Date | string, locale: string = "en-US"): string => {
   const parsedDate = typeof date === "string" ? new Date(date) : date;
   return new Intl.DateTimeFormat(locale, {
     hour: "numeric",

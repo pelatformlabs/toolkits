@@ -122,9 +122,7 @@ export function getClientIP(request: {
  * ```
  */
 export function isValidIP(ip: string): boolean {
-  if (!ip || ip === "unknown") {
-    return false;
-  }
+  if (!ip || ip === "unknown") return false;
 
   // IPv4 regex
   const ipv4Regex =
@@ -148,9 +146,7 @@ export function isValidIP(ip: string): boolean {
  * console.log('User Agent:', userAgent);
  * ```
  */
-export function getUserAgent(request: {
-  headers: { get(name: string): string | null };
-}): string {
+export function getUserAgent(request: { headers: { get(name: string): string | null } }): string {
   return request.headers.get("user-agent") || "unknown";
 }
 
@@ -167,9 +163,7 @@ export function getUserAgent(request: {
  * console.log('Referer:', origin.referer);
  * ```
  */
-export function getRequestOrigin(request: {
-  headers: { get(name: string): string | null };
-}): {
+export function getRequestOrigin(request: { headers: { get(name: string): string | null } }): {
   origin: string;
   referer: string;
   host: string;
@@ -205,9 +199,7 @@ export function getClientIPFromHeaders(
   // Helper to get header value (case-insensitive)
   const getHeader = (name: string): string | undefined => {
     const value = headers[name] ?? headers[name.toLowerCase()];
-    if (Array.isArray(value)) {
-      return value[0];
-    }
+    if (Array.isArray(value)) return value[0];
     return value;
   };
 
@@ -222,12 +214,7 @@ export function getClientIPFromHeaders(
   }
 
   // Try other common headers
-  const headerNames = [
-    "x-real-ip",
-    "x-client-ip",
-    "cf-connecting-ip",
-    "x-cluster-client-ip",
-  ];
+  const headerNames = ["x-real-ip", "x-client-ip", "cf-connecting-ip", "x-cluster-client-ip"];
   for (const header of headerNames) {
     const ip = getHeader(header);
     if (ip && ip !== "unknown" && ip.trim() !== "") {
@@ -271,8 +258,6 @@ export function getUserAgentFromHeaders(
   headers: Record<string, string | string[] | undefined>,
 ): string {
   const value = headers["user-agent"] ?? headers["User-Agent"];
-  if (Array.isArray(value)) {
-    return value[0] || "unknown";
-  }
+  if (Array.isArray(value)) return value[0] || "unknown";
   return value || "unknown";
 }

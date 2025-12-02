@@ -1,9 +1,9 @@
-import { loadCloudinaryConfig } from "./config.js";
-import { CloudinaryService } from "./services/cloudinary.js";
-import type { CloudinaryConfig } from "./types/index.js";
+import { loadCloudinaryConfig } from "./config";
+import { CloudinaryService } from "./services/cloudinary";
+import type { CloudinaryConfig } from "./types";
 
 // === SERVICE CLASSES ===
-export { CloudinaryService } from "./services/cloudinary.js";
+export { CloudinaryService } from "./services/cloudinary";
 
 // === MAIN FACTORY FUNCTIONS (Primary API) ===
 /**

@@ -1,6 +1,6 @@
 // Crypto
-export * from "./functions/crypto/generate-random-string.js";
-export * from "./functions/crypto/jwt.js";
-export * from "./functions/crypto/password.js";
+export * from "./functions/crypto/generate-random-string";
+export * from "./functions/crypto/jwt";
+export * from "./functions/crypto/password";
 // Datetime
-export * from "./functions/datetime/parse-datetime.js";
+export * from "./functions/datetime/parse-datetime";

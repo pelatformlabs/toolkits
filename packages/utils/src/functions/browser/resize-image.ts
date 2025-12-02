@@ -118,8 +118,7 @@ export const resizeImage = (
         const base64Image = canvas.toDataURL("image/jpeg", opts.quality);
         resolve(base64Image);
       };
-      img.onerror = (error) =>
-        reject(new Error(`Image loading error: ${error}`));
+      img.onerror = (error) => reject(new Error(`Image loading error: ${error}`));
     };
     reader.onerror = (error) => reject(new Error(`FileReader error: ${error}`));
     reader.readAsDataURL(file);

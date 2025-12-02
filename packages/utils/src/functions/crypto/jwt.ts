@@ -6,7 +6,7 @@
 
 import jwt from "jsonwebtoken";
 
-import { logger } from "../logging/index.js";
+import { logger } from "../logging";
 
 export { jwt };
 
@@ -296,7 +296,7 @@ export function decodeJWT(token: string): JWTPayload | null {
  */
 export function isJWTExpired(token: string): boolean {
   const payload = decodeJWT(token);
-  if (!payload?.exp) {
+  if (!payload || !payload.exp) {
     return true; // Consider invalid tokens as expired
   }
 
@@ -335,7 +335,7 @@ export function isJWTExpired(token: string): boolean {
  */
 export function getJWTTimeRemaining(token: string): number {
   const payload = decodeJWT(token);
-  if (!payload?.exp) {
+  if (!payload || !payload.exp) {
     return 0;
   }
 

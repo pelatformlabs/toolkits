@@ -5,12 +5,8 @@
 
 import slugify from "@sindresorhus/slugify";
 
-import {
-  ccTLDs,
-  SECOND_LEVEL_DOMAINS,
-  SPECIAL_APEX_DOMAINS,
-} from "../../constants/index.js";
-import { isValidUrl } from "./url-validation.js";
+import { ccTLDs, SECOND_LEVEL_DOMAINS, SPECIAL_APEX_DOMAINS } from "../../constants";
+import { isValidUrl } from "./url-validation";
 
 /**
  * Generates a domain name from a given string
@@ -41,10 +37,7 @@ import { isValidUrl } from "./url-validation.js";
  * // Returns "dgtl.io"
  * ```
  */
-export const generateDomainFromName = (
-  name: string,
-  extension = "link",
-): string => {
+export const generateDomainFromName = (name: string, extension: string = "link"): string => {
   const normalizedName = slugify(name, { separator: "" });
   if (normalizedName.length < 3) {
     return "";
@@ -58,9 +51,7 @@ export const generateDomainFromName = (
     return `${devowel.slice(0, -2)}.${devowel.slice(-2)}`;
   }
 
-  const shortestString = [normalizedName, devowel].reduce((a, b) =>
-    a.length < b.length ? a : b,
-  );
+  const shortestString = [normalizedName, devowel].reduce((a, b) => (a.length < b.length ? a : b));
 
   return `${shortestString}.${extension}`;
 };
@@ -128,9 +119,7 @@ export const validSlugRegex = new RegExp(/^[a-zA-Z0-9-]+$/);
  * ```
  */
 export const getSubdomain = (name: string, apexName: string): string | null => {
-  if (name === apexName) {
-    return null;
-  }
+  if (name === apexName) return null;
   return name.slice(0, name.length - apexName.length - 1);
 };
 
@@ -175,16 +164,13 @@ export const getApexDomain = (url: string): string => {
   } catch (_) {
     return "";
   }
-  if (domain === "youtu.be") {
-    return "youtube.com";
-  }
+  if (domain === "youtu.be") return "youtube.com";
 
   const parts = domain.split(".");
   if (parts.length > 2) {
     if (
       // if this is a second-level TLD (e.g. co.uk, .com.ua, .org.tt), we need to return the last 3 parts
-      (SECOND_LEVEL_DOMAINS.has(parts[parts.length - 2] ?? "") &&
-        ccTLDs.has(parts[parts.length - 1] ?? "")) ||
+      (SECOND_LEVEL_DOMAINS.has(parts[parts.length - 2]) && ccTLDs.has(parts[parts.length - 1])) ||
       // if it's a special subdomain for website builders (e.g. weathergpt.vercel.app/)
       SPECIAL_APEX_DOMAINS.has(parts.slice(-2).join("."))
     ) {

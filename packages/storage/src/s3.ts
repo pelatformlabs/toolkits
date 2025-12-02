@@ -1,9 +1,9 @@
-import { loadS3Config } from "./config.js";
-import { S3Service } from "./services/s3.js";
-import type { S3Config } from "./types/index.js";
+import { loadS3Config } from "./config";
+import { S3Service } from "./services/s3";
+import type { S3Config } from "./types";
 
 // === SERVICE CLASSES ===
-export { S3Service } from "./services/s3.js";
+export { S3Service } from "./services/s3";
 
 // === MAIN FACTORY FUNCTIONS (Primary API) ===
 /**

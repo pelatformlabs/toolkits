@@ -8,9 +8,11 @@ Common TypeScript configuration.
 Configs included:
 
 - `base`: Recommended configuration for libraries.
-- `node`: Configuration for Node.js libraries.
+- `bun`: Recommended configuration for Bun projects.
 - `cf`: Configuration for Cloudflare Workers projects.
-- `vite`: Configuration for Vite/React projects.
+- `next`: Configuration for Next.js projects.
+- `node`: Configuration for Node.js libraries.
+- `react`: Configuration for React projects.
 
 ## Links
 

@@ -107,13 +107,7 @@ export function linkConstructor({
  * // Returns "https://example.com"
  * ```
  */
-export function linkConstructorSimple({
-  domain,
-  key,
-}: {
-  domain: string;
-  key: string;
-}) {
+export function linkConstructorSimple({ domain, key }: { domain: string; key: string }) {
   return `https://${domain}${key === "_root" ? "" : `/${key}`}`;
 }
 

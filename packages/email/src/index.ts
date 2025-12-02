@@ -16,7 +16,7 @@ export {
   createResend,
   getConfiguredProvider,
   isEmailConfigured,
-} from "./factory.js";
+} from "./factory";
 
 // =============================================================================
 // EMAIL SERVICE CLASS
@@ -25,7 +25,7 @@ export {
 /**
  * Core email service class and related functionality
  */
-export { EmailService } from "./services.js";
+export { EmailService } from "./services";
 
 // =============================================================================
 // CONFIGURATION
@@ -43,17 +43,17 @@ export {
   validateEmailEnvVars,
   validateNodemailerEnvVars,
   validateResendEnvVars,
-} from "./config.js";
+} from "./config";
 
 // =============================================================================
 // PROVIDERS
 // =============================================================================
 
-export { NodemailerProvider } from "./providers/nodemailer.js";
+export { NodemailerProvider } from "./providers/nodemailer";
 /**
  * Email provider implementations
  */
-export { ResendProvider } from "./providers/resend.js";
+export { ResendProvider } from "./providers/resend";
 
 // =============================================================================
 // TYPES
@@ -80,4 +80,4 @@ export type {
   NodemailerConfig,
   ResendConfig,
   SendEmailOptions,
-} from "./types.js";
+} from "./types";

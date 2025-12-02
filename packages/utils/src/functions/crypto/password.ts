@@ -6,7 +6,7 @@
 
 import bcrypt from "bcryptjs";
 
-import { logger } from "../logging/index.js";
+import { logger } from "../logging";
 
 /**
  * Default salt rounds for bcrypt hashing
@@ -163,11 +163,9 @@ export async function verifyPassword(
 
   // Basic bcrypt hash format validation
   if (
-    !(
-      hashedPassword.startsWith("$2a$") ||
-      hashedPassword.startsWith("$2b$") ||
-      hashedPassword.startsWith("$2y$")
-    )
+    !hashedPassword.startsWith("$2a$") &&
+    !hashedPassword.startsWith("$2b$") &&
+    !hashedPassword.startsWith("$2y$")
   ) {
     return {
       isValid: false,
@@ -234,14 +232,8 @@ export function needsRehash(
       return true; // Invalid format
     }
 
-    const roundsPart = parts[2];
-    if (!roundsPart) {
-      return true;
-    }
-    const currentSaltRounds = Number.parseInt(roundsPart, 10);
-    return Number.isNaN(currentSaltRounds)
-      ? true
-      : currentSaltRounds !== targetSaltRounds;
+    const currentSaltRounds = parseInt(parts[2], 10);
+    return currentSaltRounds !== targetSaltRounds;
   } catch (error) {
     logger.warn("Password rehash check: Failed to parse hash", { error });
     return true; // If we can't parse, assume it needs rehashing
@@ -276,7 +268,7 @@ export function needsRehash(
  * ```
  */
 export function generateSecurePassword(
-  length = 16,
+  length: number = 16,
   options: {
     includeUppercase?: boolean;
     includeLowercase?: boolean;
@@ -295,18 +287,10 @@ export function generateSecurePassword(
   const validLength = Math.max(8, Math.min(128, length));
 
   let charset = "";
-  if (includeUppercase) {
-    charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  }
-  if (includeLowercase) {
-    charset += "abcdefghijklmnopqrstuvwxyz";
-  }
-  if (includeNumbers) {
-    charset += "0123456789";
-  }
-  if (includeSymbols) {
-    charset += "!@#$%^&*()_+-=[]{}|;:,.<>?";
-  }
+  if (includeUppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (includeLowercase) charset += "abcdefghijklmnopqrstuvwxyz";
+  if (includeNumbers) charset += "0123456789";
+  if (includeSymbols) charset += "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
   if (charset.length === 0) {
     // Fallback to alphanumeric if no character sets selected

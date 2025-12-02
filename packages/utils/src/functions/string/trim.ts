@@ -33,5 +33,4 @@
  * };
  * ```
  */
-export const trim = (u: unknown): unknown =>
-  typeof u === "string" ? u.trim() : u;
+export const trim = (u: unknown): unknown => (typeof u === "string" ? u.trim() : u);

@@ -4,8 +4,8 @@
  * Integrates with Google's verification API for bot protection
  */
 
-import { NEXT_PUBLIC_RECAPTCHA_SITE_KEY } from "../../constants/index.js";
-import { logger } from "../logging/index.js";
+import { NEXT_PUBLIC_RECAPTCHA_SITE_KEY } from "../../constants";
+import { logger } from "../logging";
 
 /**
  * Response interface from Google reCAPTCHA verification API
@@ -51,16 +51,13 @@ export async function verifyRecaptchaToken(token: string): Promise<boolean> {
       return false;
     }
 
-    const response = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(token)}`,
+    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-    );
+      body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(token)}`,
+    });
 
     const data: ReCaptchaVerifyResponse = await response.json();
 

@@ -49,11 +49,9 @@
 export const formatDate = (
   datetime: Date | string,
   options?: Intl.DateTimeFormatOptions,
-  locale = "en-US",
+  locale: string = "en-US",
 ): string => {
-  if (datetime.toString() === "Invalid Date") {
-    return "";
-  }
+  if (datetime.toString() === "Invalid Date") return "";
   return new Date(datetime).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",

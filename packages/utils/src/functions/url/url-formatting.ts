@@ -44,9 +44,7 @@
  * ```
  */
 export const getPrettyUrl = (url?: string | null): string => {
-  if (!url) {
-    return "";
-  }
+  if (!url) return "";
   // remove protocol (http/https) and www.
   // also remove trailing slash
   return url

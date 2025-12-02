@@ -20,9 +20,7 @@
  * isValidKey('<invalid>') // false
  * ```
  */
-export const validKeyRegex = new RegExp(
-  /^[0-9A-Za-z_\u0080-\uFFFF/\p{Emoji}.-]+$/u,
-);
+export const validKeyRegex = new RegExp(/^[0-9A-Za-z_\u0080-\uFFFF/\p{Emoji}.-]+$/u);
 
 /**
  * Checks if a key is unsupported by the system

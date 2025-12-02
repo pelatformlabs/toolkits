@@ -3,14 +3,9 @@
  * Supports both environment-based and manual configuration
  */
 
-import { hasEmailConfig, loadEmailConfig } from "./config.js";
-import { EmailService } from "./services.js";
-import type {
-  EmailConfig,
-  EmailProvider,
-  NodemailerConfig,
-  ResendConfig,
-} from "./types.js";
+import { hasEmailConfig, loadEmailConfig } from "./config";
+import { EmailService } from "./services";
+import type { EmailConfig, EmailProvider, NodemailerConfig, ResendConfig } from "./types";
 
 /**
  * Create an email service instance using environment variables or manual configuration

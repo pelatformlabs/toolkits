@@ -43,8 +43,6 @@
  * ```
  */
 export const randomValue = <T>(values: T[]): T | undefined => {
-  if (values.length === 0) {
-    return undefined;
-  }
+  if (values.length === 0) return undefined;
   return values[Math.floor(Math.random() * values.length)];
 };

@@ -38,7 +38,7 @@ import type {
   StorageInterface,
   UploadOptions,
   UploadResult,
-} from "../types/index.js";
+} from "../types";
 
 /**
  * Cloudinary storage provider
@@ -80,16 +80,14 @@ export class CloudinaryProvider implements StorageInterface {
       }
 
       // Extract folder and filename from key for Cloudinary folder support
-      const keyParts = options.key.split("/").filter(Boolean);
+      const keyParts = options.key.split("/");
       let folder = "";
-      let publicId: string = options.key;
+      let publicId = options.key;
 
       if (keyParts.length > 1) {
+        // If key contains folders (e.g., "user/profile.jpg")
         folder = keyParts.slice(0, -1).join("/"); // "user"
-      }
-
-      if (keyParts.length > 0) {
-        publicId = keyParts[keyParts.length - 1]!; // "profile.jpg"
+        publicId = keyParts[keyParts.length - 1]; // "profile.jpg"
       }
 
       const uploadOptions: Record<string, unknown> = {
@@ -282,13 +280,8 @@ export class CloudinaryProvider implements StorageInterface {
       return {
         success: true,
         files,
-        isTruncated: !!(
-          images.next_cursor ||
-          videos.next_cursor ||
-          rawFiles.next_cursor
-        ),
-        nextContinuationToken:
-          images.next_cursor || videos.next_cursor || rawFiles.next_cursor,
+        isTruncated: !!(images.next_cursor || videos.next_cursor || rawFiles.next_cursor),
+        nextContinuationToken: images.next_cursor || videos.next_cursor || rawFiles.next_cursor,
       };
     } catch (error) {
       return {
@@ -308,8 +301,7 @@ export class CloudinaryProvider implements StorageInterface {
     } catch (error) {
       return {
         exists: false,
-        error:
-          error instanceof Error ? error.message : "Check existence failed",
+        error: error instanceof Error ? error.message : "Check existence failed",
       };
     }
   }
@@ -349,9 +341,7 @@ export class CloudinaryProvider implements StorageInterface {
     return this.copy(options);
   }
 
-  async getPresignedUrl(
-    _options: PresignedUrlOptions,
-  ): Promise<PresignedUrlResult> {
+  async getPresignedUrl(_options: PresignedUrlOptions): Promise<PresignedUrlResult> {
     try {
       // Cloudinary uses different approach - signed URLs
       return {
@@ -361,10 +351,7 @@ export class CloudinaryProvider implements StorageInterface {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Presigned URL generation failed",
+        error: error instanceof Error ? error.message : "Presigned URL generation failed",
       };
     }
   }
@@ -386,9 +373,7 @@ export class CloudinaryProvider implements StorageInterface {
   }
 
   // Folder operations
-  async createFolder(
-    options: CreateFolderOptions,
-  ): Promise<CreateFolderResult> {
+  async createFolder(options: CreateFolderOptions): Promise<CreateFolderResult> {
     try {
       // Cloudinary folders are created implicitly when uploading files
       return {
@@ -403,15 +388,11 @@ export class CloudinaryProvider implements StorageInterface {
     }
   }
 
-  async deleteFolder(
-    options: DeleteFolderOptions,
-  ): Promise<DeleteFolderResult> {
+  async deleteFolder(options: DeleteFolderOptions): Promise<DeleteFolderResult> {
     try {
       // Cloudinary requires deleting all assets in folder first
       // Then delete the folder itself
-      const folderPath = options.path.endsWith("/")
-        ? options.path.slice(0, -1)
-        : options.path;
+      const folderPath = options.path.endsWith("/") ? options.path.slice(0, -1) : options.path;
 
       if (options.recursive) {
         // Delete all resources in the folder
@@ -437,12 +418,10 @@ export class CloudinaryProvider implements StorageInterface {
       // Use Cloudinary Admin API to list folders
       const result = await cloudinary.api.root_folders();
 
-      const folders = (result.folders || []).map(
-        (folder: Record<string, unknown>) => ({
-          name: folder.name,
-          path: folder.path,
-        }),
-      );
+      const folders = (result.folders || []).map((folder: Record<string, unknown>) => ({
+        name: folder.name,
+        path: folder.path,
+      }));
 
       return {
         success: true,
@@ -468,17 +447,12 @@ export class CloudinaryProvider implements StorageInterface {
     } catch (error) {
       return {
         exists: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Check folder existence failed",
+        error: error instanceof Error ? error.message : "Check folder existence failed",
       };
     }
   }
 
-  async renameFolder(
-    _options: RenameFolderOptions,
-  ): Promise<RenameFolderResult> {
+  async renameFolder(_options: RenameFolderOptions): Promise<RenameFolderResult> {
     try {
       // Cloudinary folder rename would require moving all assets
       return {

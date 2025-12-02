@@ -38,8 +38,8 @@
 export const currencyFormatter = (
   value: number,
   options?: Intl.NumberFormatOptions,
-  locale = "en-US",
-  currencyCode = "USD",
+  locale: string = "en-US",
+  currencyCode: string = "USD",
 ): string =>
   Intl.NumberFormat(locale, {
     style: "currency",

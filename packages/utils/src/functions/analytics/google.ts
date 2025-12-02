@@ -14,7 +14,7 @@
  * - Use hooks for: Complex SaaS tracking, React components, state-dependent tracking
  */
 
-import { logger } from "../logging/index.js";
+import { logger } from "../logging";
 
 /**
  * Interface for event tracking parameters
@@ -37,10 +37,7 @@ declare global {
     gtag?: (
       command: "event" | "config" | "set",
       targetId: string,
-      config?: Record<
-        string,
-        string | number | boolean | object | null | undefined
-      >,
+      config?: Record<string, string | number | boolean | object | null | undefined>,
     ) => void;
   }
 }
@@ -55,9 +52,7 @@ declare global {
 export const googleTrackEvent = ({ name, properties }: EventProps) => {
   // Validate required parameters
   if (!name || typeof name !== "string" || name.trim().length === 0) {
-    logger.warn(
-      "Analytics: Event name is required and must be a non-empty string",
-    );
+    logger.warn("Analytics: Event name is required and must be a non-empty string");
     return;
   }
 
@@ -96,8 +91,7 @@ const getComponentName = (componentPath: string): string => {
   }
 
   const parts = componentPath.trim().split("/");
-  const first = parts[0] ?? componentPath.trim();
-  return parts.length > 1 ? first : componentPath.trim();
+  return parts.length > 1 ? parts[0] : componentPath.trim();
 };
 
 /**
@@ -129,17 +123,13 @@ export const googleTrackCodeCopy = (componentPath: string) => {
  * @param componentPath - Path of the component where theme was changed
  * @param newTheme - New theme mode ('dark' or 'light')
  */
-export const googleTrackThemeChange = (
-  componentPath: string,
-  newTheme: "dark" | "light",
-) => {
+export const googleTrackThemeChange = (componentPath: string, newTheme: "dark" | "light") => {
   if (!componentPath || typeof componentPath !== "string") {
     logger.warn("Analytics: componentPath is required for trackThemeChange");
     return;
   }
 
-  // biome-ignore lint/nursery/noUnnecessaryConditions: <>
-  if (!(newTheme && ["dark", "light"].includes(newTheme))) {
+  if (!newTheme || !["dark", "light"].includes(newTheme)) {
     logger.warn('Analytics: newTheme must be either "dark" or "light"');
     return;
   }
@@ -162,19 +152,13 @@ export const googleTrackThemeChange = (
  * @param componentPath - Path of the component where direction was changed
  * @param newDirection - New text direction ('rtl' or 'ltr')
  */
-export const googleTrackDirectionChange = (
-  componentPath: string,
-  newDirection: "rtl" | "ltr",
-) => {
+export const googleTrackDirectionChange = (componentPath: string, newDirection: "rtl" | "ltr") => {
   if (!componentPath || typeof componentPath !== "string") {
-    logger.warn(
-      "Analytics: componentPath is required for trackDirectionChange",
-    );
+    logger.warn("Analytics: componentPath is required for trackDirectionChange");
     return;
   }
 
-  // biome-ignore lint/nursery/noUnnecessaryConditions: <>
-  if (!(newDirection && ["rtl", "ltr"].includes(newDirection))) {
+  if (!newDirection || !["rtl", "ltr"].includes(newDirection)) {
     logger.warn('Analytics: newDirection must be either "rtl" or "ltr"');
     return;
   }
@@ -197,17 +181,13 @@ export const googleTrackDirectionChange = (
  * @param componentPath - Path of the component where view was changed
  * @param newView - New view mode ('preview' or 'code')
  */
-export const googleTrackViewChange = (
-  componentPath: string,
-  newView: "preview" | "code",
-) => {
+export const googleTrackViewChange = (componentPath: string, newView: "preview" | "code") => {
   if (!componentPath || typeof componentPath !== "string") {
     logger.warn("Analytics: componentPath is required for trackViewChange");
     return;
   }
 
-  // biome-ignore lint/nursery/noUnnecessaryConditions: <>
-  if (!(newView && ["preview", "code"].includes(newView))) {
+  if (!newView || !["preview", "code"].includes(newView)) {
     logger.warn('Analytics: newView must be either "preview" or "code"');
     return;
   }
@@ -241,11 +221,7 @@ export const googleTrackItemCreate = (
     return;
   }
 
-  if (
-    !itemType ||
-    typeof itemType !== "string" ||
-    itemType.trim().length === 0
-  ) {
+  if (!itemType || typeof itemType !== "string" || itemType.trim().length === 0) {
     logger.warn("Analytics: itemType is required for trackItemCreate");
     return;
   }
@@ -269,21 +245,13 @@ export const googleTrackItemCreate = (
  * @param itemType - Type of item viewed
  * @param itemId - ID of the viewed item
  */
-export const googleTrackItemView = (
-  module: string,
-  itemType: string,
-  itemId: string | number,
-) => {
+export const googleTrackItemView = (module: string, itemType: string, itemId: string | number) => {
   if (!module || typeof module !== "string" || module.trim().length === 0) {
     logger.warn("Analytics: module is required for trackItemView");
     return;
   }
 
-  if (
-    !itemType ||
-    typeof itemType !== "string" ||
-    itemType.trim().length === 0
-  ) {
+  if (!itemType || typeof itemType !== "string" || itemType.trim().length === 0) {
     logger.warn("Analytics: itemType is required for trackItemView");
     return;
   }
@@ -322,11 +290,7 @@ export const googleTrackItemUpdate = (
     return;
   }
 
-  if (
-    !itemType ||
-    typeof itemType !== "string" ||
-    itemType.trim().length === 0
-  ) {
+  if (!itemType || typeof itemType !== "string" || itemType.trim().length === 0) {
     logger.warn("Analytics: itemType is required for trackItemUpdate");
     return;
   }
@@ -360,18 +324,14 @@ export const googleTrackItemDelete = (
   module: string,
   itemType: string,
   itemId: string | number,
-  isHardDelete = false,
+  isHardDelete: boolean = false,
 ) => {
   if (!module || typeof module !== "string" || module.trim().length === 0) {
     logger.warn("Analytics: module is required for trackItemDelete");
     return;
   }
 
-  if (
-    !itemType ||
-    typeof itemType !== "string" ||
-    itemType.trim().length === 0
-  ) {
+  if (!itemType || typeof itemType !== "string" || itemType.trim().length === 0) {
     logger.warn("Analytics: itemType is required for trackItemDelete");
     return;
   }
@@ -411,11 +371,7 @@ export const googleTrackItemRestore = (
     return;
   }
 
-  if (
-    !itemType ||
-    typeof itemType !== "string" ||
-    itemType.trim().length === 0
-  ) {
+  if (!itemType || typeof itemType !== "string" || itemType.trim().length === 0) {
     logger.warn("Analytics: itemType is required for trackItemRestore");
     return;
   }

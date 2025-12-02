@@ -59,15 +59,13 @@
  * ```
  */
 export function getHeight(element: HTMLElement): number {
-  if (!element) {
-    return 0;
-  }
+  if (!element) return 0;
 
   const styles = window.getComputedStyle(element);
 
   const height = element.getBoundingClientRect().height;
-  const marginTop = Number.parseFloat(styles.marginTop);
-  const marginBottom = Number.parseFloat(styles.marginBottom);
+  const marginTop = parseFloat(styles.marginTop);
+  const marginBottom = parseFloat(styles.marginBottom);
 
   const totalHeight = height + marginTop + marginBottom;
 

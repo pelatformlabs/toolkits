@@ -181,7 +181,7 @@ export function formatEmailAddress(name: string, email: string): string {
  */
 export function extractEmail(formattedAddress: string): string {
   const match = formattedAddress.match(/<([^>]*)>/);
-  return match?.[1] ?? formattedAddress.trim();
+  return match ? match[1] : formattedAddress.trim();
 }
 
 /**
@@ -202,7 +202,7 @@ export function extractEmail(formattedAddress: string): string {
  */
 export function extractDisplayName(formattedAddress: string): string {
   const match = formattedAddress.match(/^(.+?)\s*<[^>]*>$/);
-  return match?.[1]?.trim().replace(/^["']|["']$/g, "") ?? "";
+  return match ? match[1].trim().replace(/^["']|["']$/g, "") : "";
 }
 
 // =============================================================================
@@ -226,20 +226,14 @@ export function extractDisplayName(formattedAddress: string): string {
  */
 export function sanitizeHtml(html: string): string {
   // Remove script tags and their content
-  let sanitized = html.replace(
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    "",
-  );
+  let sanitized = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 
   // Remove dangerous attributes
   sanitized = sanitized.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, ""); // onclick, onload, etc.
   sanitized = sanitized.replace(/\s*javascript\s*:/gi, ""); // javascript: urls
 
   // Remove style attributes that could be dangerous
-  sanitized = sanitized.replace(
-    /\s*style\s*=\s*["'][^"']*expression\([^"']*\)["']/gi,
-    "",
-  );
+  sanitized = sanitized.replace(/\s*style\s*=\s*["'][^"']*expression\([^"']*\)["']/gi, "");
 
   return sanitized;
 }
@@ -260,14 +254,8 @@ export function sanitizeHtml(html: string): string {
  * console.log(truncated); // "This is a very long..."
  * ```
  */
-export function truncateText(
-  text: string,
-  maxLength: number,
-  ellipsis = "...",
-): string {
-  if (text.length <= maxLength) {
-    return text;
-  }
+export function truncateText(text: string, maxLength: number, ellipsis: string = "..."): string {
+  if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - ellipsis.length) + ellipsis;
 }
 
@@ -286,7 +274,7 @@ export function truncateText(
  * console.log(preview); // "Welcome! Thank you for joining our platform."
  * ```
  */
-export function generatePreviewText(html: string, maxLength = 150): string {
+export function generatePreviewText(html: string, maxLength: number = 150): string {
   const text = htmlToText(html);
   return truncateText(text, maxLength);
 }
@@ -314,11 +302,7 @@ export function generatePreviewText(html: string, maxLength = 150): string {
  * console.log(link); // "https://example.com/unsubscribe?email=user%40example.com&token=secure-token-123"
  * ```
  */
-export function generateUnsubscribeLink(
-  baseUrl: string,
-  email: string,
-  token?: string,
-): string {
+export function generateUnsubscribeLink(baseUrl: string, email: string, token?: string): string {
   const url = new URL(baseUrl);
   url.searchParams.set("email", email);
   if (token) {
@@ -388,21 +372,11 @@ export function addUtmParams(
 ): string {
   const urlObj = new URL(url);
 
-  if (utmParams.source) {
-    urlObj.searchParams.set("utm_source", utmParams.source);
-  }
-  if (utmParams.medium) {
-    urlObj.searchParams.set("utm_medium", utmParams.medium);
-  }
-  if (utmParams.campaign) {
-    urlObj.searchParams.set("utm_campaign", utmParams.campaign);
-  }
-  if (utmParams.term) {
-    urlObj.searchParams.set("utm_term", utmParams.term);
-  }
-  if (utmParams.content) {
-    urlObj.searchParams.set("utm_content", utmParams.content);
-  }
+  if (utmParams.source) urlObj.searchParams.set("utm_source", utmParams.source);
+  if (utmParams.medium) urlObj.searchParams.set("utm_medium", utmParams.medium);
+  if (utmParams.campaign) urlObj.searchParams.set("utm_campaign", utmParams.campaign);
+  if (utmParams.term) urlObj.searchParams.set("utm_term", utmParams.term);
+  if (utmParams.content) urlObj.searchParams.set("utm_content", utmParams.content);
 
   return urlObj.toString();
 }
@@ -474,7 +448,7 @@ export function deduplicateEmails(emails: string[]): string[] {
  * console.log(chunks[2].length); // 50
  * ```
  */
-export function chunkEmails(emails: string[], chunkSize = 100): string[][] {
+export function chunkEmails(emails: string[], chunkSize: number = 100): string[][] {
   const chunks: string[][] = [];
   for (let i = 0; i < emails.length; i += chunkSize) {
     chunks.push(emails.slice(i, i + chunkSize));
@@ -556,10 +530,8 @@ export function getMimeType(filename: string): string {
  * console.log(formatFileSize(1073741824, 1)); // "1.0 GB"
  * ```
  */
-export function formatFileSize(bytes: number, decimals = 2): string {
-  if (bytes === 0) {
-    return "0 Bytes";
-  }
+export function formatFileSize(bytes: number, decimals: number = 2): string {
+  if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;

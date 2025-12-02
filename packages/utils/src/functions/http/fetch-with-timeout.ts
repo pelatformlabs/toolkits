@@ -43,7 +43,7 @@
 export function fetchWithTimeout(
   input: RequestInfo | URL,
   init?: RequestInit | undefined,
-  timeout = 5000,
+  timeout: number = 5000,
 ): Promise<Response> {
   return new Promise<Response>((resolve, reject) => {
     const controller = new AbortController();

@@ -3,7 +3,7 @@
  * Defines types for folder creation, deletion, listing, and other folder operations
  */
 
-import type { FileInfo, FolderInfo } from "./base.js";
+import type { FileInfo, FolderInfo } from "./base";
 
 // Folder create options
 export interface CreateFolderOptions {

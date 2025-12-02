@@ -42,10 +42,7 @@ const DEFAULT_ASSET_HOST = "https://assets.pelatform.com";
  * // null (invalid base)
  * ```
  */
-export function assetsUrl(
-  path: string,
-  host: string = DEFAULT_ASSET_HOST,
-): string {
+export function assetsUrl(path: string, host: string = DEFAULT_ASSET_HOST): string {
   const env = process.env.NEXT_PUBLIC_ASSETS_URL || process.env.VITE_ASSETS_URL;
   const BASE_HOST = env ?? host;
 
@@ -55,9 +52,7 @@ export function assetsUrl(
 
   try {
     // Normalize BASE_HOST if given without protocol, e.g., "cdn.example.com"
-    const base = /^https?:\/\//i.test(BASE_HOST)
-      ? BASE_HOST
-      : `https://${BASE_HOST}`;
+    const base = /^https?:\/\//i.test(BASE_HOST) ? BASE_HOST : `https://${BASE_HOST}`;
     const url = new URL(path, base); // absolute `path` will override `base`
     return url.toString();
   } catch {

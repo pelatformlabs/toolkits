@@ -123,7 +123,7 @@ export function validateFileType(
 
   const isValidMime = allowedTypes.some((type) => {
     if (type.includes("*")) {
-      const baseType = type.split("/")[0] ?? "";
+      const baseType = type.split("/")[0];
       return mimeType.startsWith(baseType);
     }
     return mimeType === type;
@@ -131,7 +131,7 @@ export function validateFileType(
 
   const isValidExtension = extension && allowedTypes.includes(`.${extension}`);
 
-  if (!(isValidMime || isValidExtension)) {
+  if (!isValidMime && !isValidExtension) {
     return {
       valid: false,
       error: `File type not allowed. Allowed types: ${allowedTypes.join(", ")}`,
@@ -162,15 +162,13 @@ export function validateFileType(
  * ```
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) {
-    return "0 Bytes";
-  }
+  if (bytes === 0) return "0 Bytes";
 
   const k = 1024;
   const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
+  return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
 /**
@@ -245,8 +243,8 @@ export function getFileExtension(fileName: string): string {
  * ```
  */
 export function generateCacheControl(
-  maxAge = 31536000, // 1 year default
-  isPublic = true,
+  maxAge: number = 31536000, // 1 year default
+  isPublic: boolean = true,
 ): string {
   const visibility = isPublic ? "public" : "private";
   return `${visibility}, max-age=${maxAge}`;
@@ -289,11 +287,12 @@ export function parseS3Url(url: string): { bucket?: string; key?: string } {
           bucket: pathParts[0],
           key: pathParts.slice(1).join("/"),
         };
+      } else {
+        // Virtual hosted-style
+        const bucket = urlObj.hostname.split(".")[0];
+        const key = urlObj.pathname.substring(1); // Remove leading slash
+        return { bucket, key };
       }
-      // Virtual hosted-style
-      const bucket = urlObj.hostname.split(".")[0];
-      const key = urlObj.pathname.substring(1); // Remove leading slash
-      return { bucket, key };
     }
 
     // Custom endpoint (like R2, MinIO)
@@ -326,11 +325,7 @@ export function parseS3Url(url: string): { bucket?: string; key?: string } {
  * // Returns: "https://storage.example.com/assets/images/logo.png"
  * ```
  */
-export function buildPublicUrl(
-  baseUrl: string,
-  bucket: string,
-  key: string,
-): string {
+export function buildPublicUrl(baseUrl: string, bucket: string, key: string): string {
   const cleanBaseUrl = baseUrl.replace(/\/$/, "");
   const cleanKey = key.replace(/^\//, "");
 
@@ -467,7 +462,7 @@ export function getFileInfo(file: File): {
 export function generateUniqueKey(
   fileName: string,
   prefix?: string,
-  includeTimestamp = true,
+  includeTimestamp: boolean = true,
 ): string {
   const sanitized = sanitizeFileName(fileName);
   const extension = getFileExtension(sanitized);
@@ -527,13 +522,14 @@ export function extractS3Info(url: string): {
           key: pathParts.slice(1).join("/"),
           region,
         };
+      } else {
+        // Virtual hosted-style: https://bucket.s3.region.amazonaws.com/key
+        const hostParts = urlObj.hostname.split(".");
+        const bucket = hostParts[0];
+        const region = hostParts[2];
+        const key = urlObj.pathname.substring(1);
+        return { bucket, key, region };
       }
-      // Virtual hosted-style: https://bucket.s3.region.amazonaws.com/key
-      const hostParts = urlObj.hostname.split(".");
-      const bucket = hostParts[0];
-      const region = hostParts[2];
-      const key = urlObj.pathname.substring(1);
-      return { bucket, key, region };
     }
 
     // Custom endpoint (R2, MinIO, etc.)
@@ -651,8 +647,7 @@ export function validateBucketName(bucketName: string): {
   if (!/^[a-z0-9.-]+$/.test(bucketName)) {
     return {
       valid: false,
-      error:
-        "Bucket name can only contain lowercase letters, numbers, dots, and hyphens",
+      error: "Bucket name can only contain lowercase letters, numbers, dots, and hyphens",
     };
   }
 
@@ -889,9 +884,7 @@ export function joinPath(...segments: string[]): string {
 export function getParentPath(key: string): string {
   const normalizedKey = normalizePath(key);
   const lastSlashIndex = normalizedKey.lastIndexOf("/");
-  return lastSlashIndex === -1
-    ? ""
-    : normalizedKey.substring(0, lastSlashIndex);
+  return lastSlashIndex === -1 ? "" : normalizedKey.substring(0, lastSlashIndex);
 }
 
 /**
@@ -917,9 +910,7 @@ export function getParentPath(key: string): string {
 export function getFileName(key: string): string {
   const normalizedKey = normalizePath(key);
   const lastSlashIndex = normalizedKey.lastIndexOf("/");
-  return lastSlashIndex === -1
-    ? normalizedKey
-    : normalizedKey.substring(lastSlashIndex + 1);
+  return lastSlashIndex === -1 ? normalizedKey : normalizedKey.substring(lastSlashIndex + 1);
 }
 
 /**
@@ -945,10 +936,7 @@ export function getFileName(key: string): string {
  */
 export function base64ToBuffer(base64: string): Buffer {
   // Remove data URL prefix if present (e.g., "data:image/jpeg;base64,")
-  const cleanBase64 = base64.includes(",")
-    ? (base64.split(",")[1] ?? "")
-    : base64;
-
+  const cleanBase64 = base64.includes(",") ? base64.split(",")[1] : base64;
   return Buffer.from(cleanBase64, "base64");
 }
 
@@ -979,7 +967,7 @@ export function base64ToBuffer(base64: string): Buffer {
  */
 export function bufferToBase64(
   buffer: Buffer,
-  includeDataUrl = false,
+  includeDataUrl: boolean = false,
   mimeType?: string,
 ): string {
   const base64 = buffer.toString("base64");
@@ -1063,10 +1051,7 @@ export async function generateFileHash(
  * }
  * ```
  */
-export function generateBatchKeys(
-  fileNames: string[],
-  prefix?: string,
-): string[] {
+export function generateBatchKeys(fileNames: string[], prefix?: string): string[] {
   return fileNames.map((fileName) => generateFileKey(fileName, prefix));
 }
 
@@ -1118,9 +1103,7 @@ export function validateBatchFiles(
     return files.map((file) => ({
       valid: false,
       fileName: file.name,
-      errors: [
-        `Maximum ${options.maxFiles} files allowed, but ${files.length} files provided`,
-      ],
+      errors: [`Maximum ${options.maxFiles} files allowed, but ${files.length} files provided`],
     }));
   }
 
@@ -1202,11 +1185,7 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   }
 
   // PNG
-  if (
-    header
-      .subarray(0, 8)
-      .equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
-  ) {
+  if (header.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
     return "image/png";
   }
 
@@ -1219,34 +1198,20 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   }
 
   // WebP
-  if (
-    header.subarray(0, 4).toString() === "RIFF" &&
-    header.subarray(8, 12).toString() === "WEBP"
-  ) {
+  if (header.subarray(0, 4).toString() === "RIFF" && header.subarray(8, 12).toString() === "WEBP") {
     return "image/webp";
   }
 
   // ZIP (includes DOCX, XLSX, etc.)
-  if (
-    header[0] === 0x50 &&
-    header[1] === 0x4b &&
-    (header[2] === 0x03 || header[2] === 0x05)
-  ) {
+  if (header[0] === 0x50 && header[1] === 0x4b && (header[2] === 0x03 || header[2] === 0x05)) {
     // Check for Office documents
-    const zipContent = buffer.toString(
-      "utf8",
-      0,
-      Math.min(buffer.length, 1000),
-    );
-    if (zipContent.includes("word/")) {
+    const zipContent = buffer.toString("utf8", 0, Math.min(buffer.length, 1000));
+    if (zipContent.includes("word/"))
       return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    }
-    if (zipContent.includes("xl/")) {
+    if (zipContent.includes("xl/"))
       return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    }
-    if (zipContent.includes("ppt/")) {
+    if (zipContent.includes("ppt/"))
       return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    }
     return "application/zip";
   }
 
@@ -1257,10 +1222,7 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
 
   // MP3
   if (
-    (header[0] !== undefined &&
-      header[1] !== undefined &&
-      header[0] === 0xff &&
-      (header[1] & 0xe0) === 0xe0) ||
+    (header[0] === 0xff && (header[1] & 0xe0) === 0xe0) ||
     header.subarray(0, 3).toString() === "ID3"
   ) {
     return "audio/mpeg";
@@ -1271,10 +1233,6 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   const sampleSize = Math.min(buffer.length, 512);
   for (let i = 0; i < sampleSize; i++) {
     const byte = buffer[i];
-    if (byte === undefined) {
-      continue;
-    }
-
     if (byte === 0 || (byte < 32 && byte !== 9 && byte !== 10 && byte !== 13)) {
       isText = false;
       break;

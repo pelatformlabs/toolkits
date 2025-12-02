@@ -1,14 +1,4 @@
 {
-  "extends": "@pelatform/tsconfig/tsconfig.bun.json",
-  "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "composite": false,
-    "isolatedDeclarations": false,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ESNext", "DOM"]
-  },
+  "extends": "@pelatform/tsconfig/tsconfig.react.json",
   "include": ["src/**/*"]
 }

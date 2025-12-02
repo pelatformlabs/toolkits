@@ -86,9 +86,7 @@ export const getSearchParams = (url: string): Record<string, string> => {
  *   : urlParams.category ? [urlParams.category] : [];
  * ```
  */
-export const getSearchParamsWithArray = (
-  url: string,
-): Record<string, string | string[]> => {
+export const getSearchParamsWithArray = (url: string): Record<string, string | string[]> => {
   const params = {} as Record<string, string | string[]>;
 
   new URL(url).searchParams.forEach((val, key) => {
@@ -149,9 +147,7 @@ export const getSearchParamsWithArray = (
  * ```
  */
 export const getParamsFromURL = (url: string): Record<string, string> => {
-  if (!url) {
-    return {};
-  }
+  if (!url) return {};
   try {
     const params = new URL(url).searchParams;
     const paramsObj: Record<string, string> = {};

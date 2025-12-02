@@ -4,7 +4,7 @@
  * Works in both client-side and server-side environments
  */
 
-import { logger } from "../logging/index.js";
+import { logger } from "../logging";
 
 /**
  * Interface for cookie options
@@ -80,11 +80,7 @@ interface CookieValue<T = unknown> {
  * });
  * ```
  */
-export const setCookie = <T>(
-  name: string,
-  value: T,
-  options: CookieOptions = {},
-): boolean => {
+export const setCookie = <T>(name: string, value: T, options: CookieOptions = {}): boolean => {
   if (typeof document === "undefined") {
     logger.warn("setCookie: Document is not available (SSR environment)");
     return false;
@@ -103,9 +99,7 @@ export const setCookie = <T>(
     // Add expiration
     if (options.expires) {
       const expirationDate = new Date();
-      expirationDate.setTime(
-        expirationDate.getTime() + options.expires * 24 * 60 * 60 * 1000,
-      );
+      expirationDate.setTime(expirationDate.getTime() + options.expires * 24 * 60 * 60 * 1000);
       cookieString += `; expires=${expirationDate.toUTCString()}`;
     }
 
@@ -220,12 +214,9 @@ export const getCookie = <T = unknown>(name: string): T | null => {
           return parsed.value;
         } catch (_parseError) {
           // Fallback for cookies set without our wrapper
-          logger.debug(
-            "Cookie found but not in expected format, returning raw value",
-            {
-              name,
-            },
-          );
+          logger.debug("Cookie found but not in expected format, returning raw value", {
+            name,
+          });
           return cookieValue as T;
         }
       }
@@ -504,9 +495,7 @@ export const getAllCookies = (): Record<string, unknown> => {
  * }
  * ```
  */
-export const clearAllCookies = (
-  options: Pick<CookieOptions, "path" | "domain"> = {},
-): number => {
+export const clearAllCookies = (options: Pick<CookieOptions, "path" | "domain"> = {}): number => {
   if (typeof document === "undefined") {
     logger.warn("clearAllCookies: Document is not available (SSR environment)");
     return 0;

@@ -3,7 +3,7 @@
  * Defines types for file upload, download, delete, copy, move, and other file operations
  */
 
-import type { FileInfo } from "./base.js";
+import type { FileInfo } from "./base";
 
 // File upload options
 export interface UploadOptions {

@@ -3,8 +3,8 @@
  * Provides structured logging to Slack channels based on message type
  */
 
-import { isDevelopment, SLACK_WEBHOOKS } from "../../constants/index.js";
-import { logger } from "./logger.js";
+import { isDevelopment, SLACK_WEBHOOKS } from "../../constants";
+import { logger } from "./logger";
 
 /**
  * Mapping of log types to their corresponding Slack webhook environment variables
@@ -75,9 +75,7 @@ export const SlackLog = async ({
   }
   /* Log a message to the console */
   const HOOK = logTypeToEnv[type];
-  if (!HOOK) {
-    return;
-  }
+  if (!HOOK) return;
   try {
     return await fetch(HOOK, {
       method: "POST",

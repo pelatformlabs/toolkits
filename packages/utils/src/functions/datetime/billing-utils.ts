@@ -25,11 +25,7 @@
  * ```
  */
 export const getLastDayOfMonth = (referenceDate: Date = new Date()): number => {
-  const lastDay = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth() + 1,
-    0,
-  ); // This will give the last day of the current month
+  const lastDay = new Date(referenceDate.getFullYear(), referenceDate.getMonth() + 1, 0); // This will give the last day of the current month
   return lastDay.getDate();
 };
 
@@ -63,8 +59,9 @@ export const getAdjustedBillingCycleStart = (
   const lastDay = getLastDayOfMonth(referenceDate);
   if (billingCycleStart > lastDay) {
     return lastDay;
+  } else {
+    return billingCycleStart;
   }
-  return billingCycleStart;
 };
 
 /**
@@ -102,15 +99,13 @@ export const getBillingStartDate = (
   const currentDay = today.getDate();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
-  const adjustedBillingCycleStart = getAdjustedBillingCycleStart(
-    billingCycleStart,
-    referenceDate,
-  );
+  const adjustedBillingCycleStart = getAdjustedBillingCycleStart(billingCycleStart, referenceDate);
   if (currentDay <= adjustedBillingCycleStart) {
     // if the current day is less than the billing cycle start, we need to go back a month
     const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // if the current month is January, we need to go back to December
     const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear; // if the current month is January, we need to go back a year
     return new Date(lastYear, lastMonth, adjustedBillingCycleStart);
+  } else {
+    return new Date(currentYear, currentMonth, adjustedBillingCycleStart);
   }
-  return new Date(currentYear, currentMonth, adjustedBillingCycleStart);
 };

@@ -3,7 +3,6 @@
  * Provides comprehensive file management operations for S3-compatible storage providers
  */
 
-import type { S3Client } from "@aws-sdk/client-s3";
 import {
   CopyObjectCommand,
   DeleteObjectCommand,
@@ -12,10 +11,11 @@ import {
   HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  type S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { buildPublicUrl, getMimeType } from "../helpers.js";
+import { buildPublicUrl, getMimeType } from "../helpers";
 import type {
   BatchDeleteOptions,
   BatchDeleteResult,
@@ -38,7 +38,7 @@ import type {
   S3Config,
   UploadOptions,
   UploadResult,
-} from "../types/index.js";
+} from "../types";
 
 /**
  * S3 file operations implementation
@@ -111,12 +111,9 @@ export class FileOperations {
       const chunks: Uint8Array[] = [];
       const reader = result.Body.transformToWebStream().getReader();
 
-      // biome-ignore lint/nursery/noUnnecessaryConditions: <>
       while (true) {
         const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
+        if (done) break;
         chunks.push(value);
       }
 
@@ -172,9 +169,7 @@ export class FileOperations {
 
       const result = await this.client.send(command);
 
-      const deleted = result.Deleted?.map((obj) => obj.Key).filter(
-        Boolean,
-      ) as string[];
+      const deleted = result.Deleted?.map((obj) => obj.Key).filter(Boolean) as string[];
       const errors =
         result.Errors?.map((err) => ({
           key: err.Key || "",
@@ -260,8 +255,7 @@ export class FileOperations {
 
       return {
         exists: false,
-        error:
-          error instanceof Error ? error.message : "Check existence failed",
+        error: error instanceof Error ? error.message : "Check existence failed",
       };
     }
   }
@@ -334,9 +328,7 @@ export class FileOperations {
     return this.copy(options);
   }
 
-  async getPresignedUrl(
-    options: PresignedUrlOptions,
-  ): Promise<PresignedUrlResult> {
+  async getPresignedUrl(options: PresignedUrlOptions): Promise<PresignedUrlResult> {
     try {
       const expiresIn = options.expiresIn || 3600; // 1 hour default
 
@@ -366,10 +358,7 @@ export class FileOperations {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Presigned URL generation failed",
+        error: error instanceof Error ? error.message : "Presigned URL generation failed",
       };
     }
   }

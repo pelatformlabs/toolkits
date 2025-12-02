@@ -42,18 +42,12 @@
  * // Returns "0 Bytes"
  * ```
  */
-export function formatFileSize(
-  bytes: number,
-  decimals = 2,
-  base = 1024,
-): string {
-  if (bytes === 0) {
-    return "0 Bytes";
-  }
+export function formatFileSize(bytes: number, decimals: number = 2, base: number = 1024): string {
+  if (bytes === 0) return "0 Bytes";
 
   const k = base;
   const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${Number.parseFloat((bytes / k ** i).toFixed(decimals))} ${sizes[i]}`;
+  return `${parseFloat((bytes / k ** i).toFixed(decimals))} ${sizes[i]}`;
 }

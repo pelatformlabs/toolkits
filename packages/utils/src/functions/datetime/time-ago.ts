@@ -80,25 +80,19 @@ export const timeAgo = (
     justNowText?: string;
     agoText?: string;
   } = {},
-  locale = "en-US",
+  locale: string = "en-US",
 ): string => {
-  if (!timestamp) {
-    return neverText;
-  }
+  if (!timestamp) return neverText;
   const diff = Date.now() - new Date(timestamp).getTime();
   if (diff < 1000) {
     // less than 1 second
     return justNowText;
-  }
-  if (diff > 82800000) {
+  } else if (diff > 82800000) {
     // more than 23 hours – similar to how Twitter displays timestamps
     return new Date(timestamp).toLocaleDateString(locale, {
       month: "short",
       day: "numeric",
-      year:
-        new Date(timestamp).getFullYear() !== new Date().getFullYear()
-          ? "numeric"
-          : undefined,
+      year: new Date(timestamp).getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
     });
   }
   return `${ms(diff)}${withAgo ? ` ${agoText}` : ""}`;

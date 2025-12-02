@@ -35,8 +35,7 @@ export function generateRandomString(length: number): string {
   let result = "";
 
   for (let i = 0; i < length; i++) {
-    const byte = randomBytesArray[i] ?? 0;
-    const randomIndex = byte % charset.length;
+    const randomIndex = randomBytesArray[i] % charset.length;
     result += charset[randomIndex];
   }
 

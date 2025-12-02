@@ -53,16 +53,13 @@ export const getTimeZones = (): { label: string; value: string }[] => {
         timeZoneName: "shortOffset",
       });
       const parts = formatter.formatToParts(new Date());
-      const offset =
-        parts.find((part) => part.type === "timeZoneName")?.value || "";
+      const offset = parts.find((part) => part.type === "timeZoneName")?.value || "";
       const formattedOffset = offset === "GMT" ? "GMT+0" : offset;
 
       return {
         value: timezone,
         label: `(${formattedOffset}) ${timezone.replace(/_/g, " ")}`,
-        numericOffset: Number.parseInt(
-          formattedOffset.replace("GMT", "").replace("+", "") || "0",
-        ),
+        numericOffset: parseInt(formattedOffset.replace("GMT", "").replace("+", "") || "0"),
       };
     })
     .sort((a, b) => a.numericOffset - b.numericOffset);

@@ -5,8 +5,8 @@
 
 import { S3Client } from "@aws-sdk/client-s3";
 
-import { FileOperations } from "../operations/file-operations.js";
-import { FolderOperations } from "../operations/folder-operations.js";
+import { FileOperations } from "../operations/file-operations";
+import { FolderOperations } from "../operations/folder-operations";
 import type {
   BatchDeleteOptions,
   BatchDeleteResult,
@@ -40,7 +40,7 @@ import type {
   StorageInterface,
   UploadOptions,
   UploadResult,
-} from "../types/index.js";
+} from "../types";
 
 /**
  * S3-compatible storage provider
@@ -63,7 +63,7 @@ export class S3Provider implements StorageInterface {
         secretAccessKey: config.secretAccessKey,
       },
       endpoint: config.endpoint,
-      forcePathStyle: config.forcePathStyle,
+      forcePathStyle: config.forcePathStyle || false,
     });
 
     this.fileOps = new FileOperations(this.client, this.config);
@@ -107,9 +107,7 @@ export class S3Provider implements StorageInterface {
     return this.fileOps.duplicate(options);
   }
 
-  async getPresignedUrl(
-    options: PresignedUrlOptions,
-  ): Promise<PresignedUrlResult> {
+  async getPresignedUrl(options: PresignedUrlOptions): Promise<PresignedUrlResult> {
     return this.fileOps.getPresignedUrl(options);
   }
 
@@ -118,15 +116,11 @@ export class S3Provider implements StorageInterface {
   }
 
   // Folder operations
-  async createFolder(
-    options: CreateFolderOptions,
-  ): Promise<CreateFolderResult> {
+  async createFolder(options: CreateFolderOptions): Promise<CreateFolderResult> {
     return this.folderOps.createFolder(options);
   }
 
-  async deleteFolder(
-    options: DeleteFolderOptions,
-  ): Promise<DeleteFolderResult> {
+  async deleteFolder(options: DeleteFolderOptions): Promise<DeleteFolderResult> {
     return this.folderOps.deleteFolder(options);
   }
 
@@ -138,9 +132,7 @@ export class S3Provider implements StorageInterface {
     return this.folderOps.folderExists(path);
   }
 
-  async renameFolder(
-    options: RenameFolderOptions,
-  ): Promise<RenameFolderResult> {
+  async renameFolder(options: RenameFolderOptions): Promise<RenameFolderResult> {
     return this.folderOps.renameFolder(options);
   }
 

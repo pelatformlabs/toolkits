@@ -6,8 +6,8 @@
 import React from "react";
 import { render } from "@react-email/components";
 
-import { NodemailerProvider } from "./providers/nodemailer.js";
-import { ResendProvider } from "./providers/resend.js";
+import { NodemailerProvider } from "./providers/nodemailer";
+import { ResendProvider } from "./providers/resend";
 import type {
   EmailConfig,
   EmailResult,
@@ -16,7 +16,7 @@ import type {
   NodemailerConfig,
   ResendConfig,
   SendEmailOptions,
-} from "./types.js";
+} from "./types";
 
 /**
  * Email service class that provides a unified interface for sending emails across different providers
@@ -85,9 +85,7 @@ export class EmailService {
       case "nodemailer":
         return new NodemailerProvider(config as NodemailerConfig);
       default:
-        throw new Error(
-          `Unsupported email provider: ${(config as EmailConfig).provider}`,
-        );
+        throw new Error(`Unsupported email provider: ${(config as EmailConfig).provider}`);
     }
   }
 
@@ -191,8 +189,7 @@ export class EmailService {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Failed to render template",
+        error: error instanceof Error ? error.message : "Failed to render template",
       };
     }
   }
@@ -260,7 +257,7 @@ export class EmailService {
    * }
    * ```
    */
-  async validateConfig(): Promise<{ valid: boolean }> {
+  async validateConfig() {
     if (this.provider.validateConfig) {
       return this.provider.validateConfig();
     }

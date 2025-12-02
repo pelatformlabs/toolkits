@@ -125,9 +125,7 @@ export const constructURLFromUTMParams = (
   url: string,
   utmParams: Record<string, string>,
 ): string => {
-  if (!url) {
-    return "";
-  }
+  if (!url) return "";
   try {
     const newURL = new URL(url);
     for (const [key, value] of Object.entries(utmParams)) {

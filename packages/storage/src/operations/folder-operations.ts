@@ -3,15 +3,15 @@
  * Provides comprehensive folder management operations for S3-compatible storage providers
  */
 
-import type { S3Client } from "@aws-sdk/client-s3";
 import {
   CopyObjectCommand,
   DeleteObjectsCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  type S3Client,
 } from "@aws-sdk/client-s3";
 
-import { getMimeType } from "../helpers.js";
+import { getMimeType } from "../helpers";
 import type {
   CopyFolderOptions,
   CopyFolderResult,
@@ -27,7 +27,7 @@ import type {
   RenameFolderOptions,
   RenameFolderResult,
   S3Config,
-} from "../types/index.js";
+} from "../types";
 
 /**
  * S3 folder operations implementation
@@ -40,14 +40,10 @@ export class FolderOperations {
     private config: S3Config,
   ) {}
 
-  async createFolder(
-    options: CreateFolderOptions,
-  ): Promise<CreateFolderResult> {
+  async createFolder(options: CreateFolderOptions): Promise<CreateFolderResult> {
     try {
       // Ensure path ends with /
-      const folderPath = options.path.endsWith("/")
-        ? options.path
-        : `${options.path}/`;
+      const folderPath = options.path.endsWith("/") ? options.path : `${options.path}/`;
 
       // Create a placeholder object to represent the folder
       const command = new PutObjectCommand({
@@ -71,14 +67,10 @@ export class FolderOperations {
     }
   }
 
-  async deleteFolder(
-    options: DeleteFolderOptions,
-  ): Promise<DeleteFolderResult> {
+  async deleteFolder(options: DeleteFolderOptions): Promise<DeleteFolderResult> {
     try {
       // Ensure path ends with /
-      const folderPath = options.path.endsWith("/")
-        ? options.path
-        : `${options.path}/`;
+      const folderPath = options.path.endsWith("/") ? options.path : `${options.path}/`;
 
       if (options.recursive) {
         // List all objects with the folder prefix
@@ -107,29 +99,29 @@ export class FolderOperations {
 
         const deleteResult = await this.client.send(deleteCommand);
 
-        const deletedFiles =
-          deleteResult.Deleted?.map((obj) => obj.Key!).filter(Boolean) || [];
+        const deletedFiles = deleteResult.Deleted?.map((obj) => obj.Key!).filter(Boolean) || [];
 
         return {
           success: true,
           deletedFiles,
         };
+      } else {
+        // Just delete the folder placeholder
+        const deleteCommand = new DeleteObjectsCommand({
+          Bucket: this.config.bucket,
+          Delete: {
+            Objects: [{ Key: folderPath }],
+            Quiet: false,
+          },
+        });
+
+        await this.client.send(deleteCommand);
+
+        return {
+          success: true,
+          deletedFiles: [folderPath],
+        };
       }
-      // Just delete the folder placeholder
-      const deleteCommand = new DeleteObjectsCommand({
-        Bucket: this.config.bucket,
-        Delete: {
-          Objects: [{ Key: folderPath }],
-          Quiet: false,
-        },
-      });
-
-      await this.client.send(deleteCommand);
-
-      return {
-        success: true,
-        deletedFiles: [folderPath],
-      };
     } catch (error) {
       return {
         success: false,
@@ -138,9 +130,7 @@ export class FolderOperations {
     }
   }
 
-  async listFolders(
-    options: ListFoldersOptions = {},
-  ): Promise<ListFoldersResult> {
+  async listFolders(options: ListFoldersOptions = {}): Promise<ListFoldersResult> {
     try {
       const command = new ListObjectsV2Command({
         Bucket: this.config.bucket,
@@ -228,25 +218,16 @@ export class FolderOperations {
     } catch (error) {
       return {
         exists: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Check folder existence failed",
+        error: error instanceof Error ? error.message : "Check folder existence failed",
       };
     }
   }
 
-  async renameFolder(
-    options: RenameFolderOptions,
-  ): Promise<RenameFolderResult> {
+  async renameFolder(options: RenameFolderOptions): Promise<RenameFolderResult> {
     try {
       // This is essentially a copy + delete operation for all files in the folder
-      const oldPath = options.oldPath.endsWith("/")
-        ? options.oldPath
-        : `${options.oldPath}/`;
-      const newPath = options.newPath.endsWith("/")
-        ? options.newPath
-        : `${options.newPath}/`;
+      const oldPath = options.oldPath.endsWith("/") ? options.oldPath : `${options.oldPath}/`;
+      const newPath = options.newPath.endsWith("/") ? options.newPath : `${options.newPath}/`;
 
       // List all objects in the old folder
       const listCommand = new ListObjectsV2Command({

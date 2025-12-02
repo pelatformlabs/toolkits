@@ -1,3 +1,3 @@
-export * from "./cctlds.js";
-export * from "./second.js";
-export * from "./special.js";
+export * from "./cctlds";
+export * from "./second";
+export * from "./special";

@@ -61,15 +61,12 @@ export const isIframeable = async ({
 
   const cspHeader = res.headers.get("content-security-policy");
   if (cspHeader) {
-    const frameAncestorsMatch = cspHeader.match(
-      /frame-ancestors\s+([\s\S]+?)(?=;|$)/i,
-    );
+    const frameAncestorsMatch = cspHeader.match(/frame-ancestors\s+([\s\S]+?)(?=;|$)/i);
     if (frameAncestorsMatch) {
-      const ancestors = frameAncestorsMatch[1] ?? "";
-      if (ancestors === "*") {
+      if (frameAncestorsMatch[1] === "*") {
         return true;
       }
-      const allowedOrigins = ancestors.split(/\s+/);
+      const allowedOrigins = frameAncestorsMatch[1].split(/\s+/);
       if (allowedOrigins.includes(requestDomain)) {
         return true;
       }

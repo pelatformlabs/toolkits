@@ -12,7 +12,7 @@ import type {
   IEmailProvider,
   ResendConfig,
   SendEmailOptions,
-} from "../types.js";
+} from "../types";
 
 /**
  * Resend email provider implementation
@@ -87,7 +87,7 @@ export class ResendProvider implements IEmailProvider {
         };
       }
 
-      if (!(this.config.from.email && this.config.from.name)) {
+      if (!this.config.from.email || !this.config.from.name) {
         return {
           valid: false,
           error: "From email and name are required",
@@ -108,8 +108,7 @@ export class ResendProvider implements IEmailProvider {
     } catch (error) {
       return {
         valid: false,
-        error:
-          error instanceof Error ? error.message : "Unknown validation error",
+        error: error instanceof Error ? error.message : "Unknown validation error",
       };
     }
   }
@@ -160,9 +159,7 @@ export class ResendProvider implements IEmailProvider {
       }
 
       if (options.bcc) {
-        emailData.bcc = Array.isArray(options.bcc)
-          ? options.bcc
-          : [options.bcc];
+        emailData.bcc = Array.isArray(options.bcc) ? options.bcc : [options.bcc];
       }
 
       if (options.html) {
@@ -209,8 +206,7 @@ export class ResendProvider implements IEmailProvider {
     } catch (error) {
       return {
         success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
+        error: error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }

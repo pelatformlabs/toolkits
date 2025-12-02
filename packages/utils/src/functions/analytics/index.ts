@@ -1,1 +1,1 @@
-export * from "./google.js";
+export * from "./google";

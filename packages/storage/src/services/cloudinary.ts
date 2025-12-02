@@ -3,8 +3,8 @@
  * High-level service wrapper for Cloudinary storage operations with convenience methods
  */
 
-import { loadCloudinaryConfig } from "../config.js";
-import { CloudinaryProvider } from "../providers/cloudinary.js";
+import { loadCloudinaryConfig } from "../config";
+import { CloudinaryProvider } from "../providers/cloudinary";
 import type {
   BatchDeleteOptions,
   BatchDeleteResult,
@@ -38,7 +38,7 @@ import type {
   StorageInterface,
   UploadOptions,
   UploadResult,
-} from "../types/index.js";
+} from "../types";
 
 /**
  * Cloudinary storage service
@@ -106,22 +106,16 @@ export class CloudinaryService implements StorageInterface {
     return this.provider.duplicate(options);
   }
 
-  async getPresignedUrl(
-    options: PresignedUrlOptions,
-  ): Promise<PresignedUrlResult> {
+  async getPresignedUrl(options: PresignedUrlOptions): Promise<PresignedUrlResult> {
     return this.provider.getPresignedUrl(options);
   }
 
   // Folder operations
-  async createFolder(
-    options: CreateFolderOptions,
-  ): Promise<CreateFolderResult> {
+  async createFolder(options: CreateFolderOptions): Promise<CreateFolderResult> {
     return this.provider.createFolder(options);
   }
 
-  async deleteFolder(
-    options: DeleteFolderOptions,
-  ): Promise<DeleteFolderResult> {
+  async deleteFolder(options: DeleteFolderOptions): Promise<DeleteFolderResult> {
     return this.provider.deleteFolder(options);
   }
 
@@ -133,9 +127,7 @@ export class CloudinaryService implements StorageInterface {
     return this.provider.folderExists(path);
   }
 
-  async renameFolder(
-    options: RenameFolderOptions,
-  ): Promise<RenameFolderResult> {
+  async renameFolder(options: RenameFolderOptions): Promise<RenameFolderResult> {
     return this.provider.renameFolder(options);
   }
 
@@ -206,10 +198,7 @@ export class CloudinaryService implements StorageInterface {
     return this.list({ prefix, maxKeys });
   }
 
-  async getDownloadUrl(
-    key: string,
-    expiresIn?: number,
-  ): Promise<PresignedUrlResult> {
+  async getDownloadUrl(key: string, expiresIn?: number): Promise<PresignedUrlResult> {
     return this.getPresignedUrl({ key, operation: "get", expiresIn });
   }
 
@@ -231,10 +220,7 @@ export class CloudinaryService implements StorageInterface {
     return this.createFolder({ path });
   }
 
-  async deleteFolderPath(
-    path: string,
-    recursive = false,
-  ): Promise<DeleteFolderResult> {
+  async deleteFolderPath(path: string, recursive = false): Promise<DeleteFolderResult> {
     return this.deleteFolder({ path, recursive });
   }
 
@@ -243,10 +229,7 @@ export class CloudinaryService implements StorageInterface {
     return result.exists;
   }
 
-  async renameFolderPath(
-    oldPath: string,
-    newPath: string,
-  ): Promise<RenameFolderResult> {
+  async renameFolderPath(oldPath: string, newPath: string): Promise<RenameFolderResult> {
     return this.renameFolder({ oldPath, newPath });
   }
 

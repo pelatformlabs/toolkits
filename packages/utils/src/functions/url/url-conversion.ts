@@ -9,7 +9,7 @@
 //   MAIN_DOMAIN,
 //   PORTAL_DOMAIN,
 // } from '../../constants';
-import { isValidUrl } from "./url-validation.js";
+import { isValidUrl } from "./url-validation";
 
 // /**
 //  * Constructs an absolute URL based on the base application URL
@@ -98,9 +98,7 @@ import { isValidUrl } from "./url-validation.js";
  * ```
  */
 export const getUrlFromString = (str: string): string => {
-  if (isValidUrl(str)) {
-    return str;
-  }
+  if (isValidUrl(str)) return str;
   try {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();
@@ -150,9 +148,7 @@ export const getUrlFromString = (str: string): string => {
  * ```
  */
 export const getUrlObjFromString = (str: string): URL | null => {
-  if (isValidUrl(str)) {
-    return new URL(str);
-  }
+  if (isValidUrl(str)) return new URL(str);
   try {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`);
@@ -202,9 +198,7 @@ export const getUrlObjFromString = (str: string): URL | null => {
  * ```
  */
 export const getUrlFromStringIfValid = (str: string): string | null => {
-  if (isValidUrl(str)) {
-    return str;
-  }
+  if (isValidUrl(str)) return str;
   try {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();

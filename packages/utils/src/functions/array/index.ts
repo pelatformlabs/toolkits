@@ -1,3 +1,3 @@
-export * from "./chunk.js";
-export * from "./random-value.js";
-export * from "./stable-sort.js";
+export * from "./chunk";
+export * from "./random-value";
+export * from "./stable-sort";

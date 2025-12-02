@@ -39,7 +39,7 @@
 export const formatDateTimeSmart = (
   datetime: Date | string,
   options?: Intl.DateTimeFormatOptions,
-  locale = "en-US",
+  locale: string = "en-US",
 ): string => {
   const date = new Date(datetime);
   const now = new Date();

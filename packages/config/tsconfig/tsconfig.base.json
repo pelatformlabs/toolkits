@@ -1,45 +1,40 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2024",
-    "lib": ["ES2024"],
-    "outDir": "${configDir}/dist",
-    "rootDir": "${configDir}/src",
-    "tsBuildInfoFile": "${configDir}/dist/.tsbuildinfo",
-    // build
-    "types": [],
-    "esModuleInterop": true,
-    "preserveConstEnums": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "importHelpers": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    // speeds up compilation, make sure you are linting for type-only imports!
-    "verbatimModuleSyntax": true,
-    // Enable this per-project as it prevents isolatedDeclarations from being used
-    // "allowJs": true,
-    // "checkJs": true,
-    // performance in monorepo
-    "incremental": true,
-    "composite": true,
-    "isolatedDeclarations": true,
-    // linting
+    // Type Checking
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    // "noErrorTruncation": true,
-    // sources
-    "sourceMap": true,
+    "strictNullChecks": true,
+    // Modules
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    // Emit
     "declaration": true,
     "declarationMap": true,
-    "inlineSources": true
+    "inlineSources": false,
+    "outDir": "dist",
+    // JavaScript Support
+    "allowJs": true,
+    // Editor Support
+    // Interop Constraints
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    // Backwards Compatibility
+    // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["ES2022"],
+    "target": "ES2022",
+    // Compiler Diagnostics
+    // Projects
+    "composite": false,
+    "incremental": false,
+    // Output Formatting
+    "preserveWatchOutput": true,
+    // Completeness
+    "skipLibCheck": true
   },
-  "include": ["${configDir}/src/**/*"]
+  "exclude": ["node_modules"]
 }

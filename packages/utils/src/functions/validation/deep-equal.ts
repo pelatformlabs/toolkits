@@ -7,10 +7,7 @@
  * Type definition for the deepEqual function
  * Specifies the function signature for comparing two objects deeply
  */
-type DeepEqual = (
-  obj1: Record<string, unknown>,
-  obj2: Record<string, unknown>,
-) => boolean;
+type DeepEqual = (obj1: Record<string, unknown>, obj2: Record<string, unknown>) => boolean;
 
 /**
  * Performs a deep equality check between two objects
@@ -60,12 +57,7 @@ export const deepEqual: DeepEqual = (obj1, obj2) => {
     return true;
   }
 
-  if (
-    typeof obj1 !== "object" ||
-    typeof obj2 !== "object" ||
-    obj1 === null ||
-    obj2 === null
-  ) {
+  if (typeof obj1 !== "object" || typeof obj2 !== "object" || obj1 === null || obj2 === null) {
     return false;
   }
 
@@ -85,18 +77,8 @@ export const deepEqual: DeepEqual = (obj1, obj2) => {
     const val2 = obj2[key];
 
     // If both values are objects, recursively compare them
-    if (
-      typeof val1 === "object" &&
-      val1 !== null &&
-      typeof val2 === "object" &&
-      val2 !== null
-    ) {
-      if (
-        !deepEqual(
-          val1 as Record<string, unknown>,
-          val2 as Record<string, unknown>,
-        )
-      ) {
+    if (typeof val1 === "object" && val1 !== null && typeof val2 === "object" && val2 !== null) {
+      if (!deepEqual(val1 as Record<string, unknown>, val2 as Record<string, unknown>)) {
         return false;
       }
     } else if (val1 !== val2) {

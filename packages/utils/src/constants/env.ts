@@ -10,8 +10,7 @@
  * @example
  * <Recaptcha siteKey={NEXT_PUBLIC_RECAPTCHA_SITE_KEY} />
  */
-export const NEXT_PUBLIC_RECAPTCHA_SITE_KEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+export const NEXT_PUBLIC_RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 /**
  * Slack webhook URLs for different log types.

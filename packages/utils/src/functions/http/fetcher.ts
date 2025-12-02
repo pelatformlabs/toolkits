@@ -59,8 +59,7 @@ export async function fetcher<T = unknown>(
 
   if (!res.ok) {
     const message =
-      (await res.json())?.error?.message ||
-      "An error occurred while fetching the data.";
+      (await res.json())?.error?.message || "An error occurred while fetching the data.";
     const error = new Error(message) as SWRError;
     error.info = message;
     error.status = res.status;

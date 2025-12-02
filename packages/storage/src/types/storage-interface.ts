@@ -23,7 +23,7 @@ import type {
   PresignedUrlResult,
   UploadOptions,
   UploadResult,
-} from "./file-operations.js";
+} from "./file-operations";
 import type {
   CopyFolderOptions,
   CopyFolderResult,
@@ -36,7 +36,7 @@ import type {
   ListFoldersResult,
   RenameFolderOptions,
   RenameFolderResult,
-} from "./folder-operations.js";
+} from "./folder-operations";
 
 /**
  * Main storage interface that all providers must implement

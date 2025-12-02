@@ -3,11 +3,7 @@
  * Provides automatic configuration loading from environment variables
  */
 
-import type {
-  CloudinaryConfig,
-  S3Config,
-  StorageConfig,
-} from "./types/index.js";
+import type { CloudinaryConfig, S3Config, StorageConfig } from "./types";
 
 /**
  * Environment variable names for storage configuration
@@ -70,9 +66,7 @@ function getRequiredEnvVar(key: string): string {
  */
 function getBooleanEnvVar(key: string, defaultValue = false): boolean {
   const value = getEnvVar(key);
-  if (!value) {
-    return defaultValue;
-  }
+  if (!value) return defaultValue;
   return value.toLowerCase() === "true" || value === "1";
 }
 
@@ -109,9 +103,7 @@ function getBooleanEnvVar(key: string, defaultValue = false): boolean {
  * ```
  */
 export function loadS3Config(): S3Config {
-  const provider = getRequiredEnvVar(
-    ENV_VARS.PELATFORM_S3_PROVIDER,
-  ) as S3Config["provider"];
+  const provider = getRequiredEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER) as S3Config["provider"];
 
   // Validate provider
   const validProviders: S3Config["provider"][] = [
@@ -219,8 +211,9 @@ export function loadStorageConfig(): StorageConfig {
   if (provider) {
     if (provider === "cloudinary") {
       return loadCloudinaryConfig();
+    } else {
+      return loadS3Config();
     }
-    return loadS3Config();
   }
 
   // Auto-detect based on available environment variables
@@ -236,8 +229,7 @@ export function loadStorageConfig(): StorageConfig {
 
   if (hasCloudinaryVars) {
     return loadCloudinaryConfig();
-  }
-  if (hasS3Vars) {
+  } else if (hasS3Vars) {
     // Default to AWS if no provider specified
     const config = loadS3Config();
     if (!config.provider) {
@@ -346,20 +338,14 @@ export function isStorageConfigured(): boolean {
  */
 export function getStorageProvider(): string | undefined {
   const provider = getEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER);
-  if (provider) {
-    return provider;
-  }
+  if (provider) return provider;
 
   // Auto-detect
   const hasCloudinaryVars = getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME);
   const hasS3Vars = getEnvVar(ENV_VARS.PELATFORM_S3_BUCKET);
 
-  if (hasCloudinaryVars) {
-    return "cloudinary";
-  }
-  if (hasS3Vars) {
-    return "aws"; // Default S3 provider
-  }
+  if (hasCloudinaryVars) return "cloudinary";
+  if (hasS3Vars) return "aws"; // Default S3 provider
 
   return undefined;
 }

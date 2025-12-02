@@ -3,7 +3,7 @@
  * Provides consistent date range formatting with smart year display
  */
 
-import { formatDate } from "../../index.js";
+import { formatDate } from "../..";
 
 /**
  * Formats a date period (start and end dates) into a readable range string
@@ -51,9 +51,9 @@ export const formatPeriod = (
     periodStart?: Date | null;
     periodEnd?: Date | null;
   },
-  locale = "en-US",
+  locale: string = "en-US",
 ): string => {
-  if (!(d.periodStart && d.periodEnd)) {
+  if (!d.periodStart || !d.periodEnd) {
     return "-";
   }
 
@@ -62,8 +62,7 @@ export const formatPeriod = (
     {
       month: "short",
       year:
-        new Date(d.periodStart).getUTCFullYear() ===
-        new Date(d.periodEnd).getUTCFullYear()
+        new Date(d.periodStart).getUTCFullYear() === new Date(d.periodEnd).getUTCFullYear()
           ? undefined
           : "numeric",
       timeZone: "utc",

@@ -3,7 +3,7 @@
  * Provides intelligent truncation that preserves important parts of URLs
  */
 
-import { truncate } from "./truncate.js";
+import { truncate } from "./truncate";
 
 /**
  * Truncates a domain name while preserving the TLD
@@ -61,9 +61,8 @@ export const smartTruncate = (link: string, maxLength: number): string => {
     return link;
   }
 
-  const parts = link.split("/");
-  const domain = parts.shift() ?? "";
-  const path = parts.join("/");
+  const [domain, ...pathParts] = link.split("/");
+  const path = pathParts.join("/");
   const minDomainLength = 8;
 
   // calculate max path length
@@ -73,10 +72,7 @@ export const smartTruncate = (link: string, maxLength: number): string => {
   const truncatedPath = truncate(path, maxPathLength)!;
 
   // Truncate domain if necessary, preserving TLD
-  const truncatedDomain = truncateDomain(
-    domain,
-    maxLength - truncatedPath.length,
-  );
+  const truncatedDomain = truncateDomain(domain, maxLength - truncatedPath.length);
 
   return `${truncatedDomain}/${truncatedPath}`;
 };

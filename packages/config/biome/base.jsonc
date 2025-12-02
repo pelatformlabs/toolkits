@@ -1,5 +1,4 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "root": false,
   "vcs": {
     "enabled": true,
@@ -25,18 +24,13 @@
   },
   "formatter": {
     "enabled": true,
-    "useEditorconfig": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto"
+    "lineWidth": 100,
+    "lineEnding": "lf"
   },
   "linter": {
     "enabled": true,
-    "domains": {
-      "project": "recommended"
-    },
     "rules": {
       "recommended": true,
       "a11y": {
@@ -52,57 +46,22 @@
         "useSemanticElements": "off",
         "useValidAnchor": "off"
       },
-      "nursery": {
-        "noFloatingPromises": "error",
-        "noUnnecessaryConditions": "error",
-        "useSortedClasses": {
+      "correctness": {
+        "noUnusedImports": {
           "fix": "safe",
           "level": "info",
-          "options": {
-            "functions": ["cn"]
-          }
-        }
+          "options": {}
+        },
+        "noUnknownTypeSelector": "off",
+        "useUniqueElementIds": "off",
+        "noUnusedFunctionParameters": "off",
+        "useParseIntRadix": "off",
+        "useHookAtTopLevel": "off"
       },
       "complexity": {
-        "useSimplifiedLogicExpression": "error",
         "noImportantStyles": "off"
       },
-      "suspicious": {
-        "noDuplicateProperties": "off",
-        "noUnknownAtRules": "off",
-        "noArrayIndexKey": "off",
-        "noExplicitAny": "warn",
-        "noImplicitAnyLet": "off",
-        "noDoubleEquals": {
-          "fix": "safe",
-          "level": "warn",
-          "options": {}
-        }
-      },
       "style": {
-        "useImportType": {
-          "level": "error",
-          "options": {
-            "style": "separatedType"
-          }
-        },
-        "noParameterAssign": "error",
-        "useAsConstAssertion": "error",
-        "useDefaultParameterLast": "error",
-        "useEnumInitializers": "error",
-        "noUnusedTemplateLiteral": "error",
-        "useNumberNamespace": "error",
-        "noInferrableTypes": "error",
-        "noUselessElse": "error",
-        "useBlockStatements": "error",
-        "useCollapsedElseIf": "error",
-        "useConsistentArrayType": {
-          "level": "error",
-          "options": {
-            "syntax": "shorthand"
-          }
-        },
-        "useConsistentTypeDefinitions": "error",
         "useConst": "error",
         "useShorthandAssign": "error",
         "useSingleVarDeclarator": "error",
@@ -117,31 +76,36 @@
           "fix": "safe",
           "level": "info",
           "options": {}
+        },
+        // For React Fast Refresh to work
+        "useComponentExportOnlyModules": "warn",
+        "useReactFunctionComponents": "error"
+      },
+      "suspicious": {
+        "noDuplicateProperties": "off",
+        "noUnknownAtRules": "off",
+        "noArrayIndexKey": "off",
+        "noExplicitAny": "warn",
+        "noImplicitAnyLet": "off",
+        "noDoubleEquals": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {}
         }
       },
-      "correctness": {
-        "noUnusedVariables": "warn",
-        "noUndeclaredDependencies": "error",
-        "useImportExtensions": {
-          "level": "error",
-          "options": {
-            "forceJsExtensions": true
-          }
-        },
-        "noUnusedImports": {
+      "nursery": {
+        "useSortedClasses": {
           "fix": "safe",
           "level": "info",
-          "options": {}
-        },
-        "noUnknownTypeSelector": "off",
-        "useUniqueElementIds": "off",
-        "noUnusedFunctionParameters": "off",
-        "useParseIntRadix": "off",
-        "useHookAtTopLevel": "off"
+          "options": {
+            "functions": ["cn"]
+          }
+        }
       }
     }
   },
   "assist": {
+    "enabled": true,
     "actions": {
       "source": {
         "organizeImports": {
@@ -155,13 +119,7 @@
               "react/**",
               "next",
               "next/**",
-              [
-                ":PACKAGE:",
-                "!@pelatform/**",
-                "!pelatformui",
-                "!pelatformui/**",
-                "!@repo/**"
-              ],
+              [":PACKAGE:", "!@pelatform/**", "!pelatformui", "!pelatformui/**", "!@repo/**"],
               ":BLANK_LINE:",
               "@pelatform/**",
               "pelatformui",
@@ -176,9 +134,6 @@
     }
   },
   "json": {
-    "parser": {
-      "allowTrailingCommas": true
-    },
     "formatter": {
       "indentStyle": "space",
       "indentWidth": 2,
@@ -187,18 +142,30 @@
   },
   "javascript": {
     "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
+      "quoteStyle": "double",
       "arrowParentheses": "always",
       "bracketSameLine": false,
-      "bracketSpacing": true
+      "bracketSpacing": true,
+      "quoteProperties": "asNeeded",
+      "semicolons": "always",
+      "trailingCommas": "all"
     }
   },
   "html": {
     "formatter": {
       "enabled": true
+    },
+    "experimentalFullSupportEnabled": true
+  },
+  "css": {
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "quoteStyle": "double"
+    },
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }

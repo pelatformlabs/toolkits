@@ -12,6 +12,6 @@
 // export { CloudinaryService } from './services/cloudinary';
 
 // === CONFIGURATION UTILITIES ===
-export * from "./config.js";
+export * from "./config";
 // === PUBLIC TYPES ===
-export type * from "./types/index.js";
+export type * from "./types";

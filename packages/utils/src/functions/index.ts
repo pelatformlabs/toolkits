@@ -1,26 +1,26 @@
 // Export all functions from the functions directory
 
 // Analytics and tracking
-export * from "./analytics/index.js";
+export * from "./analytics";
 // Array utilities
-export * from "./array/index.js";
+export * from "./array";
 // Browser utilities
-export * from "./browser/index.js";
+export * from "./browser";
 // Crypto and security
-export * from "./crypto/index.js";
+export * from "./crypto";
 // Date and time utilities
-export * from "./datetime/index.js";
+export * from "./datetime";
 // File utilities
-export * from "./file/index.js";
+export * from "./file";
 // HTTP and network utilities
-export * from "./http/index.js";
+export * from "./http";
 // Logging utilities
-export * from "./logging/index.js";
+export * from "./logging";
 // Performance utilities
-export * from "./performance/index.js";
+export * from "./performance";
 // String utilities
-export * from "./string/index.js";
+export * from "./string";
 // URL utilities
-export * from "./url/index.js";
+export * from "./url";
 // Validation utilities
-export * from "./validation/index.js";
+export * from "./validation";

@@ -51,11 +51,9 @@ export function nFormatter(
   opts: { digits?: number; full?: boolean } = {
     digits: 1,
   },
-  locale = "en-US",
+  locale: string = "en-US",
 ): string {
-  if (!num) {
-    return "0";
-  }
+  if (!num) return "0";
   if (opts.full) {
     return Intl.NumberFormat(locale).format(num);
   }
@@ -79,7 +77,5 @@ export function nFormatter(
     .slice()
     .reverse()
     .find((item) => num >= item.value);
-  return item
-    ? (num / item.value).toFixed(opts.digits).replace(rx, "$1") + item.symbol
-    : "0";
+  return item ? (num / item.value).toFixed(opts.digits).replace(rx, "$1") + item.symbol : "0";
 }

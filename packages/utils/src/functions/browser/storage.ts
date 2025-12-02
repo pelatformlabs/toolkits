@@ -4,7 +4,7 @@
  * with SSR compatibility and error handling
  */
 
-import { logger } from "../logging/index.js";
+import { logger } from "../logging";
 
 /**
  * Type representing browser storage options
@@ -19,9 +19,7 @@ type StorageType = "localStorage" | "sessionStorage";
  * @returns The Storage object or null if running in a non-browser environment
  */
 const getStorageObject = (storageType: StorageType): Storage | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
+  if (typeof window === "undefined") return null;
   return storageType === "localStorage" ? localStorage : sessionStorage;
 };
 
@@ -53,9 +51,7 @@ const getStorageItem = <T = unknown>(
 ): T | undefined => {
   try {
     const storage = getStorageObject(storageType);
-    if (!storage) {
-      return defaultValue;
-    }
+    if (!storage) return defaultValue;
 
     const data = storage.getItem(key);
     if (data) {
@@ -91,9 +87,7 @@ const setStorageItem = (
 ): void => {
   try {
     const storage = getStorageObject(storageType);
-    if (!storage) {
-      return;
-    }
+    if (!storage) return;
 
     storage.setItem(key, JSON.stringify(value));
   } catch (error) {
@@ -116,15 +110,10 @@ const setStorageItem = (
  * removeStorageItem('tempData', 'sessionStorage');
  * ```
  */
-const removeStorageItem = (
-  key: string,
-  storageType: StorageType = "localStorage",
-): void => {
+const removeStorageItem = (key: string, storageType: StorageType = "localStorage"): void => {
   try {
     const storage = getStorageObject(storageType);
-    if (!storage) {
-      return;
-    }
+    if (!storage) return;
 
     storage.removeItem(key);
   } catch (error) {
@@ -149,9 +138,7 @@ const removeStorageItem = (
 const clearStorage = (storageType: StorageType = "localStorage"): void => {
   try {
     const storage = getStorageObject(storageType);
-    if (!storage) {
-      return;
-    }
+    if (!storage) return;
 
     storage.clear();
   } catch (error) {
@@ -177,15 +164,10 @@ const clearStorage = (storageType: StorageType = "localStorage"): void => {
  * }
  * ```
  */
-const hasStorageItem = (
-  key: string,
-  storageType: StorageType = "localStorage",
-): boolean => {
+const hasStorageItem = (key: string, storageType: StorageType = "localStorage"): boolean => {
   try {
     const storage = getStorageObject(storageType);
-    if (!storage) {
-      return false;
-    }
+    if (!storage) return false;
 
     return storage.getItem(key) !== null;
   } catch (error) {

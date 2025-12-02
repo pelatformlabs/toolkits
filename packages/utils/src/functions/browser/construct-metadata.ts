@@ -3,15 +3,15 @@
  * Provides functions for building SEO-optimized metadata for Next.js applications
  */
 
-import { assetsUrl } from "../string/index.js";
+import { assetsUrl } from "../string";
 
-export interface metadataProps {
+export type metadataProps = {
   baseUrl?: string;
   title?: string;
   fullTitle?: string;
   description?: string;
   // biome-ignore lint/suspicious/noExplicitAny: disable
-  icons?: Record<string, any>[];
+  icons?: Array<Record<string, any>>;
   url?: string;
   image?: string | null;
   video?: string | null;
@@ -42,7 +42,7 @@ export interface metadataProps {
   noArchive?: boolean;
   noSnippet?: boolean;
   manifest?: string | URL | null;
-}
+};
 
 /**
  * Helper to map short locale codes to Open Graph/SEO locale format
@@ -50,9 +50,7 @@ export interface metadataProps {
  * @returns Open Graph locale string (e.g., 'en_US', 'id_ID', 'ar_AR', 'zh_CN')
  */
 function mapLocale(locale?: string): string | undefined {
-  if (!locale) {
-    return undefined;
-  }
+  if (!locale) return undefined;
 
   const mapping: Record<string, string> = {
     en: "en_US",

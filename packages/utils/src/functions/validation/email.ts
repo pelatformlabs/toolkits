@@ -189,7 +189,7 @@ export function validateEmail(
 
   // Check for business email
   const isFreeEmail = FREE_EMAIL_DOMAINS.has(domain);
-  const isBusiness = !(isFreeEmail || isDisposable);
+  const isBusiness = !isFreeEmail && !isDisposable;
 
   if (requireBusiness && !isBusiness) {
     return {
@@ -241,15 +241,12 @@ export function validateEmail(
  */
 export function normalizeEmail(email: string): string | null {
   const result = validateEmail(email);
-  if (!(result.isValid && result.normalized)) {
+  if (!result.isValid || !result.normalized) {
     return null;
   }
 
   let normalized = result.normalized;
   const [localPart, domain] = normalized.split("@");
-  if (!(localPart && domain)) {
-    return null;
-  }
 
   // Gmail-specific normalization
   if (domain === "gmail.com") {
@@ -295,9 +292,9 @@ export function normalizeEmail(email: string): string | null {
  * }
  * ```
  */
-export function isDisposableEmail(email: string): boolean | null {
+export function isDisposableEmail(email: string): boolean {
   const result = validateEmail(email);
-  return result.details?.isDisposable || null;
+  return result.details?.isDisposable || false;
 }
 
 /**
@@ -322,9 +319,9 @@ export function isDisposableEmail(email: string): boolean | null {
  * }
  * ```
  */
-export function isBusinessEmail(email: string): boolean | null {
+export function isBusinessEmail(email: string): boolean {
   const result = validateEmail(email);
-  return result.details?.isBusiness || null;
+  return result.details?.isBusiness || false;
 }
 
 /**

@@ -82,7 +82,7 @@ export function cuid() {
  * };
  * ```
  */
-export function customeId(prefix?: string, length = 12) {
+export function customeId(prefix?: string, length: number = 12) {
   const generateId = init({
     random: Math.random,
     length,
