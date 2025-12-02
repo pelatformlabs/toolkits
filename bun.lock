@@ -82,7 +82,7 @@
     },
     "packages/utils": {
       "name": "@pelatform/utils",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "dependencies": {
         "@paralleldrive/cuid2": "^3.1.0",
         "@sindresorhus/slugify": "^3.0.0",
