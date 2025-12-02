@@ -30,7 +30,7 @@
     },
     "packages/config/tsconfig": {
       "name": "@pelatform/tsconfig",
-      "version": "0.0.1",
+      "version": "0.1.0",
     },
   },
   "packages": {
