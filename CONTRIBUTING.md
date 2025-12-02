@@ -1,18 +1,20 @@
-# Contributing to Bun Package Template
+# Contributing to Pelatform Toolkits
 
-Thank you for your interest in contributing! This template aims to provide a clean, production-ready Bun monorepo setup for building and publishing TypeScript/Node packages.
+Thank you for your interest in contributing to Pelatform Toolkits! This monorepo hosts utility packages for modern SaaS development (email, storage, shared utils) built with TypeScript.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the maintainers via email (replace with your contact email).
+This project is governed by our [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to pelatformdev@gmail.com.
 
 ## Why Contribute?
 
-This template is community-driven. Your contributions help:
+Pelatform Toolkits is a community-driven collection of packages that standardize common SaaS capabilities. Your contributions help:
 
-- Improve developer experience and documentation
-- Fix issues and enhance reliability
-- Extend tooling and workflow capabilities
+- Improve email templates and delivery providers
+- Enhance storage abstractions and provider integrations
+- Expand and refine shared utility functions
+- Fix bugs, improve performance, and strengthen type-safety
+- Keep documentation clear and up-to-date
 
 ## Getting Started
 
@@ -27,8 +29,8 @@ This template is community-driven. Your contributions help:
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-   cd YOUR_REPOSITORY
+   git clone https://github.com/devpelatform/toolkits.git
+   cd toolkits
    ```
 3. Install dependencies:
    ```bash
@@ -67,13 +69,15 @@ bun run format
 
 ```bash
 # Navigate to a package directory
-cd packages/your-package
+cd packages/email        # or packages/storage, packages/utils
 
-# Run package-specific commands (if defined in that package)
+# Package-specific commands
 bun run dev            # Development with watch mode
 bun run build          # Build the package
 bun run types:check    # Type-check the package
 ```
+
+If the package includes environment variables, copy `.env.example` to `.env` and adjust values for local development.
 
 ## Code Style
 
@@ -88,19 +92,17 @@ This project uses [Biome](https://biomejs.dev/) for linting and formatting to en
 - **Trailing Commas**: All
 - **Arrow Parentheses**: Always
 
-### Lint dan Format
+### Format and Lint
 
-Before committing, always run:
+Before committing, run:
 
 ```bash
-# Lint (check)
-bun run lint
+# Format and lint in one command
+bun run lint:format
 
-# Lint (auto-fix)
-bun run lint:fix
-
-# Format only
-bun run format
+# Or run separately
+bun run format    # Format only
+bun run lint      # Lint only
 ```
 
 ## Making Changes
@@ -109,34 +111,32 @@ bun run format
 
 Use descriptive branch names:
 
-- `feature/add-new-capability` - For new features
-- `fix/build-script-bug` - For bug fixes
+- `feature/add-new-animation-component` - For new features
+- `fix/hook-hydration-bug` - For bug fixes
 - `docs/update-readme` - For documentation
-- `refactor/simplify-structure` - For refactoring
+- `refactor/simplify-components` - For refactoring
 
 ### Commit Messages
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat(template): add package scaffolding script
-fix(ci): correct bun run command in workflow
-docs(readme): clarify release process
-refactor(workspace): simplify outputs in turbo.json
-test(package): add basic type check script
+feat(animation): add new text reveal component
+fix(hook): resolve hydration mismatch in useMounted
+docs(general): update utility function documentation
+refactor(base): simplify button component variants
+test(default): add unit tests for data grid filtering
 ```
 
 **Format**: `type(scope): description`
 
 **Types**:
 
-- `feat` or `feature`: New feature
+- `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
 - `refactor`: Code refactoring
 - `test`: Adding or updating tests
-- `build`: Build system changes
-- `ci`: CI configuration changes
 - `chore`: Maintenance tasks
 
 ### Writing Code
@@ -206,9 +206,9 @@ Make sure:
 ### Pull Request Checklist
 
 - [ ] Code follows the project's style guidelines
-- [ ] All checks pass (`bun run types:check`)
-- [ ] Build succeeds (`bun run build`)
-- [ ] Code is properly formatted (`bun run lint:format`)
+- [ ] Type-check succeeds (`bun types:check`)
+- [ ] Build succeeds (`bun build`)
+- [ ] Code is properly formatted (`bun lint:format`)
 - [ ] Commit messages follow conventional commits
 - [ ] Documentation is updated (if needed)
 - [ ] No breaking changes (or clearly documented if necessary)
@@ -218,10 +218,11 @@ Make sure:
 ### Adding a New Package
 
 1. Create a new directory in `packages/`
-2. Copy the structure from an existing package
-3. Update `package.json` with appropriate metadata
-4. (Optional) Create `tsup.config.ts` for build configuration
-5. Ensure the package is included in the workspace
+2. Copy the structure from an existing package (`packages/email`, `packages/storage`, or `packages/utils`)
+3. Update `package.json` with appropriate metadata and workspace name (e.g., `@pelatform/<name>`)
+4. Create `tsup.config.ts` for build configuration
+5. Add TypeScript configuration (`tsconfig.json`)
+6. Add the package to the workspace (Turborepo and root `workspaces` already include `packages/*`)
 
 ### Package Structure
 
@@ -234,6 +235,7 @@ packages/your-package/
 ├── package.json          # Package metadata
 ├── tsup.config.ts        # Build configuration
 ├── tsconfig.json         # TypeScript configuration
+├── .env.example          # Environment variables (if needed)
 └── README.md             # Package documentation
 ```
 
@@ -244,7 +246,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) for ver
 1. **Create a changeset**:
 
    ```bash
-   npx changeset
+   bunx changeset
    ```
 
    Follow the prompts to describe your changes.
@@ -267,7 +269,7 @@ This project uses [Changesets](https://github.com/changesets/changesets) for ver
 
 ## Security
 
-If you discover a security vulnerability, please report it privately as described in [SECURITY.md](./SECURITY.md). Replace the contact email with your own when using this template.
+If you discover a security vulnerability within Pelatform Toolkits, please send an email to pelatformdev@gmail.com. All security vulnerabilities will be promptly addressed.
 
 **Do not report security issues through public GitHub issues.**
 
@@ -276,9 +278,10 @@ If you discover a security vulnerability, please report it privately as describe
 If you have questions or need help:
 
 - Check the [documentation](./README.md) and package READMEs
-- Open an issue in your repository
-- Start a discussion in your repository
+- Search [existing issues](https://github.com/devpelatform/toolkits/issues) and [discussions](https://github.com/devpelatform/toolkits/discussions)
+- Open a new [discussion](https://github.com/devpelatform/toolkits/discussions) for questions
+- Open an [issue](https://github.com/devpelatform/toolkits/issues) for bug reports
 
 ## License
 
-By contributing to this template, you agree that your contributions will be licensed under the MIT License.
+By contributing to Pelatform Toolkits, you agree that your contributions will be licensed under the MIT License.

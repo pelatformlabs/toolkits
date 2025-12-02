@@ -1,88 +1,106 @@
-# Bun Package Template
+# Pelatform Toolkits
 
-**A minimal, production-ready Bun monorepo template for building and publishing TypeScript/Node packages.**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Bun](https://img.shields.io/badge/bun-1.3.3-black)](https://bun.sh)
 
-This template provides a ready-to-use setup for multi-package repositories with Bun as the package manager, Turborepo for task orchestration, Biome for linting/formatting, Changesets for versioning and releases, and GitHub Actions for CI.
+A collection of ready-to-use packages for modern application development. This monorepo includes reusable packages for email, storage, common utilities, and shared linting/TypeScript configurations.
 
-## Features
+## Packages
 
-- Monorepo workspaces: `packages/**`, optional `apps/**`
-- Bun-first workflows: `bun install`, `bun run <script>`
-- Turborepo pipelines for `dev`, `build`, `start`, `types:check`
-- Biome-based lint and format with consistent project style
-- Versioning and publishing via Changesets
-- CI workflows for linting and releases
+| Package                                            | Version                                                                                                                   | Description                                                 |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [@pelatform/email](./packages/email)               | [![npm](https://img.shields.io/npm/v/@pelatform/email.svg)](https://www.npmjs.com/package/@pelatform/email)               | Email templates and sending utilities (Resend, Nodemailer)  |
+| [@pelatform/storage](./packages/storage)           | [![npm](https://img.shields.io/npm/v/@pelatform/storage.svg)](https://www.npmjs.com/package/@pelatform/storage)           | Unified storage interface (S3, Cloudinary, R2, MinIO, etc.) |
+| [@pelatform/utils](./packages/utils)               | [![npm](https://img.shields.io/npm/v/@pelatform/utils.svg)](https://www.npmjs.com/package/@pelatform/utils)               | Common utility functions for SaaS applications              |
+| [@pelatform/biome-config](./packages/config/biome) | [![npm](https://img.shields.io/npm/v/@pelatform/biome-config.svg)](https://www.npmjs.com/package/@pelatform/biome-config) | Opinionated Biome config for lint/format                    |
+| [@pelatform/tsconfig](./packages/config/tsconfig)  | [![npm](https://img.shields.io/npm/v/@pelatform/tsconfig.svg)](https://www.npmjs.com/package/@pelatform/tsconfig)         | Extendable TypeScript configuration presets                 |
+
+## Tech Stack
+
+- **Package Manager**: Bun
+- **Monorepo Tool**: Turborepo
+- **Build Tool**: tsup
+- **Linting/Formatting**: Biome
+- **Language**: TypeScript
 
 ## Getting Started
 
+### Prerequisites
+
+- [Bun](https://bun.sh) 1.3.3 or higher
+- Node.js 22 or higher
+
+### Installation
+
 ```bash
-# Install dependencies
+# Clone repository
+git clone https://github.com/devpelatform/toolkits.git
+cd toolkits
+
+# Install dependencies (Bun)
 bun install
-
-# Development
-bun run dev
-
-# Build all workspaces
-bun run build
-
-# Type-check
-bun run types:check
-
-# Lint (check)
-bun run lint
-
-# Lint (auto-fix)
-bun run lint:fix
-
-# Format code
-bun run format
 ```
 
-## Workspace Layout
-
-- `packages/` – Each published or internal package lives here
-- `apps/` – Optional applications (e.g., docs, demos) consuming packages
-
-Example package structure:
-
-```
-packages/your-package/
-├── src/
-│   ├── index.ts
-│   └── ...
-├── package.json
-├── tsconfig.json
-├── tsup.config.ts (optional)
-└── README.md
-```
-
-## Releases
-
-This template uses Changesets.
+### Common Commands
 
 ```bash
-# Create a changeset describing your changes
-npx changeset
+# Development
+bun run dev                # Run all packages (watch mode)
+bun run build              # Build all packages
+bun run types:check        # Type-check all packages
 
-# Version packages (CI will also do this)
-bun run version
+# Linting & Formatting (Biome)
+bun run lint               # Lint with safe fixes
+bun run lint:fix           # Lint with comprehensive fixes
+bun run format             # Format code
+bun run format:check       # Check format and fix when needed
 
-# Publish updated packages (CI release workflow)
-bun run release
+# Maintenance
+bun run clean              # Clean build outputs
+bun run clean:all          # Deep clean (.turbo, bun.lock, node_modules)
 ```
 
-Ensure `NPM_TOKEN` is configured in CI for publishing.
+### Working on Individual Packages
+
+```bash
+# Navigate to a specific package
+cd packages/email          # or packages/storage, packages/utils
+
+# Package commands
+bun run dev                # Development mode (watch)
+bun run build              # Build the package
+bun run types:check        # Type-check the package
+```
+
+## Development Workflow
+
+1. **Create a branch** for your changes
+2. **Make your changes** in the appropriate package(s)
+3. **Run tests** and type-check: `bun types:check`
+4. **Format your code**: `bun lint:format`
+5. **Commit your changes** following conventional commits
+6. **Submit a pull request**
+
+For detailed contribution guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) and follow the [Code of Conduct](./CODE_OF_CONDUCT.md).
+We welcome contributions! This project is community-driven and your help makes it better.
+
+**Getting Started:**
+
+- Read the [Contributing Guide](./CONTRIBUTING.md) for development setup and guidelines
+- Check the [Code of Conduct](./CODE_OF_CONDUCT.md)
+- Browse [open issues](https://github.com/devpelatform/dev/issues) or start a [discussion](https://github.com/devpelatform/dev/discussions)
 
 ## Security
 
-Please report vulnerabilities privately as described in [SECURITY.md](./SECURITY.md). Replace the contact email with your own when using this template.
+If you discover a security vulnerability, please email **pelatformdev@gmail.com**. All vulnerabilities will be addressed promptly.
+
+Do not report security issues through public GitHub issues.
 
 ## License
 
-MIT License – see [LICENSE](./LICENSE).
+MIT License — see [LICENSE](./LICENSE) for details.
 
-By contributing to this template, you agree that your contributions will be licensed under the MIT License.
+By contributing to Pelatform Toolkits, you agree that your contributions will be licensed under the MIT License.
