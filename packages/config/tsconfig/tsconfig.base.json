@@ -11,7 +11,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     // "rootDir": "src",
-    "types": [],
+    // "types": [],
     // Emit
     "declaration": true,
     "declarationMap": true,
@@ -26,7 +26,7 @@
     "isolatedModules": true,
     // Backwards Compatibility
     // Language and Environment
-    "jsx": "react-jsx",
+    // "jsx": "react-jsx",
     "lib": ["ES2022"],
     "target": "ES2022",
     // Compiler Diagnostics
@@ -38,6 +38,5 @@
     // Completeness
     "skipLibCheck": true
   },
-  "exclude": ["node_modules"],
-  "include": ["src"]
+  "exclude": ["node_modules"]
 }
