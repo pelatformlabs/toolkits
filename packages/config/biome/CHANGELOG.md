@@ -1,5 +1,11 @@
 # @pelatform/biome-config
 
+## 0.1.3
+
+### Patch Changes
+
+- [`e77f245`](https://github.com/devpelatform/toolkits/commit/e77f2453746e1ee408c60fe779ec0cec71974296) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Clean up biome config and fix package name references
+
 ## 0.1.2
 
 ### Patch Changes

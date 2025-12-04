@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/biome-config",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Opinionated Biome configuration for modern TypeScript projects.",
   "author": "Pelatform",
   "license": "MIT",

@@ -1,5 +1,11 @@
 # @pelatform/tsconfig
 
+## 0.1.2
+
+### Patch Changes
+
+- [`e77f245`](https://github.com/devpelatform/toolkits/commit/e77f2453746e1ee408c60fe779ec0cec71974296) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Add default types and include src in base.json
+
 ## 0.1.1
 
 ### Patch Changes
