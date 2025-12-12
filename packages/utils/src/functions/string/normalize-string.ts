@@ -3,8 +3,8 @@
  * Provides consistent string formatting by removing special characters and normalizing whitespace
  */
 
-import { isDevelopment } from "../../constants";
-import { logger } from "../logging";
+import { isDevelopment } from "../../constants/development";
+import { logger } from "../logging/logger";
 
 /**
  * Normalizes a string by removing special characters and normalizing whitespace

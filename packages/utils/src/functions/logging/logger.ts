@@ -6,7 +6,7 @@
 
 import { createConsola } from "consola";
 
-import { isDevelopment, LOG_LEVEL } from "../../constants";
+import { isDevelopment, LOG_LEVEL } from "../../constants/development";
 
 /**
  * Application logger instance with consistent formatting

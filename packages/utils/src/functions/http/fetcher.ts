@@ -13,6 +13,29 @@ interface SWRError extends Error {
 }
 
 /**
+ * HTTP request methods supported by the `request` utility
+ * Ensures type-safe method selection for fetch operations
+ */
+type RequestMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+
+/**
+ * Options for the `request` utility
+ * Controls request headers and optional logging
+ */
+type RequestOptions = {
+  /**
+   * Custom headers to include in the request
+   * When sending JSON, `Content-Type: application/json` is automatically added
+   */
+  headers?: Record<string, string>;
+  /**
+   * Whether to log the endpoint and response to console
+   * Useful for debugging during development (default: false)
+   */
+  log?: boolean;
+};
+
+/**
  * Fetches data from an API endpoint with proper error handling
  * Designed to work seamlessly with SWR data fetching library
  *
@@ -68,4 +91,73 @@ export async function fetcher<T = unknown>(
   }
 
   return res.json();
+}
+
+/**
+ * Performs an HTTP request with optional JSON or FormData payload
+ * Automatically sets `Content-Type: application/json` for JSON bodies
+ * Supports basic logging of endpoint and response data
+ *
+ * @param endpoint - The target URL to send the request to
+ * @param method - HTTP method to use (default: `GET`)
+ * @param body - Request payload; accepts plain objects or `FormData`
+ * @param options - Additional request options like headers and logging
+ * @returns A Promise resolving to parsed JSON response
+ *
+ * @example
+ * ```ts
+ * // GET request
+ * const users = await request('/api/users');
+ *
+ * // POST JSON body
+ * const created = await request('/api/users', 'POST', { name: 'Alice' });
+ *
+ * // PUT with custom header
+ * const updated = await request('/api/users/1', 'PUT', { name: 'Bob' }, {
+ *   headers: { Authorization: `Bearer ${token}` },
+ * });
+ *
+ * // Multipart/FormData upload
+ * const form = new FormData();
+ * form.append('file', file);
+ * const upload = await request('/api/upload', 'POST', form);
+ * ```
+ */
+export async function request(
+  endpoint: string,
+  method: RequestMethod = "GET",
+  body?: unknown,
+  options?: RequestOptions,
+): Promise<unknown> {
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
+  const headers: Record<string, string> = { ...options?.headers };
+  let payload: BodyInit | undefined;
+
+  if (body !== undefined) {
+    if (isFormData) {
+      payload = body as FormData;
+    } else {
+      headers["Content-Type"] = "application/json";
+      payload = JSON.stringify(body);
+    }
+  }
+
+  const response = await fetch(endpoint, {
+    method,
+    headers,
+    body: payload,
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const data = await response.json();
+
+  if (options?.log) {
+    console.log(endpoint, data);
+  }
+
+  return data;
 }

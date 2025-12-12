@@ -4,8 +4,8 @@
  * Integrates with Google's verification API for bot protection
  */
 
-import { NEXT_PUBLIC_RECAPTCHA_SITE_KEY } from "../../constants";
-import { logger } from "../logging";
+import { NEXT_PUBLIC_RECAPTCHA_SITE_KEY } from "../../constants/env";
+import { logger } from "../logging/logger";
 
 /**
  * Response interface from Google reCAPTCHA verification API

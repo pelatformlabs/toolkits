@@ -6,7 +6,7 @@
 
 import jwt from "jsonwebtoken";
 
-import { logger } from "../logging";
+import { logger } from "../logging/logger";
 
 export { jwt };
 

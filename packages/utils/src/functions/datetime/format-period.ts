@@ -3,7 +3,7 @@
  * Provides consistent date range formatting with smart year display
  */
 
-import { formatDate } from "../..";
+import { formatDate } from "./format-date";
 
 /**
  * Formats a date period (start and end dates) into a readable range string

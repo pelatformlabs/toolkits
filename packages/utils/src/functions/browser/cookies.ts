@@ -4,7 +4,7 @@
  * Works in both client-side and server-side environments
  */
 
-import { logger } from "../logging";
+import { logger } from "../logging/logger";
 
 /**
  * Interface for cookie options

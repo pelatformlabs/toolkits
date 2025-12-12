@@ -4,7 +4,7 @@
  * with SSR compatibility and error handling
  */
 
-import { logger } from "../logging";
+import { logger } from "../logging/logger";
 
 /**
  * Type representing browser storage options

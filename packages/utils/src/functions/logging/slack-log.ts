@@ -3,7 +3,8 @@
  * Provides structured logging to Slack channels based on message type
  */
 
-import { isDevelopment, SLACK_WEBHOOKS } from "../../constants";
+import { isDevelopment } from "../../constants/development";
+import { SLACK_WEBHOOKS } from "../../constants/env";
 import { logger } from "./logger";
 
 /**

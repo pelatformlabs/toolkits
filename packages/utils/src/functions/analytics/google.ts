@@ -14,7 +14,7 @@
  * - Use hooks for: Complex SaaS tracking, React components, state-dependent tracking
  */
 
-import { logger } from "../logging";
+import { logger } from "../logging/logger";
 
 /**
  * Interface for event tracking parameters

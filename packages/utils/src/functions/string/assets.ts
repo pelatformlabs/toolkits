@@ -3,7 +3,10 @@
  * Provides helpers to construct absolute asset URLs against a configurable asset host.
  */
 
-const DEFAULT_ASSET_HOST = "https://assets.pelatform.com";
+const DEFAULT_ASSET_HOST =
+  process.env.NEXT_PUBLIC_ASSETS_URL ||
+  process.env.VITE_ASSETS_URL ||
+  "https://assets.pelatform.com";
 
 /**
  * Builds an absolute URL for a given asset path using the provided asset host (CDN) base.
@@ -58,4 +61,34 @@ export function assetsUrl(path: string, host: string = DEFAULT_ASSET_HOST): stri
   } catch {
     return BASE_HOST;
   }
+}
+
+/**
+ * Build a CDN URL for a country flag SVG.
+ *
+ * The function lowercases the given ISO country code and returns a
+ * fully-qualified URL pointing to the SVG flag hosted on the Pelatform
+ * assets CDN.
+ *
+ * @param flag - ISO 3166-1 alpha-2 country code (e.g., "US", "ID", "GB")
+ * @returns A URL string to the SVG flag on the CDN
+ *
+ * @example
+ * ```ts
+ * import { getFlagUrl } from "@pelatform/ui/utils/flag-url";
+ *
+ * const urlUs = getFlagUrl("US");
+ * // "https://assets.pelatform.com/media/flags/us.svg"
+ *
+ * const urlId = getFlagUrl("id");
+ * // "https://assets.pelatform.com/media/flags/id.svg"
+ *
+ * // Can be used directly in an <img /> or <Image /> component
+ * // <img src={getFlagUrl("GB")} alt="United Kingdom flag" />
+ * ```
+ */
+export function getFlagUrl(flag: string): string {
+  const flagCode = flag.toLowerCase();
+
+  return `${assetsUrl("media/flags")}/${flagCode}.svg`;
 }

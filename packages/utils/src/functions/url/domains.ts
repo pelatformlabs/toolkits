@@ -5,7 +5,9 @@
 
 import slugify from "@sindresorhus/slugify";
 
-import { ccTLDs, SECOND_LEVEL_DOMAINS, SPECIAL_APEX_DOMAINS } from "../../constants";
+import { ccTLDs } from "../../constants/domain/cctlds";
+import { SECOND_LEVEL_DOMAINS } from "../../constants/domain/second";
+import { SPECIAL_APEX_DOMAINS } from "../../constants/domain/special";
 import { isValidUrl } from "./url-validation";
 
 /**

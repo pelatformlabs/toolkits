@@ -6,7 +6,7 @@
 
 import bcrypt from "bcryptjs";
 
-import { logger } from "../logging";
+import { logger } from "../logging/logger";
 
 /**
  * Default salt rounds for bcrypt hashing

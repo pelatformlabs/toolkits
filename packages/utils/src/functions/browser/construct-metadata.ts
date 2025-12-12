@@ -3,7 +3,7 @@
  * Provides functions for building SEO-optimized metadata for Next.js applications
  */
 
-import { assetsUrl } from "../string";
+import { assetsUrl } from "../string/assets";
 
 export type metadataProps = {
   baseUrl?: string;
