@@ -92,6 +92,7 @@ export * from "./string/pluralize";
 // export * from './string/punycode';
 export * from "./string/regex-escape";
 export * from "./string/smart-truncate";
+export * from "./string/translations";
 export * from "./string/trim";
 export * from "./string/truncate";
 
