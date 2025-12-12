@@ -1,5 +1,11 @@
 # @pelatform/storage
 
+## 1.0.5
+
+### Patch Changes
+
+- [`9bb7728`](https://github.com/devpelatform/toolkits/commit/9bb77287752e8786b2417e5d938d5cafb0ac345e) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest version
+
 ## 1.0.4
 
 ### Patch Changes
