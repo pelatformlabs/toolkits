@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/storage",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Storage utilities for SaaS applications.",
   "author": "Pelatform",
   "license": "MIT",
