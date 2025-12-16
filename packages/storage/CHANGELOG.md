@@ -1,5 +1,11 @@
 # @pelatform/storage
 
+## 1.0.6
+
+### Patch Changes
+
+- [`9c92960`](https://github.com/devpelatform/toolkits/commit/9c92960de09cc822a15bbb851e93edecd63d8fd1) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Add S3_PROVIDER constant and getSupabasePublicUrl helper function
+
 ## 1.0.5
 
 ### Patch Changes
