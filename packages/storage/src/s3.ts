@@ -1,9 +1,11 @@
 import { loadS3Config } from "./config";
 import { S3Service } from "./services/s3";
-import type { S3Config } from "./types";
+import type { S3Config, S3ProviderType } from "./types";
 
 // === SERVICE CLASSES ===
 export { S3Service } from "./services/s3";
+
+export const S3_PROVIDER = process.env.PELATFORM_S3_PROVIDER as S3ProviderType;
 
 // === MAIN FACTORY FUNCTIONS (Primary API) ===
 /**

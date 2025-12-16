@@ -6,6 +6,30 @@
 import { lookup } from "mime-types";
 
 /**
+ * Generate public URL for a storage key using environment variables
+ * @param key The storage key/path
+ * @returns Constructed public URL with timestamp versioning
+ * @public
+ *
+ * @example
+ * ```typescript
+ * // Requires env vars: PELATFORM_S3_BUCKET, PELATFORM_S3_ENDPOINT
+ * const url = getSupabasePublicUrl('folder/image.png');
+ * ```
+ */
+export function getSupabasePublicUrl(key: string) {
+  const bucket = process.env.PELATFORM_S3_BUCKET || "";
+  const endpoint = process.env.PELATFORM_S3_ENDPOINT || "";
+
+  // Remove both `.storage` subdomain and S3 path
+  const publicUrl = endpoint
+    .replace(/\.storage/, "") // remove ".storage"
+    .replace(/\/storage\/v1\/s3$/, ""); // remove "/storage/v1/s3"
+
+  return `${publicUrl}/storage/v1/object/public/${bucket}/${key}?v=${Date.now()}`;
+}
+
+/**
  * Generate a unique file key with timestamp and random string
  * @param originalName Original file name
  * @param prefix Optional prefix for the key
