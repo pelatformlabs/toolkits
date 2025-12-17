@@ -1,5 +1,11 @@
 # @pelatform/storage
 
+## 1.0.7
+
+### Patch Changes
+
+- [`a6eae4a`](https://github.com/devpelatform/toolkits/commit/a6eae4a109c0f78b2d611d5015e7de9bf9fea1cc) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Enhance buildPublicUrl to support Cloudflare R2 and Supabase and improve Cloudinary upload handling with folder support and extension fixes
+
 ## 1.0.6
 
 ### Patch Changes
