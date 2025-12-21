@@ -105,4 +105,4 @@ Create a `biome.jsonc` file in your project root:
 
 ## License
 
-MIT © [Pelatform Toolkits](../../../LICENSE)
+MIT © [Pelatform Inc.](../../../LICENSE)

@@ -432,12 +432,34 @@ const token = jwtSign({ userId: id });`;
   }
 }
 
+
 // Or extend in biome.json:
 import biomeConfig from "${packageName}/base";
 export default {
   ...biomeConfig,
   // Your custom overrides
 };`;
+      }
+
+      if (packageName.includes("eslint")) {
+        return `// ESLint config usage example
+// eslint.config.js
+import { configs } from "${packageName}";
+
+export default [
+  // For full configuration with Prettier and all plugins
+  // ...configs.base, // or configs.reactFull, configs.viteFull depending on package
+
+  // For fast configuration optimized for Biome (recommended)
+  ...configs.fast, // or configs.reactFast, configs.viteFast depending on package
+  {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+];`;
       }
 
       if (packageName.includes("tsconfig")) {

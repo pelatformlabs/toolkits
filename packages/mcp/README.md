@@ -6,7 +6,7 @@ MCP server for exploring Pelatform Toolkits packages, utilities, and documentati
 
 This MCP server provides access to:
 
-- **5 packages** in the Pelatform Toolkits
+- **8 packages** in the Pelatform Toolkits
 - **Utility discovery** and search
 - **Source code reading** for development
 - **Usage examples** and documentation
@@ -27,11 +27,23 @@ This MCP server provides access to:
   - **Exports**: Main, `/server` (Node.js only utilities)
   - **Categories**: string, url, datetime, crypto, validation, browser, array, analytics
 
-### Configuration Packages (2)
+### Configuration Packages (5)
 
 - `@pelatform/biome-config` - Shared Biome linting and formatting configuration
   - **Exports**: `/base` - Base Biome configuration
   - **Usage**: Extend in your project's biome.json or biome.jsonc
+
+- `@pelatform/eslint-config` - Shared ESLint configuration
+  - **Exports**: Main - Base ESLint configuration
+  - **Usage**: Extend in your project's `eslint.config.js`
+
+- `@pelatform/eslint-config-react` - ESLint configuration for React
+  - **Exports**: Main - React ESLint configuration
+  - **Usage**: Extend in your project's `eslint.config.js`
+
+- `@pelatform/eslint-config-vite` - ESLint configuration for Vite
+  - **Exports**: Main - Vite ESLint configuration
+  - **Usage**: Extend in your project's `eslint.config.js`
 
 - `@pelatform/tsconfig` - Shared TypeScript configuration
   - **Exports**: Base TypeScript configuration
@@ -181,6 +193,7 @@ Give me usage examples for the email package.
 How do I use the storage package?
 Show me examples for the utils package.
 How do I set up @pelatform/biome-config?
+How do I use the eslint config?
 ```
 
 ## Usage Examples
@@ -270,6 +283,9 @@ Use the tools to discover and explore available packages:
      - `@pelatform/storage`
      - `@pelatform/utils`
      - `@pelatform/biome-config`
+     - `@pelatform/eslint-config`
+     - `@pelatform/eslint-config-react`
+     - `@pelatform/eslint-config-vite`
      - `@pelatform/tsconfig`
 
 ## File Structure Reference

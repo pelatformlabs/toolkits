@@ -1,7 +1,7 @@
 {
   "name": "@pelatform/utils",
   "version": "1.0.6",
-  "description": "A library of utility functions that are used across for SaaS applications.",
+  "description": "A comprehensive library of utility functions for building modern SaaS applications.",
   "author": "Pelatform",
   "license": "MIT",
   "type": "module",

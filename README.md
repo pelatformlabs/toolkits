@@ -7,13 +7,16 @@ A collection of ready-to-use packages for modern application development. This m
 
 ## Packages
 
-| Package                                            | Version                                                                                                                   | Description                                                 |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [@pelatform/email](./packages/email)               | [![npm](https://img.shields.io/npm/v/@pelatform/email.svg)](https://www.npmjs.com/package/@pelatform/email)               | Email templates and sending utilities (Resend, Nodemailer)  |
-| [@pelatform/storage](./packages/storage)           | [![npm](https://img.shields.io/npm/v/@pelatform/storage.svg)](https://www.npmjs.com/package/@pelatform/storage)           | Unified storage interface (S3, Cloudinary, R2, MinIO, etc.) |
-| [@pelatform/utils](./packages/utils)               | [![npm](https://img.shields.io/npm/v/@pelatform/utils.svg)](https://www.npmjs.com/package/@pelatform/utils)               | Common utility functions for SaaS applications              |
-| [@pelatform/biome-config](./packages/config/biome) | [![npm](https://img.shields.io/npm/v/@pelatform/biome-config.svg)](https://www.npmjs.com/package/@pelatform/biome-config) | Opinionated Biome config for lint/format                    |
-| [@pelatform/tsconfig](./packages/config/tsconfig)  | [![npm](https://img.shields.io/npm/v/@pelatform/tsconfig.svg)](https://www.npmjs.com/package/@pelatform/tsconfig)         | Extendable TypeScript configuration presets                 |
+| Package                                                                 | Version                                                                                                                                 | Description                                                 |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [@pelatform/email](./packages/email)                                    | [![npm](https://img.shields.io/npm/v/@pelatform/email.svg)](https://www.npmjs.com/package/@pelatform/email)                             | Email templates and sending utilities (Resend, Nodemailer)  |
+| [@pelatform/storage](./packages/storage)                                | [![npm](https://img.shields.io/npm/v/@pelatform/storage.svg)](https://www.npmjs.com/package/@pelatform/storage)                         | Unified storage interface (S3, Cloudinary, R2, MinIO, etc.) |
+| [@pelatform/utils](./packages/utils)                                    | [![npm](https://img.shields.io/npm/v/@pelatform/utils.svg)](https://www.npmjs.com/package/@pelatform/utils)                             | Common utility functions for SaaS applications              |
+| [@pelatform/biome-config](./packages/config/biome)                      | [![npm](https://img.shields.io/npm/v/@pelatform/biome-config.svg)](https://www.npmjs.com/package/@pelatform/biome-config)               | Opinionated Biome config for lint/format                    |
+| [@pelatform/eslint-config](./packages/config/eslint-config)             | [![npm](https://img.shields.io/npm/v/@pelatform/eslint-config.svg)](https://www.npmjs.com/package/@pelatform/eslint-config)             | Shared ESLint configuration                                 |
+| [@pelatform/eslint-config-react](./packages/config/eslint-config-react) | [![npm](https://img.shields.io/npm/v/@pelatform/eslint-config-react.svg)](https://www.npmjs.com/package/@pelatform/eslint-config-react) | ESLint configuration for React                              |
+| [@pelatform/eslint-config-vite](./packages/config/eslint-config-vite)   | [![npm](https://img.shields.io/npm/v/@pelatform/eslint-config-vite.svg)](https://www.npmjs.com/package/@pelatform/eslint-config-vite)   | ESLint configuration for Vite                               |
+| [@pelatform/tsconfig](./packages/config/tsconfig)                       | [![npm](https://img.shields.io/npm/v/@pelatform/tsconfig.svg)](https://www.npmjs.com/package/@pelatform/tsconfig)                       | Extendable TypeScript configuration presets                 |
 
 ## Tech Stack
 

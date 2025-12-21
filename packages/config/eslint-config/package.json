@@ -1,0 +1,64 @@
+{
+  "name": "@pelatform/eslint-config",
+  "version": "0.0.1",
+  "description": "Common ESLint configuration.",
+  "author": "Pelatform",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "tsc -b --clean && rimraf dist",
+    "clean:all": "rimraf dist node_modules",
+    "build": "tsc"
+  },
+  "repository": "github:pelatformlabs/toolkits",
+  "homepage": "https://github.com/pelatformlabs/toolkits",
+  "bugs": {
+    "url": "https://github.com/pelatformlabs/toolkits/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "pelatform",
+    "eslint",
+    "eslintconfig",
+    "configuration",
+    "config",
+    "typescript",
+    "linting",
+    "code-style"
+  ],
+  "dependencies": {
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/parser": "^8.50.0",
+    "eslint-config-turbo": "^2.7.1",
+    "globals": "^16.5.0",
+    "typescript-eslint": "^8.50.0"
+  },
+  "devDependencies": {
+    "@pelatform/tsconfig": "workspace:^",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.30.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
+    "*.{md,yml,yaml}": "prettier --write",
+    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
+  }
+}

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This guide describes how development tools should interact with the code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
@@ -42,6 +42,15 @@ bun run clean              # Clean build outputs
 bun run clean:all          # Deep clean (.turbo, bun.lock, node_modules)
 ```
 
+### Testing
+
+```bash
+bun run test               # Run all tests
+bun run test:coverage      # Run tests with coverage report
+cd packages/email && bun run test         # Run tests for specific package
+cd packages/storage && bun run test:coverage  # Run coverage for specific package
+```
+
 ### Publishing (maintainers)
 
 ```bash
@@ -55,6 +64,7 @@ bun run release            # Build and publish packages to npm
 cd packages/email && bun run dev       # Develop email package with watch mode
 cd packages/email && bun run build     # Build specific package
 cd packages/email && bun run types:check  # Type-check specific package
+cd packages/email && bun run test      # Test specific package
 ```
 
 ## Repository Structure
@@ -65,11 +75,16 @@ cd packages/email && bun run types:check  # Type-check specific package
 │   ├── email/          # Email (Resend, Nodemailer)
 │   ├── storage/        # Storage (S3, Cloudinary, R2, MinIO, etc.)
 │   ├── utils/          # Common utilities
-│   ├── mcp/           # MCP server for documentation
+│   ├── mcp/           # MCP server for documentation (private)
 │   └── config/
-│       ├── biome/      # Biome configuration
-│       └── tsconfig/   # TypeScript configuration
-└── apps/               # Optional (currently empty)
+│       ├── biome/               # Biome configuration
+│       ├── eslint-config/       # Base ESLint configuration
+│       ├── eslint-config-react/ # React ESLint configuration
+│       ├── eslint-config-vite/  # Vite ESLint configuration
+│       └── tsconfig/            # TypeScript configuration
+├── .changeset/          # Changeset configuration for versioning
+├── apps/               # Optional (currently empty)
+└── tools/              # Build and development tools
 ```
 
 ## Package Architecture
@@ -102,10 +117,15 @@ cd packages/email && bun run types:check  # Type-check specific package
 - **Private Package**: Not published to npm
 - **Used for**: Internal documentation lookup and code helper functions
 
-### @pelatform/biome-config
+### Config Packages
 
-- **Purpose**: Consistent configuration for Biome lint/format
-- **Usage**: Extend in projects/packages to standardize style
+All config packages follow the same pattern:
+
+- **Purpose**: Shared configuration for consistent tooling across projects
+- **Usage**: Extended via `extends` in consumer config files
+- **Biome**: Opinionated linting and formatting rules
+- **ESLint**: Base, React, and Vite-specific configurations
+- **TypeScript**: Extendable presets for different environments
 
 ### @pelatform/tsconfig
 
@@ -171,10 +191,32 @@ Packages are published to npm with public access:
 4. Run `bun run lint:format` before committing
 5. For publishing: update changesets, then `bun run version` and `bun run release`
 
-## Important Notes
+## Critical Implementation Details
+
+### Package Dependencies
 
 - All packages are ESM-only (no CommonJS support)
 - Storage package has optional peer dependencies — consumers only install what they need
 - Email package requires React as a peer dependency
 - Utils package has both client and server exports (`/server` for Node.js-only utilities)
-- The `apps/` directory is optional and currently empty
+
+### Build System
+
+- Uses `tsup` with TypeScript for bundling
+- Multiple entry points per package for tree-shaking
+- Outputs only `dist/` directory for publishing
+- Turborepo handles dependency-aware builds
+
+### Testing Strategy
+
+- Test commands are available but not extensively implemented yet
+- Uses `bun test` as the test runner
+- Coverage reports generated via `test:coverage`
+- Tests should run after successful builds (`dependsOn: ["^build"]` in turbo.json)
+
+### Code Quality
+
+- Biome extends `@pelatform/biome-config/base` for consistency
+- Import sorting with custom groups: React/Next → packages → @pelatform/\* → relative
+- Conventional commits required for changesets
+- Type safety enforced with strict TypeScript configuration

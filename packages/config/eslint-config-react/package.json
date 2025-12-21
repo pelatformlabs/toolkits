@@ -1,0 +1,66 @@
+{
+  "name": "@pelatform/eslint-config-react",
+  "version": "0.0.1",
+  "description": "ESLint configuration to use for React projects.",
+  "author": "Pelatform",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "tsc -b --clean && rimraf dist",
+    "clean:all": "rimraf dist node_modules",
+    "build": "tsc"
+  },
+  "repository": "github:pelatformlabs/toolkits",
+  "homepage": "https://github.com/pelatformlabs/toolkits",
+  "bugs": {
+    "url": "https://github.com/pelatformlabs/toolkits/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "pelatform",
+    "eslint",
+    "eslintconfig",
+    "configuration",
+    "config",
+    "react",
+    "typescript",
+    "linting",
+    "code-style"
+  ],
+  "dependencies": {
+    "@pelatform/eslint-config": "workspace:^",
+    "@tanstack/eslint-plugin-query": "^5.91.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "typescript-eslint": "^8.50.0"
+  },
+  "devDependencies": {
+    "@pelatform/tsconfig": "workspace:^",
+    "@types/eslint-plugin-jsx-a11y": "^6.10.1",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.30.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
+    "*.{md,yml,yaml}": "prettier --write",
+    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
+  }
+}
