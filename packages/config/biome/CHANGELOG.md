@@ -1,5 +1,11 @@
 # @pelatform/biome-config
 
+## 0.1.5
+
+### Patch Changes
+
+- [`33d27e1`](https://github.com/pelatformlabs/toolkits/commit/33d27e176fa0f589ae936cf64da9920ca2215b4f) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - core update
+
 ## 0.1.4
 
 ### Patch Changes
