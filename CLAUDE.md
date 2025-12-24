@@ -131,6 +131,14 @@ All config packages follow the same pattern:
 
 - **Purpose**: Extendable TypeScript configurations
 - **Notes**: Consumers override `rootDir`, `outDir`, and `include` to match their structure
+- **Available Presets**:
+  - `tsconfig.base.json` - Base configuration (ES2022, strict mode)
+  - `tsconfig.react.json` - React projects (extends base, adds JSX support)
+  - `tsconfig.next.json` - Next.js projects
+  - `tsconfig.node.json` - Node.js projects
+  - `tsconfig.bun.json` - Bun projects
+  - `tsconfig.dom.json` - DOM/browser projects
+  - `tsconfig.cf.json` - Cloudflare Workers projects
 
 ## Build Configuration
 
@@ -147,10 +155,10 @@ Biome is configured with:
 
 - **Indentation**: 2 spaces
 - **Line Width**: 100 characters
-- **Quotes**: Single quotes for JS/TS, single quotes for CSS
+- **Quotes**: Double quotes for JS/TS, double quotes for CSS
 - **Semicolons**: Always
 - **Trailing Commas**: All
-- **Import Sorting**: Enabled with custom groups (React/Next first, then packages, then @pelatform/\*, then relative imports)
+- **Import Sorting**: Enabled with custom groups (React/Next first, then external packages, then @pelatform/*, then repo packages, then relative imports)
 
 Notable rules:
 
@@ -210,13 +218,14 @@ Packages are published to npm with public access:
 ### Testing Strategy
 
 - Test commands are available but not extensively implemented yet
-- Uses `bun test` as the test runner
-- Coverage reports generated via `test:coverage`
+- Uses `vitest` as the test runner (configured in root vitest.config.ts)
+- Coverage reports generated via `test:coverage` using @vitest/coverage-v8
 - Tests should run after successful builds (`dependsOn: ["^build"]` in turbo.json)
 
-### Code Quality
+#### Code Quality
 
 - Biome extends `@pelatform/biome-config/base` for consistency
 - Import sorting with custom groups: React/Next → packages → @pelatform/\* → relative
-- Conventional commits required for changesets
+- Conventional commits required for changesets (enforced via commitlint)
 - Type safety enforced with strict TypeScript configuration
+- Husky + lint-staged configured for pre-commit hooks
