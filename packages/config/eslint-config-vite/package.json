@@ -16,7 +16,7 @@
   },
   "scripts": {
     "clean": "tsc -b --clean && rimraf dist",
-    "clean:all": "rimraf dist node_modules",
+    "clean:all": "rimraf .turbo dist node_modules",
     "build": "tsc"
   },
   "repository": "github:pelatformlabs/toolkits",
@@ -43,7 +43,7 @@
     "@pelatform/eslint-config-react": "workspace:^",
     "@tanstack/eslint-plugin-router": "^1.141.0",
     "eslint-plugin-react-refresh": "^0.4.26",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.50.1"
   },
   "devDependencies": {
     "@pelatform/eslint-config": "workspace:^",

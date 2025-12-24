@@ -16,7 +16,7 @@
   },
   "scripts": {
     "clean": "tsc -b --clean && rimraf dist",
-    "clean:all": "rimraf dist node_modules",
+    "clean:all": "rimraf .turbo dist node_modules",
     "build": "tsc"
   },
   "repository": "github:pelatformlabs/toolkits",
@@ -39,10 +39,10 @@
   ],
   "dependencies": {
     "@eslint/js": "^9.39.2",
-    "@typescript-eslint/parser": "^8.50.0",
-    "eslint-config-turbo": "^2.7.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "eslint-config-turbo": "^2.7.2",
     "globals": "^16.5.0",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.50.1"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
