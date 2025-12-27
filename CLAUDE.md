@@ -8,10 +8,10 @@ This is a Bun-based monorepo for Pelatform Toolkits, containing utility packages
 
 ## Tech Stack
 
-- **Package Manager**: Bun (v1.3.3+)
-- **Monorepo Tool**: Turborepo (v2.6.3)
-- **Build Tool**: tsup (for package bundling)
-- **Linting/Formatting**: Biome (v2.3.10)
+- **Package Manager**: Bun 1.3.5
+- **Monorepo Tool**: Turborepo 2.7.2
+- **Build Tool**: tsup (for package bundling), tsc (for ESLint configs)
+- **Linting/Formatting**: Biome 2.3.10
 - **Language**: TypeScript 5.9.3
 - **Node Version**: >=22
 
@@ -46,10 +46,13 @@ bun run clean:all          # Deep clean (.turbo, bun.lock, node_modules)
 
 ```bash
 bun run test               # Run all tests
+bun run test:watch         # Run tests in watch mode
 bun run test:coverage      # Run tests with coverage report
 cd packages/email && bun run test         # Run tests for specific package
 cd packages/storage && bun run test:coverage  # Run coverage for specific package
 ```
+
+**Note**: Root `vitest.config.ts` configures separate test projects for each package (email, storage, utils) with their respective setup files in `packages/*/test/setup.ts`.
 
 ### Publishing (maintainers)
 
@@ -123,8 +126,8 @@ All config packages follow the same pattern:
 
 - **Purpose**: Shared configuration for consistent tooling across projects
 - **Usage**: Extended via `extends` in consumer config files
-- **Biome**: Opinionated linting and formatting rules
-- **ESLint**: Base, React, and Vite-specific configurations
+- **Biome**: Opinionated linting and formatting rules (JSONC format, extends via `@pelatform/biome-config/base`)
+- **ESLint**: Base, React, and Vite-specific configurations (built with TypeScript compiler, not tsup)
 - **TypeScript**: Extendable presets for different environments
 
 ### @pelatform/tsconfig
@@ -158,7 +161,7 @@ Biome is configured with:
 - **Quotes**: Double quotes for JS/TS, double quotes for CSS
 - **Semicolons**: Always
 - **Trailing Commas**: All
-- **Import Sorting**: Enabled with custom groups (React/Next first, then external packages, then @pelatform/*, then repo packages, then relative imports)
+- **Import Sorting**: Enabled with custom groups (React/Next first, then external packages, then @pelatform/\*, then repo packages, then relative imports)
 
 Notable rules:
 
@@ -201,31 +204,40 @@ Packages are published to npm with public access:
 
 ## Critical Implementation Details
 
+### Monorepo Workspace Protocol
+
+- Internal dependencies use Bun workspace protocol: `workspace:*` for exact matching, `workspace:^` for version ranges
+- Example: `@pelatform/eslint-config` depends on `@pelatform/tsconfig` via `workspace:^`
+- Workspace references are resolved during installation and publish
+
 ### Package Dependencies
 
 - All packages are ESM-only (no CommonJS support)
 - Storage package has optional peer dependencies — consumers only install what they need
 - Email package requires React as a peer dependency
 - Utils package has both client and server exports (`/server` for Node.js-only utilities)
+- MCP package (`@pelatform/mcp.toolkits`) is private and not published to npm
 
 ### Build System
 
-- Uses `tsup` with TypeScript for bundling
-- Multiple entry points per package for tree-shaking
+- **Standard packages** (email, storage, utils): Use `tsup` with TypeScript for bundling
+- **ESLint config packages**: Use TypeScript compiler (`tsc -b`) instead of tsup
+- Multiple entry points per package for tree-shaking (e.g., `email` exports `/`, `/components`, `/helpers`)
 - Outputs only `dist/` directory for publishing
-- Turborepo handles dependency-aware builds
+- Turborepo handles dependency-aware builds (see turbo.json)
 
 ### Testing Strategy
 
-- Test commands are available but not extensively implemented yet
-- Uses `vitest` as the test runner (configured in root vitest.config.ts)
+- Test commands use root `vitest.config.ts` with project-based configuration
+- Each package has separate test project with dedicated setup file in `packages/*/test/setup.ts`
 - Coverage reports generated via `test:coverage` using @vitest/coverage-v8
-- Tests should run after successful builds (`dependsOn: ["^build"]` in turbo.json)
+- Tests run after successful builds (`dependsOn: ["^build"]` in turbo.json)
 
-#### Code Quality
+### Code Quality
 
 - Biome extends `@pelatform/biome-config/base` for consistency
-- Import sorting with custom groups: React/Next → packages → @pelatform/\* → relative
-- Conventional commits required for changesets (enforced via commitlint)
+- Import sorting with custom groups: React/Next → external packages → @pelatform/\* → relative
+- Conventional commits enforced via commitlint (required for changesets)
 - Type safety enforced with strict TypeScript configuration
-- Husky + lint-staged configured for pre-commit hooks
+- Husky + lint-staged configured for pre-commit hooks (runs biome check, prettier for MD/YAML)
+- Root `lint-staged` config applies to all packages automatically
