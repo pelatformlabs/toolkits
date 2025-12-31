@@ -28,10 +28,10 @@ bun run types:check        # Type-check all packages
 ### Linting and Formatting
 
 ```bash
-bun run lint               # Lint with safe auto-fixes
-bun run lint:fix           # Lint with comprehensive (unsafe) fixes
-bun run format             # Format code
-bun run format:check       # Check format and fix when needed
+bun run lint               # Run Biome check (no auto-fix)
+bun run lint:fix           # Lint and apply comprehensive (unsafe) fixes
+bun run format             # Format code with Biome
+bun run format:check       # Check format and apply fixes via Biome
 ```
 
 ### Package Management
@@ -90,6 +90,14 @@ cd packages/email && bun run test      # Test specific package
 └── tools/              # Build and development tools
 ```
 
+Each package follows a standard structure:
+
+- `src/` - Source code (entry points: index.ts, plus additional exports like components.ts, helpers.ts, server.ts)
+- `test/` - Test files with setup.ts for Vitest configuration
+- `dist/` - Build output (generated, not in git)
+- `tsup.config.ts` or `tsconfig.json` - Build configuration
+- `package.json` - Package metadata and exports
+
 ## Package Architecture
 
 ### @pelatform/email
@@ -128,6 +136,8 @@ All config packages follow the same pattern:
 - **Usage**: Extended via `extends` in consumer config files
 - **Biome**: Opinionated linting and formatting rules (JSONC format, extends via `@pelatform/biome-config/base`)
 - **ESLint**: Base, React, and Vite-specific configurations (built with TypeScript compiler, not tsup)
+  - Dependency chain: `eslint-config-vite` → `eslint-config-react` → `eslint-config` → `tsconfig`
+  - All use `workspace:^` protocol for internal dependencies
 - **TypeScript**: Extendable presets for different environments
 
 ### @pelatform/tsconfig
@@ -169,6 +179,8 @@ Notable rules:
 - `noExplicitAny` is set to warn
 - `useSortedClasses` is enabled for Tailwind (with `cn()` function)
 
+The root `biome.jsonc` extends `@pelatform/biome-config/base` and excludes test directories. Individual packages do not need their own biome configuration — they inherit from the root.
+
 ## Turborepo Tasks
 
 - **build**: Builds packages with dependency awareness
@@ -199,7 +211,7 @@ Packages are published to npm with public access:
 1. Make changes in `packages/*/src/`
 2. Run `bun run dev` in the relevant package (watch mode)
 3. Run `bun run types:check` to verify types
-4. Run `bun run lint:format` before committing
+4. Run `bun run lint:fix` and `bun run format` before committing
 5. For publishing: update changesets, then `bun run version` and `bun run release`
 
 ## Critical Implementation Details
@@ -221,7 +233,8 @@ Packages are published to npm with public access:
 ### Build System
 
 - **Standard packages** (email, storage, utils): Use `tsup` with TypeScript for bundling
-- **ESLint config packages**: Use TypeScript compiler (`tsc -b`) instead of tsup
+- **ESLint config packages** (eslint-config, eslint-config-react, eslint-config-vite): Use TypeScript compiler (`tsc`) instead of tsup (clean uses `tsc -b`)
+- **MCP package**: Uses TypeScript compiler (`tsc`) for Node.js CLI binary
 - Multiple entry points per package for tree-shaking (e.g., `email` exports `/`, `/components`, `/helpers`)
 - Outputs only `dist/` directory for publishing
 - Turborepo handles dependency-aware builds (see turbo.json)
@@ -239,5 +252,8 @@ Packages are published to npm with public access:
 - Import sorting with custom groups: React/Next → external packages → @pelatform/\* → relative
 - Conventional commits enforced via commitlint (required for changesets)
 - Type safety enforced with strict TypeScript configuration
-- Husky + lint-staged configured for pre-commit hooks (runs biome check, prettier for MD/YAML)
-- Root `lint-staged` config applies to all packages automatically
+- Husky + lint-staged configured for pre-commit hooks
+- Root `lint-staged` config applies to all packages automatically:
+  - JS/TS files: `biome check --write`
+  - MD/YAML files: `prettier --write`
+  - JSON files: `biome format --write`
