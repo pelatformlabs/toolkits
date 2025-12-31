@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/eslint-config-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ESLint configuration to use for React projects.",
   "author": "Pelatform",
   "license": "MIT",
