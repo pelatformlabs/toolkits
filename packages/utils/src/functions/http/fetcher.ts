@@ -56,7 +56,7 @@ type RequestOptions = {
  *
  * // With custom headers
  * const { data } = useSWR('/api/protected', url =>
- *   fetcher(url, {
+ *   fetcherSWR(url, {
  *     headers: {
  *       Authorization: `Bearer ${token}`
  *     }
@@ -65,7 +65,7 @@ type RequestOptions = {
  *
  * // Direct usage without SWR
  * try {
- *   const data = await fetcher('/api/data');
+ *   const data = await fetcherSWR('/api/data');
  *   console.log(data);
  * } catch (error) {
  *   // Error will include status code and error info
@@ -73,7 +73,7 @@ type RequestOptions = {
  * }
  * ```
  */
-export async function fetcher<T>(
+export async function fetcherSWR<T>(
   input: RequestInfo,
   init?: RequestInit & { headers?: Record<string, string> },
 ): Promise<T> {
@@ -110,23 +110,23 @@ export async function fetcher<T>(
  * @example
  * ```ts
  * // GET request
- * const users = await request('/api/users');
+ * const users = await fetcher('/api/users');
  *
  * // POST JSON body
- * const created = await request('/api/users', 'POST', { name: 'Alice' });
+ * const created = await fetcher('/api/users', 'POST', { name: 'Alice' });
  *
  * // PUT with custom header
- * const updated = await request('/api/users/1', 'PUT', { name: 'Bob' }, {
+ * const updated = await fetcher('/api/users/1', 'PUT', { name: 'Bob' }, {
  *   headers: { Authorization: `Bearer ${token}` },
  * });
  *
  * // Multipart/FormData upload
  * const form = new FormData();
  * form.append('file', file);
- * const upload = await request('/api/upload', 'POST', form);
+ * const upload = await fetcher('/api/upload', 'POST', form);
  * ```
  */
-export async function request<T>(
+export async function fetcher<T>(
   endpoint: string,
   method: RequestMethod = "GET",
   body?: unknown,
@@ -163,9 +163,5 @@ export async function request<T>(
     console.log(`[request] ${endpoint}`, data);
   }
 
-  if (!res.ok) {
-    throw new Error(data?.error?.message || "An error occurred while fetching the data.");
-  }
-
-  return data;
+  return data?.data as T;
 }

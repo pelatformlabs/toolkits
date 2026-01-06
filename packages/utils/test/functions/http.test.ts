@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
-  request,
   fetcher,
+  fetcherSWR,
   fetchWithTimeout,
   fetchWithRetry,
   getClientIP,
@@ -15,7 +15,7 @@ import {
 
 describe("HTTP", () => {
   it("request should perform GET", async () => {
-    const res = (await request("/api/test")) as Record<string, unknown>;
+    const res = (await fetcher("/api/test")) as Record<string, unknown>;
     expect(res).toBeDefined();
   });
 
@@ -25,7 +25,7 @@ describe("HTTP", () => {
       status: 500,
       json: async () => ({ error: { message: "fail" } }),
     } as any);
-    await expect(fetcher("/api/error")).rejects.toMatchObject({ status: 500, info: "fail" });
+    await expect(fetcherSWR("/api/error")).rejects.toMatchObject({ status: 500, info: "fail" });
   });
 
   it("fetchWithTimeout should reject on timeout", async () => {
