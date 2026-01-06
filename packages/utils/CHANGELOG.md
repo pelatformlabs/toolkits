@@ -1,5 +1,11 @@
 # @pelatform/utils
 
+## 1.0.9
+
+### Patch Changes
+
+- [`9dd34af`](https://github.com/pelatformlabs/toolkits/commit/9dd34afa22f5dc7a34fbda8efe15045f20ed9615) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Simplify fetcher and request functions
+
 ## 1.0.8
 
 ### Patch Changes
