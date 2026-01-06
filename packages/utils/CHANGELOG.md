@@ -1,5 +1,11 @@
 # @pelatform/utils
 
+## 1.0.10
+
+### Patch Changes
+
+- [`89f4a1e`](https://github.com/pelatformlabs/toolkits/commit/89f4a1ed8676ddb09f53b67c1d02d003db5827fa) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Rename `fetcher` to `fetcherSWR` and `request` to `fetcher` for better clarity
+
 ## 1.0.9
 
 ### Patch Changes
