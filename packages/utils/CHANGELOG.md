@@ -1,5 +1,11 @@
 # @pelatform/utils
 
+## 1.0.8
+
+### Patch Changes
+
+- [`edbc46e`](https://github.com/pelatformlabs/toolkits/commit/edbc46ee34cd85b2e6f565e26502bce9ac56eb3d) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Improve http fetcher with better error handling and parsing
+
 ## 1.0.7
 
 ### Patch Changes
