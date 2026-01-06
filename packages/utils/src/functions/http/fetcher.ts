@@ -3,6 +3,8 @@
  * Provides enhanced fetch implementation with error handling for SWR
  */
 
+import { isDevelopment } from "../../constants/development";
+
 /**
  * Extended Error interface for SWR compatibility
  * Includes additional properties for error information and HTTP status
@@ -34,6 +36,50 @@ type RequestOptions = {
    */
   log?: boolean;
 };
+
+/**
+ * Safely parses a JSON response body.
+ *
+ * This helper prevents runtime errors when attempting to parse
+ * non-JSON responses (e.g. empty body, plain text, HTML error pages).
+ *
+ * @param res - Fetch Response object
+ * @returns Parsed JSON object if available, otherwise `null`
+ */
+async function safeParseJSON(res: Response): Promise<Record<string, unknown> | null> {
+  try {
+    return (await res.json()) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Creates a standardized error object compatible with SWR.
+ *
+ * Attaches HTTP status code and additional error information
+ * extracted from the response body.
+ *
+ * @param message - Error message or response payload
+ * @param status - HTTP status code
+ * @returns SWRError instance with enriched metadata
+ */
+function createFetchError(message: unknown, status: number): SWRError {
+  const errorMessage = typeof message === "string" ? message : "Request failed";
+
+  const error = new Error(errorMessage) as SWRError;
+
+  error.info =
+    typeof message === "string"
+      ? message
+      : message && typeof message === "object"
+        ? (message as Record<string, unknown>)
+        : "Unknown error";
+
+  error.status = status;
+
+  return error;
+}
 
 /**
  * Fetches data from an API endpoint with proper error handling
@@ -77,20 +123,29 @@ export async function fetcher<T = unknown>(
 ): Promise<T> {
   const res = await fetch(input, {
     ...init,
-    ...(init?.headers && { headers: init.headers }),
+    headers: {
+      ...init?.headers,
+    },
   });
 
-  if (!res.ok) {
-    const message =
-      (await res.json())?.error?.message || "An error occurred while fetching the data.";
-    const error = new Error(message) as SWRError;
-    error.info = message;
-    error.status = res.status;
+  const data = await safeParseJSON(res);
 
-    throw error;
+  if (!res.ok) {
+    const errorPayload =
+      typeof data === "object" && data !== null && "error" in data
+        ? // biome-ignore lint/suspicious/noExplicitAny: <>
+          ((data as any).error?.message ?? data)
+        : (data ?? res.statusText);
+
+    throw createFetchError(errorPayload, res.status);
   }
 
-  return res.json();
+  // Handle 204 No Content
+  if (res.status === 204) {
+    return null as T;
+  }
+
+  return data as T;
 }
 
 /**
@@ -123,41 +178,52 @@ export async function fetcher<T = unknown>(
  * const upload = await request('/api/upload', 'POST', form);
  * ```
  */
-export async function request(
+export async function request<T = unknown>(
   endpoint: string,
   method: RequestMethod = "GET",
   body?: unknown,
   options?: RequestOptions,
-): Promise<unknown> {
+): Promise<T> {
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
-  const headers: Record<string, string> = { ...options?.headers };
+  const headers: Record<string, string> = {
+    ...options?.headers,
+  };
+
   let payload: BodyInit | undefined;
 
   if (body !== undefined) {
     if (isFormData) {
       payload = body as FormData;
     } else {
-      headers["Content-Type"] = "application/json";
+      if (!headers["Content-Type"]) {
+        headers["Content-Type"] = "application/json";
+      }
       payload = JSON.stringify(body);
     }
   }
 
-  const response = await fetch(endpoint, {
+  const res = await fetch(endpoint, {
     method,
     headers,
     body: payload,
   });
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  const data = await safeParseJSON(res);
+
+  if (!res.ok) {
+    const errorPayload =
+      typeof data === "object" && data !== null && "error" in data
+        ? // biome-ignore lint/suspicious/noExplicitAny: <>
+          ((data as any).error?.message ?? data)
+        : (data ?? res.statusText);
+
+    throw createFetchError(errorPayload, res.status);
   }
 
-  const data = await response.json();
-
-  if (options?.log) {
-    console.log(endpoint, data);
+  if (options?.log && isDevelopment) {
+    console.log(`[request] ${endpoint}`, data);
   }
 
-  return data;
+  return data as T;
 }
