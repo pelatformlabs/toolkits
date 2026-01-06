@@ -38,50 +38,6 @@ type RequestOptions = {
 };
 
 /**
- * Safely parses a JSON response body.
- *
- * This helper prevents runtime errors when attempting to parse
- * non-JSON responses (e.g. empty body, plain text, HTML error pages).
- *
- * @param res - Fetch Response object
- * @returns Parsed JSON object if available, otherwise `null`
- */
-async function safeParseJSON(res: Response): Promise<Record<string, unknown> | null> {
-  try {
-    return (await res.json()) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Creates a standardized error object compatible with SWR.
- *
- * Attaches HTTP status code and additional error information
- * extracted from the response body.
- *
- * @param message - Error message or response payload
- * @param status - HTTP status code
- * @returns SWRError instance with enriched metadata
- */
-function createFetchError(message: unknown, status: number): SWRError {
-  const errorMessage = typeof message === "string" ? message : "Request failed";
-
-  const error = new Error(errorMessage) as SWRError;
-
-  error.info =
-    typeof message === "string"
-      ? message
-      : message && typeof message === "object"
-        ? (message as Record<string, unknown>)
-        : "Unknown error";
-
-  error.status = status;
-
-  return error;
-}
-
-/**
  * Fetches data from an API endpoint with proper error handling
  * Designed to work seamlessly with SWR data fetching library
  *
@@ -117,35 +73,27 @@ function createFetchError(message: unknown, status: number): SWRError {
  * }
  * ```
  */
-export async function fetcher<T = unknown>(
+export async function fetcher<T>(
   input: RequestInfo,
   init?: RequestInit & { headers?: Record<string, string> },
 ): Promise<T> {
   const res = await fetch(input, {
     ...init,
-    headers: {
-      ...init?.headers,
-    },
+    ...(init?.headers && { headers: init.headers }),
   });
 
-  const data = await safeParseJSON(res);
+  const data = await res.json();
 
   if (!res.ok) {
-    const errorPayload =
-      typeof data === "object" && data !== null && "error" in data
-        ? // biome-ignore lint/suspicious/noExplicitAny: <>
-          ((data as any).error?.message ?? data)
-        : (data ?? res.statusText);
+    const message = data?.error?.message || "An error occurred while fetching the data.";
+    const error = new Error(message) as SWRError;
+    error.info = message;
+    error.status = res.status;
 
-    throw createFetchError(errorPayload, res.status);
+    throw error;
   }
 
-  // Handle 204 No Content
-  if (res.status === 204) {
-    return null as T;
-  }
-
-  return data as T;
+  return data;
 }
 
 /**
@@ -178,7 +126,7 @@ export async function fetcher<T = unknown>(
  * const upload = await request('/api/upload', 'POST', form);
  * ```
  */
-export async function request<T = unknown>(
+export async function request<T>(
   endpoint: string,
   method: RequestMethod = "GET",
   body?: unknown,
@@ -209,21 +157,15 @@ export async function request<T = unknown>(
     body: payload,
   });
 
-  const data = await safeParseJSON(res);
-
-  if (!res.ok) {
-    const errorPayload =
-      typeof data === "object" && data !== null && "error" in data
-        ? // biome-ignore lint/suspicious/noExplicitAny: <>
-          ((data as any).error?.message ?? data)
-        : (data ?? res.statusText);
-
-    throw createFetchError(errorPayload, res.status);
-  }
+  const data = await res.json();
 
   if (options?.log && isDevelopment) {
     console.log(`[request] ${endpoint}`, data);
   }
 
-  return data as T;
+  if (!res.ok) {
+    throw new Error(data?.error?.message || "An error occurred while fetching the data.");
+  }
+
+  return data;
 }
