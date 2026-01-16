@@ -8,10 +8,10 @@ This is a Bun-based monorepo for Pelatform Toolkits, containing utility packages
 
 ## Tech Stack
 
-- **Package Manager**: Bun 1.3.5
-- **Monorepo Tool**: Turborepo 2.7.2
+- **Package Manager**: Bun 1.3.6
+- **Monorepo Tool**: Turborepo 2.7.4
 - **Build Tool**: tsup (for package bundling), tsc (for ESLint configs)
-- **Linting/Formatting**: Biome 2.3.10
+- **Linting/Formatting**: Biome 2.3.11
 - **Language**: TypeScript 5.9.3
 - **Node Version**: >=22
 
@@ -53,6 +53,16 @@ cd packages/storage && bun run test:coverage  # Run coverage for specific packag
 ```
 
 **Note**: Root `vitest.config.ts` configures separate test projects for each package (email, storage, utils) with their respective setup files in `packages/*/test/setup.ts`.
+
+### Running Specific Tests
+
+```bash
+# Run tests for a specific package from root
+bun run test --run packages/email/test/email.test.ts
+
+# Run tests matching a pattern
+bun run test --run utils  # Runs all tests matching "utils"
+```
 
 ### Publishing (maintainers)
 
@@ -113,7 +123,10 @@ Each package follows a standard structure:
 - **Purpose**: Unified storage interface for multiple cloud providers
 - **Providers**: AWS S3, Cloudflare R2, MinIO, DigitalOcean Spaces, Supabase Storage, Cloudinary
 - **Exports**: Main exports, `/s3`, `/cloudinary`, `/helpers`
-- **Peer Dependencies**: Optional - @aws-sdk/client-s3, cloudinary (install only what you need)
+- **Peer Dependencies**: Optional peer dependencies — consumers only install what they need:
+  - `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner` (for S3-compatible providers)
+  - `cloudinary` (for Cloudinary provider)
+- **Note**: AWS SDK and Cloudinary are in `devDependencies` for development, but consumers must install them as peer dependencies to use those providers
 
 ### @pelatform/utils
 
@@ -225,33 +238,46 @@ Packages are published to npm with public access:
 ### Package Dependencies
 
 - All packages are ESM-only (no CommonJS support)
-- Storage package has optional peer dependencies — consumers only install what they need
-- Email package requires React as a peer dependency
-- Utils package has both client and server exports (`/server` for Node.js-only utilities)
+- Storage package has optional peer dependencies — consumers only install what they need:
+  - AWS SDK packages are in `devDependencies` for development/testing
+  - Consumers must install them as peer dependencies to use S3-compatible providers
+  - Same pattern applies to Cloudinary
+- Email package requires React as a peer dependency (supports React 18+ and 19+)
+- Utils package has both client and server exports (`/server` for Node.js-only utilities like JWT, password hashing)
 - MCP package (`@pelatform/mcp.toolkits`) is private and not published to npm
 
 ### Build System
 
 - **Standard packages** (email, storage, utils): Use `tsup` with TypeScript for bundling
-- **ESLint config packages** (eslint-config, eslint-config-react, eslint-config-vite): Use TypeScript compiler (`tsc`) instead of tsup (clean uses `tsc -b`)
+  - Multiple entry points defined in `tsup.config.ts` (e.g., `index.ts`, `components.ts`, `helpers.ts`)
+  - Generates ESM-only output to `dist/` directory
+  - Automatic TypeScript declarations (`dts: true`)
+- **ESLint config packages** (eslint-config, eslint-config-react, eslint-config-vite): Use TypeScript compiler (`tsc`) instead of tsup
+  - Build command: `tsc` (clean uses `tsc -b`)
+  - Direct source compilation to `dist/`
+  - Dependency chain: `eslint-config-vite` → `eslint-config-react` → `eslint-config` → `tsconfig`
 - **MCP package**: Uses TypeScript compiler (`tsc`) for Node.js CLI binary
-- Multiple entry points per package for tree-shaking (e.g., `email` exports `/`, `/components`, `/helpers`)
-- Outputs only `dist/` directory for publishing
-- Turborepo handles dependency-aware builds (see turbo.json)
+- Turborepo handles dependency-aware builds (see turbo.json):
+  - `build` tasks depend on `^build` (upstream packages build first)
+  - `test` tasks depend on `^build` (must build before testing)
+  - `types:check` tasks depend on `^build` (type checking requires built artifacts)
 
 ### Testing Strategy
 
 - Test commands use root `vitest.config.ts` with project-based configuration
 - Each package has separate test project with dedicated setup file in `packages/*/test/setup.ts`
-- Coverage reports generated via `test:coverage` using @vitest/coverage-v8
+- Coverage reports generated via `test:coverage` using @vitest/coverage-v8 (provider: v8)
 - Tests run after successful builds (`dependsOn: ["^build"]` in turbo.json)
+- Package-level scripts (e.g., `bun run test` in `packages/email/`) use vitest directly, not turbo
 
 ### Code Quality
 
 - Biome extends `@pelatform/biome-config/base` for consistency
+- Root `biome.jsonc` excludes test directories (`"includes": ["!!**/test"]`)
+- Individual packages do not need their own biome configuration — they inherit from root
 - Import sorting with custom groups: React/Next → external packages → @pelatform/\* → relative
-- Conventional commits enforced via commitlint (required for changesets)
-- Type safety enforced with strict TypeScript configuration
+- Conventional commits enforced via commitlint with custom types:
+  - Allowed types: `feat`, `feature`, `fix`, `refactor`, `docs`, `build`, `test`, `ci`, `chore`
 - Husky + lint-staged configured for pre-commit hooks
 - Root `lint-staged` config applies to all packages automatically:
   - JS/TS files: `biome check --write`
