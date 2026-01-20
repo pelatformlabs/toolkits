@@ -40,10 +40,10 @@
   ],
   "dependencies": {
     "@pelatform/eslint-config": "workspace:^",
-    "@tanstack/eslint-plugin-query": "^5.91.2",
+    "@tanstack/eslint-plugin-query": "^5.91.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "typescript-eslint": "^8.53.0"
+    "typescript-eslint": "^8.53.1"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
