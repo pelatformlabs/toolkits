@@ -3,7 +3,7 @@
  * Provides functions for generating unique identifiers using @paralleldrive/cuid2
  */
 
-import { createId, init } from "@paralleldrive/cuid2/index.js";
+import { createId, init } from "@paralleldrive/cuid2";
 
 export { createId, init as initCuid };
 

@@ -48,13 +48,13 @@
     "resend"
   ],
   "dependencies": {
-    "@react-email/components": "^1.0.5",
+    "@react-email/components": "^1.0.6",
     "nodemailer": "^7.0.12",
     "resend": "^6.8.0"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:*",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "@types/nodemailer": "^7.0.5",
     "@types/react": "^19.2.9",
     "react": "^19.2.3",
