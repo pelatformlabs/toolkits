@@ -43,7 +43,7 @@
     "@pelatform/eslint-config-react": "workspace:^",
     "@tanstack/eslint-plugin-router": "^1.155.0",
     "eslint-plugin-react-refresh": "^0.4.26",
-    "typescript-eslint": "^8.53.1"
+    "typescript-eslint": "^8.54.0"
   },
   "devDependencies": {
     "@pelatform/eslint-config": "workspace:^",
