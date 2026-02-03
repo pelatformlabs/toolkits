@@ -15,8 +15,15 @@ import {
 
 describe("HTTP", () => {
   it("request should perform GET", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { message: "success" } }),
+    } as any);
     const res = (await fetcher("/api/test")) as Record<string, unknown>;
     expect(res).toBeDefined();
+    expect(res).toEqual({ message: "success" });
+    vi.restoreAllMocks();
   });
 
   it("fetcher should throw on non-ok", async () => {
