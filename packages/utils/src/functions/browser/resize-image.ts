@@ -126,41 +126,96 @@ export const resizeImage = (
 };
 
 /**
- * Resize and crop an image to a centered square of the specified size
+ * Resize and crop an image to a centered rectangle of the specified size.
  *
  * Processing steps:
  * - Load the image from the given `File`
- * - Create a square canvas with `size x size`
- * - Compute centered crop region based on the shortest image edge
+ * - Determine target width & height from `size`
+ *   - `number` → width = height = value (e.g. `512`)
+ *   - `[width, height]` → explicit width & height (e.g. `[512, 1080]`)
+ *   - `null | undefined` → use the original image width & height
+ * - Compute a centered crop region that matches the target aspect ratio
  * - Draw the cropped region to the canvas and export with desired format
  *
  * @param file The source image file to process
  * @param name The base name (without extension) for the output file
- * @param size Target square size in pixels (width and height)
+ * @param size Target size:
+ *  - `number` → square (width & height)
+ *  - `[width, height]` → custom rectangle
+ *  - `null | undefined` → use original image size
  * @param extension Output image extension (e.g., "png", "jpeg", "webp")
  * @returns A new `File` containing the processed image in the requested format
+ *
+ * @example
+ * ```ts
+ * // 1) Square: size = 512 → 512x512
+ * const out1 = await resizeAndCropImage(file, "avatar", 512, "webp");
+ *
+ * // 2) Custom rectangle: size = [512, 1080] → 512x1080
+ * const out2 = await resizeAndCropImage(file, "poster", [512, 1080], "jpeg");
+ *
+ * // 3) Keep original dimensions: size = null → originalWidth x originalHeight
+ * const out3 = await resizeAndCropImage(file, "original", null, "png");
+ * ```
  */
 export async function resizeAndCropImage(
   file: File,
   name: string,
-  size: number,
+  size: number | [number, number] | null | undefined,
   extension: string,
 ): Promise<File> {
   const image = await loadImage(file);
 
+  // Determine target width & height based on `size` parameter
+  let targetWidth: number;
+  let targetHeight: number;
+
+  if (Array.isArray(size)) {
+    [targetWidth, targetHeight] = size;
+  } else if (typeof size === "number") {
+    targetWidth = size;
+    targetHeight = size;
+  } else {
+    // When `size` is null or undefined, use original image dimensions
+    targetWidth = image.width;
+    targetHeight = image.height;
+  }
+
   const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
 
   const ctx = canvas.getContext("2d");
 
-  const minEdge = Math.min(image.width, image.height);
+  // If we are using the original size, just draw the full image without cropping
+  if (targetWidth === image.width && targetHeight === image.height) {
+    ctx?.drawImage(image, 0, 0);
+  } else {
+    // Compute centered crop region based on aspect ratio (cover behavior)
+    const sourceWidth = image.width;
+    const sourceHeight = image.height;
+    const sourceAspect = sourceWidth / sourceHeight;
+    const targetAspect = targetWidth / targetHeight;
 
-  const sx = (image.width - minEdge) / 2;
-  const sy = (image.height - minEdge) / 2;
-  const sWidth = minEdge;
-  const sHeight = minEdge;
+    let sx = 0;
+    let sy = 0;
+    let sWidth = sourceWidth;
+    let sHeight = sourceHeight;
 
-  ctx?.drawImage(image, sx, sy, sWidth, sHeight, 0, 0, size, size);
+    if (targetAspect > sourceAspect) {
+      // Target is wider → limit by width, crop top & bottom
+      sWidth = sourceWidth;
+      sHeight = sourceWidth / targetAspect;
+      sy = (sourceHeight - sHeight) / 2;
+    } else if (targetAspect < sourceAspect) {
+      // Target is taller → limit by height, crop left & right
+      sHeight = sourceHeight;
+      sWidth = sourceHeight * targetAspect;
+      sx = (sourceWidth - sWidth) / 2;
+    }
+
+    ctx?.drawImage(image, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
+  }
 
   const resizedImageBlob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, `image/${extension}`),
