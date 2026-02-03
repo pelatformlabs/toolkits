@@ -1,5 +1,11 @@
 # @pelatform/eslint-config
 
+## 0.1.6
+
+### Patch Changes
+
+- [`c4e062d`](https://github.com/pelatformlabs/toolkits/commit/c4e062d3367293f52293cb3edfaa06abcbcb9095) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest versions
+
 ## 0.1.5
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @pelatform/utils
 
+## 1.0.12
+
+### Patch Changes
+
+- [`c4e062d`](https://github.com/pelatformlabs/toolkits/commit/c4e062d3367293f52293cb3edfaa06abcbcb9095) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Improve resizeAndCropImage function
+
 ## 1.0.11
 
 ### Patch Changes
