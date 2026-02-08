@@ -48,7 +48,7 @@
   "devDependencies": {
     "@pelatform/eslint-config": "workspace:^",
     "@pelatform/tsconfig": "workspace:^",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
