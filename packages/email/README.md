@@ -37,7 +37,7 @@ await email.sendTemplate(
   {
     to: "user@example.com",
     subject: "Welcome to our platform",
-  }
+  },
 );
 ```
 
@@ -129,7 +129,7 @@ await email.sendTemplate(
   {
     to: "user@example.com",
     subject: "Password Reset",
-  }
+  },
 );
 ```
 

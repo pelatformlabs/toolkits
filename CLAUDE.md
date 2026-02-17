@@ -8,10 +8,10 @@ This is a Bun-based monorepo for Pelatform Toolkits, containing utility packages
 
 ## Tech Stack
 
-- **Package Manager**: Bun 1.3.6
-- **Monorepo Tool**: Turborepo 2.7.4
+- **Package Manager**: Bun 1.3.9
+- **Monorepo Tool**: Turborepo 2.8.9
 - **Build Tool**: tsup (for package bundling), tsc (for ESLint configs)
-- **Linting/Formatting**: Biome 2.3.11
+- **Linting/Formatting**: Biome 2.4.2
 - **Language**: TypeScript 5.9.3
 - **Node Version**: >=22
 

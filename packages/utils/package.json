@@ -50,13 +50,13 @@
     "jsonwebtoken": "^9.0.3",
     "ms": "^2.1.3",
     "nanoid": "^5.1.6",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.1"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ms": "^2.1.0",
-    "@types/node": "^25.2.2",
+    "@types/node": "^25.2.3",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },

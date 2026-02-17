@@ -20,7 +20,7 @@ Pelatform Toolkits is a community-driven collection of packages that standardize
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) 1.3.3 or higher
+- [Bun](https://bun.sh) 1.3.9 or higher
 - Node.js 22 or higher
 - Git
 
@@ -87,7 +87,7 @@ This project uses [Biome](https://biomejs.dev/) for linting and formatting to en
 
 - **Indentation**: 2 spaces
 - **Line Width**: 100 characters
-- **Quotes**: Single quotes for JavaScript/TypeScript
+- **Quotes**: Double quotes for JavaScript/TypeScript
 - **Semicolons**: Always required
 - **Trailing Commas**: All
 - **Arrow Parentheses**: Always

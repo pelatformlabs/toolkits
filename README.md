@@ -1,7 +1,7 @@
 # Pelatform Toolkits
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Bun](https://img.shields.io/badge/bun-1.3.3-black)](https://bun.sh)
+[![Bun](https://img.shields.io/badge/bun-1.3.9-black)](https://bun.sh)
 
 A collection of ready-to-use packages for modern application development. This monorepo includes reusable packages for email, storage, common utilities, and shared linting/TypeScript configurations.
 
@@ -30,7 +30,7 @@ A collection of ready-to-use packages for modern application development. This m
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) 1.3.3 or higher
+- [Bun](https://bun.sh) 1.3.9 or higher
 - Node.js 22 or higher
 
 ### Installation
