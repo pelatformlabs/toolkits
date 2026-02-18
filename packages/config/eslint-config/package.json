@@ -40,7 +40,7 @@
   "dependencies": {
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/parser": "^8.56.0",
-    "eslint-config-turbo": "^2.8.9",
+    "eslint-config-turbo": "^2.8.10",
     "globals": "^17.3.0",
     "typescript-eslint": "^8.56.0"
   },
