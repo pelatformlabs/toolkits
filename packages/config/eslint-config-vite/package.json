@@ -1,6 +1,6 @@
 {
   "name": "@pelatform/eslint-config-vite",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "ESLint configuration for Vite projects with React Refresh support.",
   "author": "Pelatform",
   "license": "MIT",
