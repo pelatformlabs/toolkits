@@ -52,7 +52,7 @@ cd packages/email && bun run test         # Run tests for specific package
 cd packages/storage && bun run test:coverage  # Run coverage for specific package
 ```
 
-**Note**: Root `vitest.config.ts` configures separate test projects for each package (email, storage, utils) with their respective setup files in `packages/*/test/setup.ts`.
+**Note**: Root `vitest.config.ts` configures separate test projects for each package (email, storage, utils) with their respective setup files in `packages/*/test/setup.ts`. Test environment uses `node` with `globals: true`.
 
 ### Running Specific Tests
 
@@ -70,6 +70,8 @@ bun run test --run utils  # Runs all tests matching "utils"
 bun run version            # Update versions using Changesets
 bun run release            # Build and publish packages to npm
 ```
+
+**Note**: Changesets configuration (`bumpVersionsWithWorkspaceProtocolOnly: true`) ensures workspace protocol is preserved. The `@pelatform/mcp.toolkits` package is ignored from versioning (private package).
 
 ### Individual Package Development
 
@@ -283,3 +285,22 @@ Packages are published to npm with public access:
   - JS/TS files: `biome check --write`
   - MD/YAML files: `prettier --write`
   - JSON files: `biome format --write`
+
+## Engine Requirements
+
+This project enforces engine requirements via `package.json`:
+
+- **Node.js**: >=22
+- **Bun**: >=1.0.0 (package manager: bun@1.3.9)
+
+## Troubleshooting
+
+### Build Issues
+
+- If types fail after build: Ensure you've run `bun run build` before `bun run types:check` (type checking depends on built artifacts)
+- ESLint config packages failing: They use `tsc` directly, not tsup — run `tsc` to build, `tsc -b` to clean
+
+### Workspace Issues
+
+- If dependencies don't resolve: Run `bun install` to re-link workspace protocol references
+- Changeset versioning not updating MCP package: This is expected — `@pelatform/mcp.toolkits` is ignored from versioning (private)
