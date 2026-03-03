@@ -83,10 +83,8 @@ Add the MCP server to your MCP client configuration:
   "mcpServers": {
     "Pelatform Toolkits": {
       "command": "node",
-      "args": [
-        "D:\\PROJECTS\\PELATFORM\\FOUNDATIONS\\LABS\\toolkits\\packages\\mcp\\dist\\index.js"
-      ],
-      "cwd": "D:\\PROJECTS\\PELATFORM\\FOUNDATIONS\\LABS\\toolkits"
+      "args": ["/absolute/path/to/toolkits/packages/mcp/dist/index.js"],
+      "cwd": "/absolute/path/to/toolkits"
     }
   }
 }
@@ -95,16 +93,44 @@ Add the MCP server to your MCP client configuration:
 ### Configuration Parameters
 
 - **command**: `"node"` - Runtime to execute the server
-- **args**: Array containing the path to the built server file
-- **cwd**: Current working directory for the server process (default: `process.cwd()`)
+- **args**: Array containing the absolute path to the built server file
+- **cwd**: Current working directory for the server process (repository root)
 
 ### Path Guidelines
 
-- Use absolute paths in the `args` array
-- Update paths according to your system:
-  - **Windows**: Use backslashes or forward slashes
-  - **macOS/Linux**: Use forward slashes
-- Ensure the path points to the compiled `dist/index.js` file
+**Finding the Correct Paths:**
+
+1. **Path to `dist/index.js`**: The `args` array must contain the absolute path to the compiled MCP server
+2. **Working Directory (`cwd`)**: Should point to the repository root where `packages/` is located
+
+**Example Paths by Platform:**
+
+```jsonc
+// macOS/Linux
+{
+  "args": ["/home/user/projects/toolkits/packages/mcp/dist/index.js"],
+  "cwd": "/home/user/projects/toolkits"
+}
+
+// Windows (with forward slashes - recommended)
+{
+  "args": ["C:/Users/user/projects/toolkits/packages/mcp/dist/index.js"],
+  "cwd": "C:/Users/user/projects/toolkits"
+}
+
+// Windows (with backslashes - also works)
+{
+  "args": ["C:\\Users\\user\\projects\\toolkits\\packages\\mcp\\dist\\index.js"],
+  "cwd": "C:\\Users\\user\\projects\\toolkits"
+}
+```
+
+**Important Notes:**
+
+- Use absolute paths (not relative paths)
+- Paths must point to the **built** files in `dist/`, not source files
+- The server must be built first: `cd packages/mcp && bun run build`
+- Forward slashes work on all platforms and are recommended
 
 ## Available Tools
 
