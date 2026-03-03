@@ -24,7 +24,7 @@ export default function Page() {
 
           {/* CTA buttons */}
           <div className="flex animate-fade-in flex-col justify-center">
-            <Button size="lg" variant="primary" className="w-40 uppercase hover:shadow-lg">
+            <Button size="lg" variant="default" className="w-40 uppercase hover:shadow-lg">
               <Link href="/docs">Get Started</Link>
             </Button>
           </div>
