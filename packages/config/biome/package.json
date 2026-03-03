@@ -24,7 +24,7 @@
     "config"
   ],
   "peerDependencies": {
-    "@biomejs/biome": ">=2.3.0"
+    "@biomejs/biome": ">=2.4.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

@@ -43,12 +43,12 @@
     "@tanstack/eslint-plugin-query": "^5.91.4",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "typescript-eslint": "^8.56.0"
+    "typescript-eslint": "^8.56.1"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
-    "eslint": "^10.0.1",
+    "eslint": "^10.0.2",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {

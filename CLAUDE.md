@@ -8,10 +8,10 @@ This is a Bun-based monorepo for Pelatform Toolkits, containing utility packages
 
 ## Tech Stack
 
-- **Package Manager**: Bun 1.3.9
-- **Monorepo Tool**: Turborepo 2.8.9
+- **Package Manager**: Bun 1.3.10
+- **Monorepo Tool**: Turborepo 2.8.12
 - **Build Tool**: tsup (for package bundling), tsc (for ESLint configs)
-- **Linting/Formatting**: Biome 2.4.2
+- **Linting/Formatting**: Biome 2.4.5
 - **Language**: TypeScript 5.9.3
 - **Node Version**: >=22
 
@@ -291,7 +291,7 @@ Packages are published to npm with public access:
 This project enforces engine requirements via `package.json`:
 
 - **Node.js**: >=22
-- **Bun**: >=1.0.0 (package manager: bun@1.3.9)
+- **Bun**: >=1.0.0 (package manager: bun@1.3.10)
 
 ## Troubleshooting
 
