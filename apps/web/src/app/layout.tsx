@@ -1,4 +1,4 @@
-import { cn } from "pelatform-ui";
+import { cn } from "pelatform-ui/utils";
 import { fontVariables } from "@/lib/fonts";
 
 import "@/styles/globals.css";

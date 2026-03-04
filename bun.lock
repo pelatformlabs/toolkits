@@ -33,7 +33,7 @@
         "fumadocs-ui": "^16.6.9",
         "lucide-react": "^0.577.0",
         "next": "16.1.6",
-        "pelatform-ui": "^1.2.5",
+        "pelatform-ui": "^1.2.6",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
         "zod": "^4.3.6",
@@ -2160,7 +2160,7 @@
 
     "peberminta": ["peberminta@0.9.0", "", {}, "sha512-XIxfHpEuSJbITd1H3EeQwpcZbTLHc+VVr8ANI9t5sit565tsI4/xK3KWTUFE2e6QiangUkh3B0jihzmGnNrRsQ=="],
 
-    "pelatform-ui": ["pelatform-ui@1.2.5", "", { "dependencies": { "class-variance-authority": "^0.7.1", "clsx": "^2.1.1", "tailwind-merge": "^3.5.0", "tw-animate-css": "^1.4.0" }, "peerDependencies": { "@base-ui/react": ">=1.2.0", "@dnd-kit/core": ">=6.3.0", "@dnd-kit/modifiers": ">=9.0.0", "@dnd-kit/sortable": ">=10.0.0", "@dnd-kit/utilities": ">=3.2.0", "@headless-tree/core": ">=1.6.0", "@pelatform/ui.components": ">=0.1.0", "@pelatform/ui.hook": ">=0.2.0", "@tanstack/react-table": ">=8.21.0", "cmdk": ">=1.1.0", "date-fns": ">=4.1.0", "embla-carousel-react": ">=8.6.0", "input-otp": ">=1.4.0", "lucide-react": ">=0.575.0", "motion": ">=12.30.0", "next-themes": ">=0.4.6", "radix-ui": ">=1.4.0", "react": ">=18.0.0 || >=19.0.0-rc.0", "react-day-picker": ">=9.13.0", "react-dom": ">=18.0.0 || >=19.0.0-rc.0", "react-phone-number-input": ">=3.4.0", "react-resizable-panels": ">=4.6.0", "recharts": "2.15.1", "sonner": ">=2.0.0", "tsup": ">=8.5.0", "typescript": ">=5.9.0", "vaul": ">=1.1.0" } }, "sha512-zAFFid8/h7JfdPvGEpjzXiWlj/ieAeCpUtP45GlN6TkidHVLsAl+F9rEw6kcI5/vLO+XEpACiV4JKr+568glFw=="],
+    "pelatform-ui": ["pelatform-ui@1.2.6", "", { "dependencies": { "class-variance-authority": "^0.7.1", "clsx": "^2.1.1", "tailwind-merge": "^3.5.0", "tw-animate-css": "^1.4.0" }, "peerDependencies": { "@base-ui/react": ">=1.2.0", "@dnd-kit/core": ">=6.3.0", "@dnd-kit/modifiers": ">=9.0.0", "@dnd-kit/sortable": ">=10.0.0", "@dnd-kit/utilities": ">=3.2.0", "@headless-tree/core": ">=1.6.0", "@pelatform/ui.components": ">=0.1.0", "@pelatform/ui.hook": ">=0.2.0", "@tanstack/react-table": ">=8.21.0", "cmdk": ">=1.1.0", "date-fns": ">=4.1.0", "embla-carousel-react": ">=8.6.0", "input-otp": ">=1.4.0", "lucide-react": ">=0.575.0", "motion": ">=12.30.0", "next-themes": ">=0.4.6", "radix-ui": ">=1.4.0", "react": ">=18.0.0 || >=19.0.0-rc.0", "react-day-picker": ">=9.13.0", "react-dom": ">=18.0.0 || >=19.0.0-rc.0", "react-phone-number-input": ">=3.4.0", "react-resizable-panels": ">=4.6.0", "recharts": "2.15.1", "sonner": ">=2.0.0", "tsup": ">=8.5.0", "typescript": ">=5.9.0", "vaul": ">=1.1.0" } }, "sha512-FPwbcOhuAICXSHZdkF+VXo8vxm/PyzFcTr/t1xY2FWSZBwQAWQ7B4m/5g0wvR2sy4Ru34qULaxB/KRFINPyDLg=="],
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
