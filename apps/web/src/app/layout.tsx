@@ -17,7 +17,7 @@ export const metadata = createMetadata({
 export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={cn(fontVariables, "overscroll-none")} suppressHydrationWarning>
-      <body className="style-vega flex h-full bg-background font-sans text-base text-foreground antialiased">
+      <body className="style-vega flex h-full flex-col bg-background font-sans text-base text-foreground antialiased">
         {children}
       </body>
     </html>

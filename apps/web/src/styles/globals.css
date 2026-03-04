@@ -18,3 +18,20 @@
 @theme inline {
   --font-display: "Satoshi", "system-ui", "sans-serif";
 }
+
+#nd-subnav {
+  @apply bg-transparent;
+}
+
+header &[data-search-full] {
+  @apply rounded-xl;
+}
+
+[data-header-tabs],
+[data-header-body] {
+  @apply border-none;
+}
+
+#nd-page {
+  @apply @container;
+}
