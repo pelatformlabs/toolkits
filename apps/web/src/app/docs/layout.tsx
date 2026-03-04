@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
-import { DocsLayout } from "@fumadocs/base-ui/layouts/notebook";
-import { RootProvider } from "@fumadocs/base-ui/provider/next";
+import { DocsLayout } from "fumadocs-ui/layouts/notebook";
+import { RootProvider } from "fumadocs-ui/provider/next";
 
 import { Logo } from "pelatform-ui/components";
 import { source } from "@/lib/source";
@@ -23,7 +23,7 @@ export default function Layout({ children }: LayoutProps<"/docs">) {
           title: (
             <>
               <Logo className="size-6.5" />
-              <span className="font-medium max-md:hidden">Toolkits</span>
+              <span className="font-semibold">Pelatform Toolkits</span>
             </>
           ),
         }}

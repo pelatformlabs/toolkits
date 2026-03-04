@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { buttonVariants } from "@fumadocs/base-ui/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@fumadocs/base-ui/components/ui/popover";
-import { useCopyButton } from "@fumadocs/base-ui/utils/use-copy-button";
+import { buttonVariants } from "fumadocs-ui/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "fumadocs-ui/components/ui/popover";
+import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
 
 import { cn } from "pelatform-ui";

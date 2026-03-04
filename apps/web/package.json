@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@apps/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,12 +11,12 @@
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@fumadocs/base-ui": "^16.6.9",
     "fumadocs-core": "^16.6.9",
     "fumadocs-mdx": "^14.2.9",
+    "fumadocs-ui": "^16.6.9",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
-    "pelatform-ui": "^1.2.4",
+    "pelatform-ui": "^1.2.5",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "zod": "^4.3.6"

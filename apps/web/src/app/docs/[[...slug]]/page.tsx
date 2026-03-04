@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  DocsBody,
-  DocsDescription,
-  DocsPage,
-  DocsTitle,
-} from "@fumadocs/base-ui/layouts/notebook/page";
-import { createRelativeLink } from "@fumadocs/base-ui/mdx";
-import { PageLastUpdate } from "@fumadocs/base-ui/page";
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/layouts/notebook/page";
+import { createRelativeLink } from "fumadocs-ui/mdx";
+import { PageLastUpdate } from "fumadocs-ui/page";
 
 import { getMDXComponents } from "@/components/mdx-components";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";

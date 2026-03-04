@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { GridBackground } from "pelatform-ui/animation";
-import { Button } from "pelatform-ui/base";
+import { Button } from "pelatform-ui/radix";
 
 export default function Page() {
   return (
@@ -25,7 +25,12 @@ export default function Page() {
 
             {/* CTA buttons */}
             <div className="flex animate-fade-in flex-col justify-center">
-              <Button size="lg" variant="default" className="w-40 uppercase hover:shadow-lg">
+              <Button
+                size="lg"
+                variant="default"
+                className="w-40 uppercase hover:shadow-lg"
+                asChild
+              >
                 <Link href="/docs">Get Started</Link>
               </Button>
             </div>
