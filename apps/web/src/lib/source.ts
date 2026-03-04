@@ -1,4 +1,4 @@
-import { type InferPageType, loader } from "fumadocs-core/source";
+import { type InferMetaType, type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 
 import { docs } from "fumadocs-mdx:collections/server";
@@ -9,6 +9,9 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
+
+export type Page = InferPageType<typeof source>;
+export type Meta = InferMetaType<typeof source>;
 
 export function getPageImage(page: InferPageType<typeof source>) {
   const segments = [...page.slugs, "image.png"];
