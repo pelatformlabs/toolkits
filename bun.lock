@@ -121,7 +121,7 @@
     },
     "packages/email": {
       "name": "@pelatform/email",
-      "version": "1.0.17",
+      "version": "1.0.18",
       "devDependencies": {
         "@pelatform/tsconfig": "workspace:*",
         "@types/node": "^25.3.5",
@@ -155,7 +155,7 @@
     },
     "packages/storage": {
       "name": "@pelatform/storage",
-      "version": "1.0.12",
+      "version": "1.0.13",
       "dependencies": {
         "mime-types": "^3.0.2",
       },
@@ -182,7 +182,7 @@
     },
     "packages/utils": {
       "name": "@pelatform/utils",
-      "version": "1.0.15",
+      "version": "1.0.16",
       "dependencies": {
         "@paralleldrive/cuid2": "^3.3.0",
         "@sindresorhus/slugify": "^3.0.0",
