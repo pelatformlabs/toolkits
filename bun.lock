@@ -124,18 +124,21 @@
       "version": "1.0.18",
       "devDependencies": {
         "@pelatform/tsconfig": "workspace:*",
+        "@react-email/components": "^1.0.8",
         "@types/node": "^25.3.5",
         "@types/nodemailer": "^7.0.11",
         "@types/react": "^19.2.14",
+        "nodemailer": "^8.0.1",
         "react": "^19.2.4",
+        "resend": "^6.9.3",
         "tsup": "^8.5.1",
         "typescript": "^5.9.3",
       },
       "peerDependencies": {
-        "@react-email/components": "^1.0.8",
-        "nodemailer": "^8.0.1",
+        "@react-email/components": ">=1.0.5",
+        "nodemailer": ">=8.0.0",
         "react": ">=18.0.0 || >=19.0.0-rc.0",
-        "resend": "^6.9.3",
+        "resend": ">=6.9.0",
       },
     },
     "packages/mcp": {
@@ -1248,7 +1251,7 @@
 
     "callsites": ["callsites@3.1.0", "", {}, "sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ=="],
 
-    "caniuse-lite": ["caniuse-lite@1.0.30001776", "", {}, "sha512-sg01JDPzZ9jGshqKSckOQthXnYwOEP50jeVFhaSFbZcOy05TiuuaffDOfcwtCisJ9kNQuLBFibYywv2Bgm9osw=="],
+    "caniuse-lite": ["caniuse-lite@1.0.30001777", "", {}, "sha512-tmN+fJxroPndC74efCdp12j+0rk0RHwV5Jwa1zWaFVyw2ZxAuPeG8ZgWC3Wz7uSjT3qMRQ5XHZ4COgQmsCMJAQ=="],
 
     "ccount": ["ccount@2.0.1", "", {}, "sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg=="],
 
