@@ -12,15 +12,6 @@ const nextConfig: NextConfig = {
 
   transpilePackages: [],
   reactStrictMode: true,
-  images: {
-    remotePatterns: [
-      {
-        // for Pelatform static assets
-        protocol: "https",
-        hostname: "assets.pelatform.com",
-      },
-    ],
-  },
 };
 
 export default withMDX(nextConfig);

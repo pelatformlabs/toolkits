@@ -1,7 +1,6 @@
 import Link from "next/link";
 
-import { GridBackground } from "pelatform-ui/animation";
-import { Button } from "pelatform-ui/radix";
+import { GridBackground } from "@/components/grid-background";
 
 export default function Page() {
   return (
@@ -25,14 +24,12 @@ export default function Page() {
 
             {/* CTA buttons */}
             <div className="flex animate-fade-in flex-col justify-center">
-              <Button
-                size="lg"
-                variant="default"
-                className="w-40 uppercase hover:shadow-lg"
-                asChild
+              <button
+                type="button"
+                className="w-40 rounded-base rounded-full bg-linear-to-br from-green-400 to-blue-600 px-4 py-2.5 text-center font-medium text-sm text-white uppercase leading-5 hover:bg-linear-to-bl hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800"
               >
                 <Link href="/docs">Get Started</Link>
-              </Button>
+              </button>
             </div>
           </div>
         </GridBackground>

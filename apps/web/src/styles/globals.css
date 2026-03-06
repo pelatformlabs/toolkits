@@ -1,13 +1,9 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
-@import "pelatform-ui/css";
 
 /** Theme and custom color styles **/
 :root {
-  /* --font-sans: var(--font-sans), sans-serif; */
-  /* --font-mono: var(--font-mono), monospace; */
-
   --primary: oklch(0.782 0.106 167.126);
 }
 
@@ -16,7 +12,7 @@
 }
 
 @theme inline {
-  --font-display: "Satoshi", "system-ui", "sans-serif";
+  --color-primary: var(--primary);
 }
 
 #nd-subnav {

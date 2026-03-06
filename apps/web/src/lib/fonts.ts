@@ -1,6 +1,6 @@
 import { Geist_Mono as FontMono, Geist as FontSans, Inter } from "next/font/google";
 
-import { cn } from "pelatform-ui/utils";
+import { cn } from "@pelatform/utils";
 
 const fontSans = FontSans({
   subsets: ["latin"],
