@@ -1,5 +1,11 @@
 # @pelatform/email
 
+## 1.0.19
+
+### Patch Changes
+
+- [`5c04611`](https://github.com/pelatformlabs/toolkits/commit/5c046118667eb1b64bcaea15a335bff262a7bb15) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Updated peerDependencies
+
 ## 1.0.18
 
 ### Patch Changes

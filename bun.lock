@@ -121,7 +121,7 @@
     },
     "packages/email": {
       "name": "@pelatform/email",
-      "version": "1.0.18",
+      "version": "1.0.19",
       "devDependencies": {
         "@pelatform/tsconfig": "workspace:*",
         "@react-email/components": "^1.0.8",
