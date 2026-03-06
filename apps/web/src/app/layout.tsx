@@ -1,9 +1,8 @@
 import { cn } from "pelatform-ui/utils";
 import { fontVariables } from "@/lib/fonts";
+import { baseUrl, createMetadata } from "@/lib/metadata";
 
 import "@/styles/globals.css";
-
-import { baseUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
   title: {

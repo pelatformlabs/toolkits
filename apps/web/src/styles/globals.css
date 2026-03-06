@@ -5,8 +5,8 @@
 
 /** Theme and custom color styles **/
 :root {
-  --font-sans: var(--font-geist-sans), sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  /* --font-sans: var(--font-sans), sans-serif; */
+  /* --font-mono: var(--font-mono), monospace; */
 
   --primary: oklch(0.782 0.106 167.126);
 }
