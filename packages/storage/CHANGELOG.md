@@ -1,5 +1,11 @@
 # @pelatform/storage
 
+## 1.0.13
+
+### Patch Changes
+
+- [`e97cbbd`](https://github.com/pelatformlabs/toolkits/commit/e97cbbdbf24e29cd7e63d3aadf85317056003a66) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Adjust peer dependencies in tsup.config files for better management.
+
 ## 1.0.12
 
 ### Patch Changes
