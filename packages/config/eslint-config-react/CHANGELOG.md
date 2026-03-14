@@ -1,5 +1,14 @@
 # @pelatform/eslint-config-react
 
+## 0.1.8
+
+### Patch Changes
+
+- [`533eb24`](https://github.com/pelatformlabs/toolkits/commit/533eb246967b9878f990403364179c337331bea0) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest versions
+
+- Updated dependencies [[`533eb24`](https://github.com/pelatformlabs/toolkits/commit/533eb246967b9878f990403364179c337331bea0)]:
+  - @pelatform/eslint-config@0.1.11
+
 ## 0.1.7
 
 ### Patch Changes
