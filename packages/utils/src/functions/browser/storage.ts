@@ -177,12 +177,10 @@ const hasStorageItem = (key: string, storageType: StorageType = "localStorage"):
 };
 
 export {
-  // Enhanced functions
-  getStorageItem,
-  setStorageItem,
-  removeStorageItem,
   clearStorage,
+  getStorageItem,
   hasStorageItem,
-  // Types
+  removeStorageItem,
   type StorageType,
+  setStorageItem,
 };
