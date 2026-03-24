@@ -39,15 +39,15 @@
   ],
   "dependencies": {
     "@eslint/js": "^10.0.1",
-    "@typescript-eslint/parser": "^8.57.0",
-    "eslint-config-turbo": "^2.8.17",
+    "@typescript-eslint/parser": "^8.57.2",
+    "eslint-config-turbo": "^2.8.20",
     "globals": "^17.4.0",
-    "typescript-eslint": "^8.57.0"
+    "typescript-eslint": "^8.57.2"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
-    "eslint": "^10.0.3",
-    "typescript": "^5.9.3"
+    "eslint": "^10.1.0",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "eslint": ">=9.30.0"
