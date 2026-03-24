@@ -1,5 +1,11 @@
 # @pelatform/storage
 
+## 1.0.14
+
+### Patch Changes
+
+- [`a6a7701`](https://github.com/pelatformlabs/toolkits/commit/a6a7701d60f2921e4b287f777f49cce3e7c11275) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest versions
+
 ## 1.0.13
 
 ### Patch Changes
