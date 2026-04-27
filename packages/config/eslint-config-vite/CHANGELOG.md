@@ -1,5 +1,14 @@
 # @pelatform/eslint-config-vite
 
+## 0.1.12
+
+### Patch Changes
+
+- [`17b64b1`](https://github.com/pelatformlabs/toolkits/commit/17b64b18a2655f3ad92176da32e41150a05bb722) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest versions
+
+- Updated dependencies [[`17b64b1`](https://github.com/pelatformlabs/toolkits/commit/17b64b18a2655f3ad92176da32e41150a05bb722)]:
+  - @pelatform/eslint-config-react@0.1.9
+
 ## 0.1.11
 
 ### Patch Changes

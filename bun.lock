@@ -60,7 +60,7 @@
     },
     "packages/config/eslint-config": {
       "name": "@pelatform/eslint-config",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "dependencies": {
         "@eslint/js": "^10.0.1",
         "@typescript-eslint/parser": "^8.59.0",
@@ -79,7 +79,7 @@
     },
     "packages/config/eslint-config-react": {
       "name": "@pelatform/eslint-config-react",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "dependencies": {
         "@pelatform/eslint-config": "workspace:^",
         "@tanstack/eslint-plugin-query": "^5.100.5",
@@ -99,7 +99,7 @@
     },
     "packages/config/eslint-config-vite": {
       "name": "@pelatform/eslint-config-vite",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "dependencies": {
         "@pelatform/eslint-config-react": "workspace:^",
         "@tanstack/eslint-plugin-router": "^1.161.6",
@@ -122,7 +122,7 @@
     },
     "packages/email": {
       "name": "@pelatform/email",
-      "version": "1.0.20",
+      "version": "1.0.21",
       "devDependencies": {
         "@pelatform/tsconfig": "workspace:*",
         "@react-email/components": "^1.0.12",
@@ -159,7 +159,7 @@
     },
     "packages/storage": {
       "name": "@pelatform/storage",
-      "version": "1.0.14",
+      "version": "1.0.15",
       "dependencies": {
         "mime-types": "^3.0.2",
       },
@@ -186,7 +186,7 @@
     },
     "packages/utils": {
       "name": "@pelatform/utils",
-      "version": "1.0.17",
+      "version": "1.0.18",
       "dependencies": {
         "@paralleldrive/cuid2": "^3.3.0",
         "@sindresorhus/slugify": "^3.0.0",
