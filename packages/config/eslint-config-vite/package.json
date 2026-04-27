@@ -43,12 +43,12 @@
     "@pelatform/eslint-config-react": "workspace:^",
     "@tanstack/eslint-plugin-router": "^1.161.6",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.59.0"
   },
   "devDependencies": {
     "@pelatform/eslint-config": "workspace:^",
     "@pelatform/tsconfig": "workspace:^",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.1",
     "typescript": "catalog:"
   },
   "peerDependencies": {
