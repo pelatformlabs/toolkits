@@ -1,5 +1,11 @@
 # @pelatform/email
 
+## 1.1.0
+
+### Minor Changes
+
+- [`c51b039`](https://github.com/pelatformlabs/toolkits/commit/c51b039e7679994ec81d0d8d172c86704210008e) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Change @react-email/components to react email
+
 ## 1.0.21
 
 ### Patch Changes
