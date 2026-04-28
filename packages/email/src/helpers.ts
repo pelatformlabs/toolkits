@@ -24,7 +24,7 @@
  */
 
 import React from "react";
-import { render } from "@react-email/components";
+import { render } from "react-email";
 
 // =============================================================================
 // TEMPLATE RENDERING

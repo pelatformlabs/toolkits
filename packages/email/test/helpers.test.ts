@@ -24,7 +24,7 @@ import {
 } from "../src/helpers";
 
 // Mock React Email render
-vi.mock("@react-email/components", () => ({
+vi.mock("react-email", () => ({
   render: vi.fn((template) => Promise.resolve("<html>mock-rendered-template</html>")),
 }));
 

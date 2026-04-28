@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { render } from "@react-email/components";
+import { render } from "react-email";
 
 import { NodemailerProvider } from "./providers/nodemailer";
 import { ResendProvider } from "./providers/resend";

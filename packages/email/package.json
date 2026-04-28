@@ -49,20 +49,20 @@
   ],
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:*",
-    "@react-email/components": "^1.0.12",
     "@types/node": "^25.6.0",
     "@types/nodemailer": "^8.0.0",
     "@types/react": "^19.2.14",
-    "nodemailer": "^8.0.6",
+    "nodemailer": "^8.0.7",
     "react": "^19.2.5",
+    "react-email": "^6.0.3",
     "resend": "^6.12.2",
     "tsup": "^8.5.1",
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@react-email/components": ">=1.0.5",
     "nodemailer": ">=8.0.0",
     "react": ">=18.0.0 || >=19.0.0-rc.0",
+    "react-email": ">=6.0.0",
     "resend": ">=6.9.0"
   },
   "publishConfig": {

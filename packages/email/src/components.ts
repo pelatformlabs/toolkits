@@ -4,7 +4,7 @@
  */
 
 // Import all components as a namespace for convenience
-import * as ReactEmailComponents from "@react-email/components";
+import * as ReactEmailComponents from "react-email";
 
 /**
  * Re-export all React Email components for easy access
@@ -13,7 +13,7 @@ import * as ReactEmailComponents from "@react-email/components";
  *
  * @see https://react.email/docs/components/html
  */
-export * from "@react-email/components";
+export * from "react-email";
 
 /**
  * Export the namespace as well for alternative import style

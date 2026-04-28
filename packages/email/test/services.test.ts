@@ -352,7 +352,7 @@ describe("EmailService", () => {
       const TestComponent = ({ name }: { name: string }) =>
         React.createElement("div", null, `Hello ${name}!`);
 
-      const components = await import("@react-email/components");
+      const components = await import("react-email");
       // Arrange: force render to throw
       (components.render as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => {
         throw new Error("render failed");

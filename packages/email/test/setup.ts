@@ -54,12 +54,12 @@ vi.mock("nodemailer", () => ({
 }));
 
 // Mock React Email render
-vi.mock("@react-email/render", () => ({
+vi.mock("react-email", () => ({
   render: vi.fn(() => Promise.resolve("<html>mock-rendered-email</html>")),
 }));
 
 // Mock React Email components
-vi.mock("@react-email/components", () => ({
+vi.mock("react-email", () => ({
   render: vi.fn((template) => "<html>mock-rendered-template</html>"),
 }));
 
