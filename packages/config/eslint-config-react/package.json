@@ -40,15 +40,15 @@
   ],
   "dependencies": {
     "@pelatform/eslint-config": "workspace:^",
-    "@tanstack/eslint-plugin-query": "^5.100.5",
+    "@tanstack/eslint-plugin-query": "^5.100.10",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "typescript-eslint": "^8.59.1"
+    "typescript-eslint": "^8.59.3"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
-    "eslint": "^10.2.1",
+    "eslint": "^10.4.0",
     "typescript": "catalog:"
   },
   "peerDependencies": {
