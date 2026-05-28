@@ -56,17 +56,12 @@
     "@pelatform/tsconfig": "workspace:*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ms": "^2.1.0",
-    "@types/node": "^25.8.0",
+    "@types/node": "^25.9.1",
     "tsup": "^8.5.1",
     "typescript": "catalog:"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
-    "*.{md,yml,yaml}": "prettier --write",
-    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
   }
 }

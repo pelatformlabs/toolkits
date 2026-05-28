@@ -40,10 +40,10 @@
   ],
   "dependencies": {
     "@pelatform/eslint-config": "workspace:^",
-    "@tanstack/eslint-plugin-query": "^5.100.10",
+    "@tanstack/eslint-plugin-query": "^5.100.14",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.60.0"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
@@ -57,10 +57,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
-    "*.{md,yml,yaml}": "prettier --write",
-    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
   }
 }

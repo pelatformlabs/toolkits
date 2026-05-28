@@ -39,10 +39,10 @@
   ],
   "dependencies": {
     "@eslint/js": "^10.0.1",
-    "@typescript-eslint/parser": "^8.59.3",
-    "eslint-config-turbo": "^2.9.14",
+    "@typescript-eslint/parser": "^8.60.0",
+    "eslint-config-turbo": "^2.9.15",
     "globals": "^17.6.0",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.60.0"
   },
   "devDependencies": {
     "@pelatform/tsconfig": "workspace:^",
@@ -55,10 +55,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}": "biome check --write --no-errors-on-unmatched",
-    "*.{md,yml,yaml}": "prettier --write",
-    "*.{json,jsonc,html}": "biome format --write --no-errors-on-unmatched"
   }
 }

@@ -53,14 +53,9 @@ vi.mock("nodemailer", () => ({
   }),
 }));
 
-// Mock React Email render
+// Mock React Email render (covers both renderEmailTemplate and EmailService.sendTemplate)
 vi.mock("react-email", () => ({
-  render: vi.fn(() => Promise.resolve("<html>mock-rendered-email</html>")),
-}));
-
-// Mock React Email components
-vi.mock("react-email", () => ({
-  render: vi.fn((template) => "<html>mock-rendered-template</html>"),
+  render: vi.fn(() => Promise.resolve("<html>mock-rendered-template</html>")),
 }));
 
 // Mock Email providers with proper function constructors

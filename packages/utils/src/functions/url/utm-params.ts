@@ -234,10 +234,26 @@ export const createHref = (
   // any params, doesn't have to be all of them
   utmParams?: Partial<Record<(typeof UTMTags)[number], string>>,
 ): string => {
-  const url = new URL(`${domain}${href}`);
+  // Normalize the domain so we can always feed a valid absolute URL into the
+  // URL constructor. Accepts inputs like "example.com", "https://example.com",
+  // or "https://example.com/" without throwing.
+  const hasScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(domain);
+  const base = hasScheme ? domain : `https://${domain}`;
+  const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+  const path = href.startsWith("/") ? href : `/${href}`;
+
+  let url: URL;
+  try {
+    url = new URL(`${normalizedBase}${path}`);
+  } catch (_) {
+    return "";
+  }
+
   if (utmParams) {
     Object.entries(utmParams).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
+      if (typeof value === "string" && value.length > 0) {
+        url.searchParams.set(key, value);
+      }
     });
   }
   return url.toString();

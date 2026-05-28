@@ -4,6 +4,8 @@
  * Includes validation and error handling for production use
  */
 
+import { randomInt } from "node:crypto";
+
 import bcrypt from "bcryptjs";
 
 import { logger } from "../logging/logger";
@@ -299,7 +301,8 @@ export function generateSecurePassword(
 
   let password = "";
   for (let i = 0; i < validLength; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
+    // Use a cryptographically secure RNG to avoid bias and predictability
+    const randomIndex = randomInt(0, charset.length);
     password += charset[randomIndex];
   }
 
