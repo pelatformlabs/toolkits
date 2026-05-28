@@ -53,14 +53,14 @@
     },
     "packages/config/biome": {
       "name": "@pelatform/biome-config",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "peerDependencies": {
         "@biomejs/biome": ">=2.4.0",
       },
     },
     "packages/config/eslint-config": {
       "name": "@pelatform/eslint-config",
-      "version": "0.1.12",
+      "version": "0.1.13",
       "dependencies": {
         "@eslint/js": "^10.0.1",
         "@typescript-eslint/parser": "^8.60.0",
@@ -79,7 +79,7 @@
     },
     "packages/config/eslint-config-react": {
       "name": "@pelatform/eslint-config-react",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "dependencies": {
         "@pelatform/eslint-config": "workspace:^",
         "@tanstack/eslint-plugin-query": "^5.100.14",
@@ -99,7 +99,7 @@
     },
     "packages/config/eslint-config-vite": {
       "name": "@pelatform/eslint-config-vite",
-      "version": "0.1.12",
+      "version": "0.1.13",
       "dependencies": {
         "@pelatform/eslint-config-react": "workspace:^",
         "@tanstack/eslint-plugin-router": "^1.162.0",
@@ -118,11 +118,11 @@
     },
     "packages/config/tsconfig": {
       "name": "@pelatform/tsconfig",
-      "version": "0.1.4",
+      "version": "0.1.5",
     },
     "packages/email": {
       "name": "@pelatform/email",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "devDependencies": {
         "@pelatform/tsconfig": "workspace:*",
         "@types/node": "^25.9.1",
@@ -159,7 +159,7 @@
     },
     "packages/storage": {
       "name": "@pelatform/storage",
-      "version": "1.0.15",
+      "version": "1.0.16",
       "dependencies": {
         "mime-types": "^3.0.2",
       },
@@ -186,7 +186,7 @@
     },
     "packages/utils": {
       "name": "@pelatform/utils",
-      "version": "1.0.18",
+      "version": "1.0.19",
       "dependencies": {
         "@paralleldrive/cuid2": "^3.3.0",
         "@sindresorhus/slugify": "^3.0.0",
