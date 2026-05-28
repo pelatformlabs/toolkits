@@ -1,5 +1,11 @@
 # @pelatform/utils
 
+## 1.0.19
+
+### Patch Changes
+
+- [`9494e8b`](https://github.com/pelatformlabs/toolkits/commit/9494e8b569b614ccf7f039a2b312cabc39a446c9) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Update dependencies to latest versions
+
 ## 1.0.18
 
 ### Patch Changes
