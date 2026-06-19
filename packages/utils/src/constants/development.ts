@@ -22,7 +22,12 @@
  *   : 'http://localhost:3001';
  * ```
  */
-export const NODE_ENV = process.env.NODE_ENV;
+const env =
+  typeof process !== "undefined" && process?.env
+    ? process.env
+    : ({} as Record<string, string | undefined>);
+
+export const NODE_ENV = env.NODE_ENV;
 
 /**
  * Checks if the application is running in development mode
@@ -106,7 +111,7 @@ export const isProduction = NODE_ENV === "production";
  *   console.log(`Server running on port ${PORT}`);
  * });
  */
-export const PORT = process.env.PORT || "3000";
+export const PORT = env.PORT || "3000";
 
 /**
  * The port number on which the api application server runs.
@@ -117,7 +122,7 @@ export const PORT = process.env.PORT || "3000";
  *   console.log(`Server running on port ${API_PORT}`);
  * });
  */
-export const API_PORT = process.env.API_PORT || "3001";
+export const API_PORT = env.API_PORT || "3001";
 
 /**
  * Indicates whether debug mode is enabled (true in development mode).
@@ -138,4 +143,4 @@ export const DEBUG = !!isDevelopment;
  *   consola.debug('Debugging enabled');
  * }
  */
-export const LOG_LEVEL = process.env.LOG_LEVEL;
+export const LOG_LEVEL = env.LOG_LEVEL;

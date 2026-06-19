@@ -18,7 +18,6 @@ export * from "./array/stable-sort";
 export * from "./browser/construct-metadata";
 export * from "./browser/cookies";
 export * from "./browser/get-height";
-// export * from './browser/is-click-on-interactive-child';
 export * from "./browser/resize-image";
 export * from "./browser/storage";
 

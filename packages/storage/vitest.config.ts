@@ -24,8 +24,6 @@ export default defineConfig({
         // Config and provider wrappers to focus on core adapters
         "src/config.ts",
         "src/providers/s3.ts",
-        // Non-executable factory aggregator
-        "src/factory.ts",
       ],
       thresholds: {
         lines: 90,

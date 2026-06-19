@@ -60,6 +60,7 @@
  */
 export function getHeight(element: HTMLElement): number {
   if (!element) return 0;
+  if (typeof window === "undefined") return 0;
 
   const styles = window.getComputedStyle(element);
 

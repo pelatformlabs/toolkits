@@ -1,7 +1,7 @@
 # Pelatform Toolkits
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Bun](https://img.shields.io/badge/bun-1.3.9-black)](https://bun.sh)
+[![Bun](https://img.shields.io/badge/bun-1.3.14-black)](https://bun.sh)
 
 A collection of ready-to-use packages for modern application development. This monorepo includes reusable packages for email, storage, common utilities, and shared linting/TypeScript configurations.
 
@@ -30,7 +30,7 @@ A collection of ready-to-use packages for modern application development. This m
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) 1.3.9 or higher
+- [Bun](https://bun.sh) 1.3.14 or higher
 - Node.js 22 or higher
 
 ### Installation
@@ -56,7 +56,10 @@ bun run types:check        # Type-check all packages
 bun run lint               # Lint with safe fixes
 bun run lint:fix           # Lint with comprehensive fixes
 bun run format             # Format code
-bun run format:check       # Check format and fix when needed
+
+# Testing
+bun run test               # Run all tests
+bun run test -- --run email  # Run one package's tests
 
 # Maintenance
 bun run clean              # Clean build outputs
@@ -73,14 +76,15 @@ cd packages/email          # or packages/storage, packages/utils
 bun run dev                # Development mode (watch)
 bun run build              # Build the package
 bun run types:check        # Type-check the package
+bun run test               # Test the package
 ```
 
 ## Development Workflow
 
 1. **Create a branch** for your changes
 2. **Make your changes** in the appropriate package(s)
-3. **Run tests** and type-check: `bun types:check`
-4. **Format your code**: `bun lint:format`
+3. **Run tests** and type-check: `bun run test && bun run types:check`
+4. **Format your code**: `bun run format && bun run lint:fix`
 5. **Commit your changes** following conventional commits
 6. **Submit a pull request**
 

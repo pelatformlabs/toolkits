@@ -75,8 +75,8 @@ export type EmailConfig = ResendConfig | NodemailerConfig;
 export interface EmailAttachment {
   /** Attachment filename */
   filename: string;
-  /** Attachment content as Buffer or string */
-  content: Buffer | string;
+  /** Attachment content as Uint8Array, Buffer, or string */
+  content: Uint8Array | string;
   /** MIME type of the attachment */
   contentType?: string;
   /** Content-ID for inline images */

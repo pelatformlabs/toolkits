@@ -1,14 +1,7 @@
-import { expect, vi } from "vitest";
+import { afterEach, vi } from "vitest";
 
-// Global test setup for Email package tests
-global.console = {
-  ...console,
-};
-
-// Set up test environment variables
 process.env.NODE_ENV = "test";
 
-// Mock Resend class with proper function constructor
 function createMockResend() {
   function MockResend() {
     return {
@@ -27,16 +20,12 @@ vi.mock("resend", () => ({
   Resend: createMockResend(),
 }));
 
-// Mock Nodemailer with default export
 vi.mock("nodemailer", () => ({
   default: {
     createTransport: vi.fn().mockReturnValue({
       sendMail: vi.fn().mockResolvedValue({
         messageId: "test-message-id",
-        envelope: {
-          from: "test@example.com",
-          to: ["recipient@example.com"],
-        },
+        envelope: { from: "test@example.com", to: ["recipient@example.com"] },
       }),
       verify: vi.fn().mockResolvedValue(true),
     }),
@@ -44,21 +33,16 @@ vi.mock("nodemailer", () => ({
   createTransport: vi.fn().mockReturnValue({
     sendMail: vi.fn().mockResolvedValue({
       messageId: "test-message-id",
-      envelope: {
-        from: "test@example.com",
-        to: ["recipient@example.com"],
-      },
+      envelope: { from: "test@example.com", to: ["recipient@example.com"] },
     }),
     verify: vi.fn().mockResolvedValue(true),
   }),
 }));
 
-// Mock React Email render (covers both renderEmailTemplate and EmailService.sendTemplate)
 vi.mock("react-email", () => ({
   render: vi.fn(() => Promise.resolve("<html>mock-rendered-template</html>")),
 }));
 
-// Mock Email providers with proper function constructors
 function createMockResendProvider() {
   function MockResendProvider(config: any) {
     return {
@@ -105,31 +89,6 @@ vi.mock("../src/providers/nodemailer", () => ({
   NodemailerProvider: createMockNodemailerProvider(),
 }));
 
-// Cleanup after each test to ensure determinism
-import { afterEach } from "vitest";
 afterEach(() => {
   vi.clearAllMocks();
-});
-
-// Global test utilities
-declare global {
-  namespace Vi {
-    interface JestAssertion<T = any> {
-      toBeValidEmail(): T;
-    }
-  }
-}
-
-expect.extend({
-  toBeValidEmail(received: string) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const pass = emailRegex.test(received);
-    return {
-      message: () =>
-        pass
-          ? `expected ${received} not to be a valid email`
-          : `expected ${received} to be a valid email`,
-      pass,
-    };
-  },
 });

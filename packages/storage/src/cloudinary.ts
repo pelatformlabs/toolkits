@@ -1,3 +1,4 @@
+import type { EnvRecord } from "./config";
 import { loadCloudinaryConfig } from "./config";
 import { CloudinaryService } from "./services/cloudinary";
 import type { CloudinaryConfig } from "./types";
@@ -9,6 +10,7 @@ export { CloudinaryService } from "./services/cloudinary";
 /**
  * Create Cloudinary service using environment variables or manual configuration
  * @param config Optional Cloudinary configuration. If not provided, loads from environment variables
+ * @param env - Optional environment record
  * @returns CloudinaryService instance
  * @throws Error if configuration is invalid or environment variables are missing
  * @public
@@ -42,10 +44,11 @@ export { CloudinaryService } from "./services/cloudinary";
  */
 export function createCloudinary(): CloudinaryService;
 export function createCloudinary(config: CloudinaryConfig): CloudinaryService;
-export function createCloudinary(config?: CloudinaryConfig): CloudinaryService {
+export function createCloudinary(config: CloudinaryConfig, env: EnvRecord): CloudinaryService;
+export function createCloudinary(config?: CloudinaryConfig, env?: EnvRecord): CloudinaryService {
   if (config) {
     return new CloudinaryService(config);
   }
-  const envConfig = loadCloudinaryConfig();
+  const envConfig = loadCloudinaryConfig(env);
   return new CloudinaryService(envConfig);
 }

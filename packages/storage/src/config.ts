@@ -6,6 +6,24 @@
 import type { CloudinaryConfig, S3Config, StorageConfig } from "./types";
 
 /**
+ * Cross-runtime environment record.
+ * Pass `process.env` on Node.js, `ctx.env` on Cloudflare Workers,
+ * `Deno.env.toObject()` on Deno, or a plain object in the browser.
+ */
+export type EnvRecord = Record<string, string | undefined>;
+
+function getDefaultEnv(): EnvRecord | undefined {
+  if (typeof process !== "undefined" && process?.env) {
+    return process.env as EnvRecord;
+  }
+  return undefined;
+}
+
+function resolveEnv(env?: EnvRecord): EnvRecord | undefined {
+  return env ?? getDefaultEnv();
+}
+
+/**
  * Environment variable names for storage configuration
  * @public
  *
@@ -39,21 +57,24 @@ export const ENV_VARS = {
 
 /**
  * Get environment variable value
+ * @param key - Environment variable name
+ * @param env - Optional environment record
  * @internal
  */
-function getEnvVar(key: string): string | undefined {
-  if (typeof process !== "undefined" && process.env) {
-    return process.env[key];
-  }
-  return undefined;
+function getEnvVar(key: string, env?: EnvRecord): string | undefined {
+  const e = resolveEnv(env);
+  if (!e) return undefined;
+  return e[key];
 }
 
 /**
  * Get required environment variable value
+ * @param key - Environment variable name
+ * @param env - Optional environment record
  * @internal
  */
-function getRequiredEnvVar(key: string): string {
-  const value = getEnvVar(key);
+function getRequiredEnvVar(key: string, env?: EnvRecord): string {
+  const value = getEnvVar(key, env);
   if (!value) {
     throw new Error(`Missing required environment variable: ${key}`);
   }
@@ -62,16 +83,20 @@ function getRequiredEnvVar(key: string): string {
 
 /**
  * Get boolean environment variable value
+ * @param key - Environment variable name
+ * @param defaultValue - Default boolean value if not set
+ * @param env - Optional environment record
  * @internal
  */
-function getBooleanEnvVar(key: string, defaultValue = false): boolean {
-  const value = getEnvVar(key);
+function getBooleanEnvVar(key: string, defaultValue = false, env?: EnvRecord): boolean {
+  const value = getEnvVar(key, env);
   if (!value) return defaultValue;
   return value.toLowerCase() === "true" || value === "1";
 }
 
 /**
  * Load S3 configuration from environment variables
+ * @param env - Optional environment record
  * @returns S3 configuration object
  * @throws Error if required environment variables are missing
  * @public
@@ -102,8 +127,8 @@ function getBooleanEnvVar(key: string, defaultValue = false): boolean {
  * }
  * ```
  */
-export function loadS3Config(): S3Config {
-  const provider = getRequiredEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER) as S3Config["provider"];
+export function loadS3Config(env?: EnvRecord): S3Config {
+  const provider = getRequiredEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER, env) as S3Config["provider"];
 
   // Validate provider
   const validProviders: S3Config["provider"][] = [
@@ -122,18 +147,19 @@ export function loadS3Config(): S3Config {
 
   return {
     provider,
-    region: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_REGION),
-    bucket: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_BUCKET),
-    accessKeyId: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_ACCESS_KEY_ID),
-    secretAccessKey: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_SECRET_ACCESS_KEY),
-    endpoint: getEnvVar(ENV_VARS.PELATFORM_S3_ENDPOINT),
-    forcePathStyle: getBooleanEnvVar(ENV_VARS.PELATFORM_S3_FORCE_PATH_STYLE),
-    publicUrl: getEnvVar(ENV_VARS.PELATFORM_S3_PUBLIC_URL),
+    region: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_REGION, env),
+    bucket: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_BUCKET, env),
+    accessKeyId: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_ACCESS_KEY_ID, env),
+    secretAccessKey: getRequiredEnvVar(ENV_VARS.PELATFORM_S3_SECRET_ACCESS_KEY, env),
+    endpoint: getEnvVar(ENV_VARS.PELATFORM_S3_ENDPOINT, env),
+    forcePathStyle: getBooleanEnvVar(ENV_VARS.PELATFORM_S3_FORCE_PATH_STYLE, false, env),
+    publicUrl: getEnvVar(ENV_VARS.PELATFORM_S3_PUBLIC_URL, env),
   };
 }
 
 /**
  * Load Cloudinary configuration from environment variables
+ * @param env - Optional environment record
  * @returns Cloudinary configuration object
  * @throws Error if required environment variables are missing
  * @public
@@ -165,20 +191,21 @@ export function loadS3Config(): S3Config {
  * }
  * ```
  */
-export function loadCloudinaryConfig(): CloudinaryConfig {
+export function loadCloudinaryConfig(env?: EnvRecord): CloudinaryConfig {
   return {
     provider: "cloudinary",
-    cloudName: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME),
-    apiKey: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_KEY),
-    apiSecret: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_SECRET),
-    secure: getBooleanEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_SECURE, true),
-    folder: getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_FOLDER),
+    cloudName: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME, env),
+    apiKey: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_KEY, env),
+    apiSecret: getRequiredEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_SECRET, env),
+    secure: getBooleanEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_SECURE, true, env),
+    folder: getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_FOLDER, env),
   };
 }
 
 /**
  * Auto-detect and load storage configuration from environment variables
  * Determines the provider based on available environment variables
+ * @param env - Optional environment record
  * @returns Storage configuration object (S3 or Cloudinary)
  * @throws Error if no valid configuration is found
  * @public
@@ -204,34 +231,34 @@ export function loadCloudinaryConfig(): CloudinaryConfig {
  * // Will load Cloudinary config even if S3 vars are also present
  * ```
  */
-export function loadStorageConfig(): StorageConfig {
-  const provider = getEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER);
+export function loadStorageConfig(env?: EnvRecord): StorageConfig {
+  const provider = getEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER, env);
 
   // If provider is explicitly set, use it
   if (provider) {
     if (provider === "cloudinary") {
-      return loadCloudinaryConfig();
-    } else {
-      return loadS3Config();
+      return loadCloudinaryConfig(env);
     }
+    return loadS3Config(env);
   }
 
   // Auto-detect based on available environment variables
   const hasCloudinaryVars =
-    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME) &&
-    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_KEY) &&
-    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_SECRET);
+    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME, env) &&
+    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_KEY, env) &&
+    getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_API_SECRET, env);
 
   const hasS3Vars =
-    getEnvVar(ENV_VARS.PELATFORM_S3_BUCKET) &&
-    getEnvVar(ENV_VARS.PELATFORM_S3_ACCESS_KEY_ID) &&
-    getEnvVar(ENV_VARS.PELATFORM_S3_SECRET_ACCESS_KEY);
+    getEnvVar(ENV_VARS.PELATFORM_S3_BUCKET, env) &&
+    getEnvVar(ENV_VARS.PELATFORM_S3_ACCESS_KEY_ID, env) &&
+    getEnvVar(ENV_VARS.PELATFORM_S3_SECRET_ACCESS_KEY, env);
 
   if (hasCloudinaryVars) {
-    return loadCloudinaryConfig();
-  } else if (hasS3Vars) {
+    return loadCloudinaryConfig(env);
+  }
+  if (hasS3Vars) {
     // Default to AWS if no provider specified
-    const config = loadS3Config();
+    const config = loadS3Config(env);
     if (!config.provider) {
       config.provider = "aws";
     }
@@ -247,6 +274,7 @@ export function loadStorageConfig(): StorageConfig {
 
 /**
  * Check if storage configuration is available in environment variables
+ * @param env - Optional environment record
  * @returns True if valid storage configuration is found
  * @public
  *
@@ -265,9 +293,9 @@ export function loadStorageConfig(): StorageConfig {
  * const storage = hasStorageConfig() ? createStorage() : null;
  * ```
  */
-export function hasStorageConfig(): boolean {
+export function hasStorageConfig(env?: EnvRecord): boolean {
   try {
-    loadStorageConfig();
+    loadStorageConfig(env);
     return true;
   } catch {
     return false;
@@ -276,6 +304,7 @@ export function hasStorageConfig(): boolean {
 
 /**
  * Check if storage configuration is available in environment variables
+ * @param env - Optional environment record
  * @returns True if either S3 or Cloudinary configuration is available
  * @public
  *
@@ -301,12 +330,13 @@ export function hasStorageConfig(): boolean {
  * }
  * ```
  */
-export function isStorageConfigured(): boolean {
-  return hasStorageConfig();
+export function isStorageConfigured(env?: EnvRecord): boolean {
+  return hasStorageConfig(env);
 }
 
 /**
  * Get storage provider name from environment variables without loading full config
+ * @param env - Optional environment record
  * @returns Provider name or undefined if not configured
  * @public
  *
@@ -336,13 +366,13 @@ export function isStorageConfigured(): boolean {
  * }
  * ```
  */
-export function getStorageProvider(): string | undefined {
-  const provider = getEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER);
+export function getStorageProvider(env?: EnvRecord): string | undefined {
+  const provider = getEnvVar(ENV_VARS.PELATFORM_S3_PROVIDER, env);
   if (provider) return provider;
 
   // Auto-detect
-  const hasCloudinaryVars = getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME);
-  const hasS3Vars = getEnvVar(ENV_VARS.PELATFORM_S3_BUCKET);
+  const hasCloudinaryVars = getEnvVar(ENV_VARS.PELATFORM_CLOUDINARY_CLOUD_NAME, env);
+  const hasS3Vars = getEnvVar(ENV_VARS.PELATFORM_S3_BUCKET, env);
 
   if (hasCloudinaryVars) return "cloudinary";
   if (hasS3Vars) return "aws"; // Default S3 provider
@@ -352,6 +382,7 @@ export function getStorageProvider(): string | undefined {
 
 /**
  * Validate if all required environment variables are set for S3
+ * @param env - Optional environment record
  * @returns Validation result with missing variables
  * @public
  *
@@ -369,7 +400,10 @@ export function getStorageProvider(): string | undefined {
  * }
  * ```
  */
-export function validateS3EnvVars(): { valid: boolean; missing: string[] } {
+export function validateS3EnvVars(env?: EnvRecord): {
+  valid: boolean;
+  missing: string[];
+} {
   const required = [
     ENV_VARS.PELATFORM_S3_PROVIDER,
     ENV_VARS.PELATFORM_S3_REGION,
@@ -378,7 +412,7 @@ export function validateS3EnvVars(): { valid: boolean; missing: string[] } {
     ENV_VARS.PELATFORM_S3_SECRET_ACCESS_KEY,
   ];
 
-  const missing = required.filter((key) => !getEnvVar(key));
+  const missing = required.filter((key) => !getEnvVar(key, env));
 
   return {
     valid: missing.length === 0,
@@ -388,6 +422,7 @@ export function validateS3EnvVars(): { valid: boolean; missing: string[] } {
 
 /**
  * Validate if all required environment variables are set for Cloudinary
+ * @param env - Optional environment record
  * @returns Validation result with missing variables
  * @public
  *
@@ -405,7 +440,7 @@ export function validateS3EnvVars(): { valid: boolean; missing: string[] } {
  * }
  * ```
  */
-export function validateCloudinaryEnvVars(): {
+export function validateCloudinaryEnvVars(env?: EnvRecord): {
   valid: boolean;
   missing: string[];
 } {
@@ -415,7 +450,7 @@ export function validateCloudinaryEnvVars(): {
     ENV_VARS.PELATFORM_CLOUDINARY_API_SECRET,
   ];
 
-  const missing = required.filter((key) => !getEnvVar(key));
+  const missing = required.filter((key) => !getEnvVar(key, env));
 
   return {
     valid: missing.length === 0,
@@ -425,6 +460,7 @@ export function validateCloudinaryEnvVars(): {
 
 /**
  * Get all available environment variables for debugging
+ * @param env - Optional environment record
  * @returns Object containing all storage-related env vars
  * @public
  *
@@ -442,11 +478,11 @@ export function validateCloudinaryEnvVars(): {
  * // }
  * ```
  */
-export function getStorageEnvVars(): Record<string, string | undefined> {
+export function getStorageEnvVars(env?: EnvRecord): Record<string, string | undefined> {
   const result: Record<string, string | undefined> = {};
 
   Object.values(ENV_VARS).forEach((key) => {
-    const value = getEnvVar(key);
+    const value = getEnvVar(key, env);
     if (value) {
       // Mask sensitive values
       if (key.includes("SECRET") || key.includes("API_SECRET")) {

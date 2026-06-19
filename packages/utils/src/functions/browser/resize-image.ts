@@ -57,11 +57,14 @@ export const resizeImage = (
     height: number;
     quality?: number;
   } = {
-    width: 1200, // Desired output width
-    height: 630, // Desired output height
-    quality: 1.0, // Set quality to maximum
+    width: 1200,
+    height: 630,
+    quality: 1.0,
   },
 ): Promise<string> => {
+  if (typeof document === "undefined") {
+    return Promise.reject(new Error("resizeImage only works in browser environments"));
+  }
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e: ProgressEvent<FileReader>) => {

@@ -3,17 +3,8 @@
  * Provides tools for building URLs with various options and formats
  */
 
-// import {
-//   ADMIN_DOMAIN,
-//   APP_DOMAIN,
-//   MAIN_DOMAIN,
-//   PORTAL_DOMAIN,
-// } from '../../constants';
-
-// import { punycode } from '../string';
-
 /**
- * Constructs a URL with various options including punycode support
+ * Constructs a URL with various options
  * Handles special cases like root paths and optional search parameters
  *
  * @param options - Configuration options for the URL
@@ -72,7 +63,6 @@ export function linkConstructor({
   }
 
   let url = `https://${domain}${key && key !== "_root" ? `/${key}` : ""}`;
-  // let url = `https://${punycode(domain)}${key && key !== '_root' ? `/${punycode(key)}` : ''}`;
 
   if (searchParams) {
     const search = new URLSearchParams();
@@ -87,7 +77,7 @@ export function linkConstructor({
 
 /**
  * Simplified version of linkConstructor with fewer options
- * Creates a basic URL without punycode encoding or search parameters
+ * Creates a basic URL without extra encoding or search parameters
  *
  * @param options - Configuration options for the URL
  * @param options.domain - The domain name

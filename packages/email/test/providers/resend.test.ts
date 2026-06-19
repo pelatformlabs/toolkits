@@ -4,11 +4,13 @@ import { createResend } from "../../src/index";
 
 describe("Resend Provider", () => {
   beforeEach(() => {
-    // Clear all PELATFORM_EMAIL environment variables
     delete process.env.PELATFORM_EMAIL_RESEND_API_KEY;
     delete process.env.PELATFORM_EMAIL_FROM_NAME;
     delete process.env.PELATFORM_EMAIL_FROM_EMAIL;
     delete process.env.PELATFORM_EMAIL_REPLY_TO;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.EMAIL_FROM_NAME;
+    delete process.env.EMAIL_FROM_EMAIL;
   });
 
   describe("createResend", () => {

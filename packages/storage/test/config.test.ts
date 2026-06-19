@@ -1,6 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { hasStorageConfig, isStorageConfigured, loadCloudinaryConfig, loadS3Config, loadStorageConfig } from "../src/config";
+import {
+  getStorageEnvVars,
+  getStorageProvider,
+  hasStorageConfig,
+  isStorageConfigured,
+  loadCloudinaryConfig,
+  loadS3Config,
+  loadStorageConfig,
+  validateCloudinaryEnvVars,
+  validateS3EnvVars,
+} from "../src/config";
 
 describe("Storage Configuration", () => {
   beforeEach(() => {
@@ -252,6 +262,134 @@ describe("Storage Configuration", () => {
       process.env.PELATFORM_S3_BUCKET = "test-bucket";
 
       expect(isStorageConfigured()).toBe(hasStorageConfig());
+    });
+  });
+
+  describe("validateS3EnvVars", () => {
+    it("should pass with all required env vars", () => {
+      process.env.PELATFORM_S3_PROVIDER = "aws";
+      process.env.PELATFORM_S3_ACCESS_KEY_ID = "key";
+      process.env.PELATFORM_S3_SECRET_ACCESS_KEY = "secret";
+      process.env.PELATFORM_S3_REGION = "us-east-1";
+      process.env.PELATFORM_S3_BUCKET = "bucket";
+
+      const result = validateS3EnvVars();
+      expect(result.valid).toBe(true);
+      expect(result.missing).toHaveLength(0);
+    });
+
+    it("should report missing fields", () => {
+      process.env.PELATFORM_S3_PROVIDER = "aws";
+      const result = validateS3EnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.missing.length).toBeGreaterThan(0);
+    });
+
+    it("should accept explicit EnvRecord", () => {
+      const result = validateS3EnvVars({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_ACCESS_KEY_ID: "key",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+        PELATFORM_S3_REGION: "us-east-1",
+        PELATFORM_S3_BUCKET: "bucket",
+      });
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe("validateCloudinaryEnvVars", () => {
+    it("should pass with all required env vars", () => {
+      process.env.PELATFORM_CLOUDINARY_CLOUD_NAME = "cloud";
+      process.env.PELATFORM_CLOUDINARY_API_KEY = "key";
+      process.env.PELATFORM_CLOUDINARY_API_SECRET = "secret";
+
+      const result = validateCloudinaryEnvVars();
+      expect(result.valid).toBe(true);
+      expect(result.missing).toHaveLength(0);
+    });
+
+    it("should report missing fields", () => {
+      process.env.PELATFORM_CLOUDINARY_CLOUD_NAME = "cloud";
+      const result = validateCloudinaryEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.missing.length).toBeGreaterThan(0);
+    });
+
+    it("should accept explicit EnvRecord", () => {
+      const result = validateCloudinaryEnvVars({
+        PELATFORM_CLOUDINARY_CLOUD_NAME: "cloud",
+        PELATFORM_CLOUDINARY_API_KEY: "key",
+        PELATFORM_CLOUDINARY_API_SECRET: "secret",
+      });
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe("EnvRecord (explicit env parameter)", () => {
+    it("loadS3Config should work with explicit env", () => {
+      const config = loadS3Config({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_ACCESS_KEY_ID: "key",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+        PELATFORM_S3_REGION: "us-east-1",
+        PELATFORM_S3_BUCKET: "bucket",
+      });
+      expect(config.provider).toBe("aws");
+      expect(config.bucket).toBe("bucket");
+    });
+
+    it("loadCloudinaryConfig should work with explicit env", () => {
+      const config = loadCloudinaryConfig({
+        PELATFORM_CLOUDINARY_CLOUD_NAME: "cloud",
+        PELATFORM_CLOUDINARY_API_KEY: "key",
+        PELATFORM_CLOUDINARY_API_SECRET: "secret",
+      });
+      expect(config.provider).toBe("cloudinary");
+      expect(config.cloudName).toBe("cloud");
+    });
+
+    it("loadStorageConfig should work with explicit env", () => {
+      const config = loadStorageConfig({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_ACCESS_KEY_ID: "key",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+        PELATFORM_S3_REGION: "us-east-1",
+        PELATFORM_S3_BUCKET: "bucket",
+      });
+      expect(config.provider).toBe("aws");
+    });
+
+    it("hasStorageConfig should work with explicit env", () => {
+      expect(hasStorageConfig({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_ACCESS_KEY_ID: "key",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+        PELATFORM_S3_REGION: "us-east-1",
+        PELATFORM_S3_BUCKET: "bucket",
+      })).toBe(true);
+      expect(hasStorageConfig({})).toBe(false);
+    });
+
+    it("getStorageProvider should work with explicit env", () => {
+      const provider = getStorageProvider({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_ACCESS_KEY_ID: "key",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+        PELATFORM_S3_REGION: "us-east-1",
+        PELATFORM_S3_BUCKET: "bucket",
+      });
+      expect(provider).toBe("aws");
+    });
+
+    it("getStorageEnvVars should work with explicit env", () => {
+      const vars = getStorageEnvVars({
+        PELATFORM_S3_PROVIDER: "aws",
+        PELATFORM_S3_BUCKET: "my-bucket",
+        PELATFORM_S3_SECRET_ACCESS_KEY: "secret",
+      });
+      expect(vars.PELATFORM_S3_PROVIDER).toBe("aws");
+      expect(vars.PELATFORM_S3_BUCKET).toBe("my-bucket");
+      expect(vars.PELATFORM_S3_SECRET_ACCESS_KEY).toContain("***");
     });
   });
 });

@@ -410,9 +410,9 @@ export function validateS3Key(key: string): { valid: boolean; error?: string } {
  * }
  * ```
  */
-export async function fileToBuffer(file: File): Promise<Buffer> {
+export async function fileToBuffer(file: File): Promise<Uint8Array> {
   const arrayBuffer = await file.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  return new Uint8Array(arrayBuffer);
 }
 
 /**
@@ -949,10 +949,19 @@ export function getFileName(key: string): string {
  * await storage.uploadFile('images/photo.jpg', imageBuffer);
  * ```
  */
-export function base64ToBuffer(base64: string): Buffer {
-  // Remove data URL prefix if present (e.g., "data:image/jpeg;base64,")
+export function base64ToBuffer(base64: string): Uint8Array {
   const cleanBase64 = base64.includes(",") ? base64.split(",")[1] : base64;
-  return Buffer.from(cleanBase64, "base64");
+
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(cleanBase64, "base64");
+  }
+
+  const binary = atob(cleanBase64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 
 /**
@@ -981,11 +990,21 @@ export function base64ToBuffer(base64: string): Buffer {
  * ```
  */
 export function bufferToBase64(
-  buffer: Buffer,
+  buffer: Uint8Array,
   includeDataUrl: boolean = false,
   mimeType?: string,
 ): string {
-  const base64 = buffer.toString("base64");
+  let base64: string;
+
+  if (typeof Buffer !== "undefined" && buffer instanceof Buffer) {
+    base64 = buffer.toString("base64");
+  } else {
+    let binary = "";
+    for (let i = 0; i < buffer.length; i++) {
+      binary += String.fromCharCode(buffer[i]);
+    }
+    base64 = btoa(binary);
+  }
 
   if (includeDataUrl) {
     if (!mimeType) {
@@ -1029,12 +1048,25 @@ export function bufferToBase64(
  * ```
  */
 export async function generateFileHash(
-  content: Buffer | string,
+  content: Uint8Array | string,
   algorithm: "md5" | "sha1" | "sha256" = "md5",
 ): Promise<string> {
-  const crypto = await import("node:crypto");
-  const hash = crypto.createHash(algorithm);
-  hash.update(content);
+  if (algorithm !== "md5" && typeof crypto !== "undefined" && crypto.subtle) {
+    const rawData = typeof content === "string" ? new TextEncoder().encode(content) : content;
+    const hashBuffer = await crypto.subtle.digest(
+      algorithm === "sha1" ? "SHA-1" : "SHA-256",
+      // biome-ignore lint/suspicious/noExplicitAny: <>
+      rawData as any,
+    );
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  const nodeCrypto = await import("node:crypto");
+  const hash = nodeCrypto.createHash(algorithm);
+  // biome-ignore lint/suspicious/noExplicitAny: <>
+  hash.update(content as any);
   return hash.digest("hex");
 }
 
@@ -1181,7 +1213,7 @@ export function validateBatchFiles(
  * }
  * ```
  */
-export function detectFileTypeFromContent(buffer: Buffer): string {
+export function detectFileTypeFromContent(buffer: Uint8Array): string {
   if (buffer.length === 0) {
     return "application/octet-stream";
   }
@@ -1190,7 +1222,7 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   const header = buffer.subarray(0, 16);
 
   // PDF
-  if (header.subarray(0, 4).toString() === "%PDF") {
+  if (header.subarray(0, 4).reduce((s, b) => s + String.fromCharCode(b), "") === "%PDF") {
     return "application/pdf";
   }
 
@@ -1200,27 +1232,28 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   }
 
   // PNG
-  if (header.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+  const pngSig = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (header.length >= 8 && header.slice(0, 8).every((b, i) => b === pngSig[i])) {
     return "image/png";
   }
 
   // GIF
-  if (
-    header.subarray(0, 6).toString() === "GIF87a" ||
-    header.subarray(0, 6).toString() === "GIF89a"
-  ) {
+  const gifHead = header.subarray(0, 6).reduce((s, b) => s + String.fromCharCode(b), "");
+  if (gifHead === "GIF87a" || gifHead === "GIF89a") {
     return "image/gif";
   }
 
   // WebP
-  if (header.subarray(0, 4).toString() === "RIFF" && header.subarray(8, 12).toString() === "WEBP") {
+  if (
+    header.subarray(0, 4).reduce((s, b) => s + String.fromCharCode(b), "") === "RIFF" &&
+    header.subarray(8, 12).reduce((s, b) => s + String.fromCharCode(b), "") === "WEBP"
+  ) {
     return "image/webp";
   }
 
   // ZIP (includes DOCX, XLSX, etc.)
   if (header[0] === 0x50 && header[1] === 0x4b && (header[2] === 0x03 || header[2] === 0x05)) {
-    // Check for Office documents
-    const zipContent = buffer.toString("utf8", 0, Math.min(buffer.length, 1000));
+    const zipContent = new TextDecoder().decode(buffer.slice(0, Math.min(buffer.length, 1000)));
     if (zipContent.includes("word/"))
       return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     if (zipContent.includes("xl/"))
@@ -1231,14 +1264,14 @@ export function detectFileTypeFromContent(buffer: Buffer): string {
   }
 
   // MP4
-  if (header.subarray(4, 8).toString() === "ftyp") {
+  if (new TextDecoder().decode(header.subarray(4, 8)) === "ftyp") {
     return "video/mp4";
   }
 
   // MP3
   if (
     (header[0] === 0xff && (header[1] & 0xe0) === 0xe0) ||
-    header.subarray(0, 3).toString() === "ID3"
+    new TextDecoder().decode(header.subarray(0, 3)) === "ID3"
   ) {
     return "audio/mpeg";
   }

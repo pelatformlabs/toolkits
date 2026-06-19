@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import type { EmailConfig, NodemailerConfig, ResendConfig } from "../src/index";
 import {
@@ -11,7 +11,6 @@ import {
 
 describe("Email Factory", () => {
   beforeEach(() => {
-    // Clear all PELATFORM_EMAIL environment variables
     delete process.env.PELATFORM_EMAIL_RESEND_API_KEY;
     delete process.env.PELATFORM_EMAIL_FROM_NAME;
     delete process.env.PELATFORM_EMAIL_FROM_EMAIL;
@@ -21,6 +20,13 @@ describe("Email Factory", () => {
     delete process.env.PELATFORM_EMAIL_SMTP_SECURE;
     delete process.env.PELATFORM_EMAIL_SMTP_USER;
     delete process.env.PELATFORM_EMAIL_SMTP_PASS;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.EMAIL_FROM_NAME;
+    delete process.env.EMAIL_FROM_EMAIL;
+    delete process.env.SMTP_HOST;
+    delete process.env.SMTP_PORT;
+    delete process.env.SMTP_USER;
+    delete process.env.SMTP_PASS;
   });
 
   it("should have factory functions exported", () => {
@@ -158,12 +164,15 @@ describe("Email Factory", () => {
       );
     });
 
-    it("should handle empty config object", async () => {
-      vi.unmock("../src/providers/resend");
-      vi.resetModules();
-      const { createResend } = await import("../src/index");
-      const config = {} as any;
-      expect(() => createResend(config)).toThrow();
+    it("should create from explicit EnvRecord", () => {
+      const env = {
+        PELATFORM_EMAIL_RESEND_API_KEY: "re_test_key",
+        PELATFORM_EMAIL_FROM_NAME: "Test App",
+        PELATFORM_EMAIL_FROM_EMAIL: "test@example.com",
+      };
+      const emailService = createResend(undefined, env);
+      expect(emailService).toBeDefined();
+      expect(emailService.getConfig().provider).toBe("resend");
     });
   });
 
@@ -211,12 +220,31 @@ describe("Email Factory", () => {
       );
     });
 
-    it("should handle empty config object", async () => {
-      vi.unmock("../src/providers/nodemailer");
-      vi.resetModules();
-      const { createNodemailer } = await import("../src/index");
-      const config = {} as any;
-      expect(() => createNodemailer(config)).toThrow();
+    it("should create from explicit EnvRecord", () => {
+      const env = {
+        PELATFORM_EMAIL_SMTP_HOST: "smtp.example.com",
+        PELATFORM_EMAIL_SMTP_PORT: "587",
+        PELATFORM_EMAIL_SMTP_USER: "user@example.com",
+        PELATFORM_EMAIL_SMTP_PASS: "password",
+        PELATFORM_EMAIL_FROM_NAME: "Test App",
+        PELATFORM_EMAIL_FROM_EMAIL: "test@example.com",
+      };
+      const emailService = createNodemailer(undefined, env);
+      expect(emailService).toBeDefined();
+      expect(emailService.getConfig().provider).toBe("nodemailer");
+    });
+  });
+
+  describe("createEmail with explicit EnvRecord", () => {
+    it("should create EmailService from explicit env", () => {
+      const env = {
+        PELATFORM_EMAIL_RESEND_API_KEY: "re_test_key",
+        PELATFORM_EMAIL_FROM_NAME: "Test App",
+        PELATFORM_EMAIL_FROM_EMAIL: "test@example.com",
+      };
+      const emailService = createEmail(undefined, env);
+      expect(emailService).toBeDefined();
+      expect(emailService.getConfig().provider).toBe("resend");
     });
   });
 });

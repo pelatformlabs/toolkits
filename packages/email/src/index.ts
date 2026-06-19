@@ -34,6 +34,7 @@ export { EmailService } from "./services";
 /**
  * Configuration loading and validation utilities
  */
+export type { EnvRecord } from "./config";
 export {
   getEmailEnvVars,
   hasEmailConfig,

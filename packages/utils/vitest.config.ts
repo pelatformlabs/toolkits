@@ -30,8 +30,6 @@ export default defineConfig({
         "src/functions/url/link-constructor.ts",
         "src/functions/url/url-conversion.ts",
         "src/functions/url/url-formatting.ts",
-        "src/functions/string/translations.ts",
-        "src/functions/string/punycode.ts",
         // Lower-priority datetime helpers (covered elsewhere)
         "src/functions/datetime/billing-utils.ts",
         "src/functions/datetime/format-datetime.ts",

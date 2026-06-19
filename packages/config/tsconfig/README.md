@@ -37,7 +37,7 @@ Base configuration for general TypeScript projects.
 **Features:**
 
 - Target: ES2022
-- Module: ESNext
+- Module: ES2022
 - Strict mode enabled
 - Module resolution: bundler
 - Allows synthetic default imports

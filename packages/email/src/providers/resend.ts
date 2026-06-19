@@ -184,7 +184,7 @@ export class ResendProvider implements IEmailProvider {
       if (options.attachments) {
         emailData.attachments = options.attachments.map((attachment) => ({
           filename: attachment.filename,
-          content: attachment.content,
+          content: attachment.content as string | Buffer,
           content_type: attachment.contentType,
           cid: attachment.cid,
         }));

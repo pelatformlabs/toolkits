@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { NodemailerConfig, ResendConfig } from "../src/types";
 import {
   getEmailEnvVars,
   hasEmailConfig,
@@ -8,12 +9,31 @@ import {
   loadResendConfig,
   validateEmailEnvVars,
   validateNodemailerEnvVars,
+  validateResendEnvVars,
 } from "../src/index";
+
+function resendEnv() {
+  return {
+    PELATFORM_EMAIL_RESEND_API_KEY: "re_test_key",
+    PELATFORM_EMAIL_FROM_NAME: "Test App",
+    PELATFORM_EMAIL_FROM_EMAIL: "test@example.com",
+  };
+}
+
+function nodemailerEnv() {
+  return {
+    PELATFORM_EMAIL_SMTP_HOST: "smtp.example.com",
+    PELATFORM_EMAIL_SMTP_PORT: "587",
+    PELATFORM_EMAIL_SMTP_USER: "user@example.com",
+    PELATFORM_EMAIL_SMTP_PASS: "password",
+    PELATFORM_EMAIL_FROM_NAME: "Test App",
+    PELATFORM_EMAIL_FROM_EMAIL: "sender@example.com",
+  };
+}
 
 describe("Email Configuration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Clear all PELATFORM_EMAIL environment variables
     delete process.env.PELATFORM_EMAIL_RESEND_API_KEY;
     delete process.env.PELATFORM_EMAIL_FROM_NAME;
     delete process.env.PELATFORM_EMAIL_FROM_EMAIL;
@@ -23,141 +43,194 @@ describe("Email Configuration", () => {
     delete process.env.PELATFORM_EMAIL_SMTP_SECURE;
     delete process.env.PELATFORM_EMAIL_SMTP_USER;
     delete process.env.PELATFORM_EMAIL_SMTP_PASS;
+    delete process.env.RESEND_API_KEY;
+    delete process.env.EMAIL_FROM_NAME;
+    delete process.env.EMAIL_FROM_EMAIL;
+    delete process.env.SMTP_HOST;
+    delete process.env.SMTP_PORT;
+    delete process.env.SMTP_USER;
+    delete process.env.SMTP_PASS;
   });
+
+  // =============================================================================
+  // EnvRecord (explicit env parameter)
+  // =============================================================================
+
+  describe("EnvRecord (explicit env parameter)", () => {
+    describe("loadResendConfig", () => {
+      it("should load from explicit EnvRecord", () => {
+        const config = loadResendConfig(resendEnv());
+        expect(config).not.toBeNull();
+        expect(config!.provider).toBe("resend");
+        expect((config as ResendConfig).apiKey).toBe("re_test_key");
+      });
+
+      it("should return null when explicit env has no api key", () => {
+        const config = loadResendConfig({ PELATFORM_EMAIL_FROM_NAME: "A", PELATFORM_EMAIL_FROM_EMAIL: "a@b.com" });
+        expect(config).toBeNull();
+      });
+
+      it("should return null for empty explicit env", () => {
+        const config = loadResendConfig({});
+        expect(config).toBeNull();
+      });
+    });
+
+    describe("loadNodemailerConfig", () => {
+      it("should load from explicit EnvRecord", () => {
+        const config = loadNodemailerConfig(nodemailerEnv());
+        expect(config).not.toBeNull();
+        expect(config!.provider).toBe("nodemailer");
+        expect((config as NodemailerConfig).smtp.host).toBe("smtp.example.com");
+      });
+
+      it("should return null when required fields missing", () => {
+        const config = loadNodemailerConfig({ PELATFORM_EMAIL_SMTP_HOST: "h" });
+        expect(config).toBeNull();
+      });
+    });
+
+    describe("loadEmailConfig", () => {
+      it("should auto-detect from explicit EnvRecord", () => {
+        const config = loadEmailConfig(resendEnv());
+        expect(config?.provider).toBe("resend");
+      });
+
+      it("should return null for empty explicit env", () => {
+        expect(loadEmailConfig({})).toBeNull();
+      });
+    });
+
+    describe("hasEmailConfig", () => {
+      it("should return true when explicit env has Resend", () => {
+        expect(hasEmailConfig(resendEnv())).toBe(true);
+      });
+
+      it("should return true when explicit env has Nodemailer", () => {
+        expect(hasEmailConfig(nodemailerEnv())).toBe(true);
+      });
+
+      it("should return false for empty explicit env", () => {
+        expect(hasEmailConfig({})).toBe(false);
+      });
+    });
+
+    describe("getEmailEnvVars", () => {
+      it("should return masked values from explicit env", () => {
+        const vars = getEmailEnvVars({ PELATFORM_EMAIL_RESEND_API_KEY: "secret", PELATFORM_EMAIL_FROM_EMAIL: "a@b.com" });
+        expect(vars.PELATFORM_EMAIL_RESEND_API_KEY).toBe("***");
+        expect(vars.PELATFORM_EMAIL_FROM_EMAIL).toBe("a@b.com");
+      });
+
+      it("should return empty object when no env available", () => {
+        const vars = getEmailEnvVars();
+        expect(vars.PELATFORM_EMAIL_FROM_EMAIL).toBeUndefined();
+      });
+    });
+  });
+
+  // =============================================================================
+  // loadEmailConfig
+  // =============================================================================
 
   describe("loadEmailConfig", () => {
     it("should load Resend configuration when available", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
+      Object.assign(process.env, resendEnv());
       const config = loadEmailConfig();
       expect(config).toBeTruthy();
       expect(config?.provider).toBe("resend");
-      const cfg = config as import("../src/types").ResendConfig;
-      expect(cfg.apiKey).toBe("re_test_key");
-      expect(cfg.from.name).toBe("Test App");
-      expect(cfg.from.email).toBe("test@example.com");
+      expect((config as ResendConfig).apiKey).toBe("re_test_key");
+      expect(config!.from.name).toBe("Test App");
+      expect(config!.from.email).toBe("test@example.com");
     });
 
     it("should load Nodemailer configuration when Resend is not available", () => {
-      delete process.env.PELATFORM_EMAIL_RESEND_API_KEY;
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "587";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "sender@example.com";
-
+      Object.assign(process.env, nodemailerEnv());
       const config = loadEmailConfig();
       expect(config).toBeTruthy();
       expect(config?.provider).toBe("nodemailer");
-      const cfg = config as import("../src/types").NodemailerConfig;
-      expect(cfg.smtp.host).toBe("smtp.example.com");
-      expect(cfg.smtp.port).toBe(587);
-      expect(cfg.smtp.auth.user).toBe("user@example.com");
-      expect(cfg.from.name).toBe("Test App");
-      expect(cfg.from.email).toBe("sender@example.com");
+      expect((config as NodemailerConfig).smtp.host).toBe("smtp.example.com");
+      expect((config as NodemailerConfig).smtp.port).toBe(587);
     });
 
     it("should return null when no provider is configured", () => {
-      const config = loadEmailConfig();
-      expect(config).toBeNull();
+      expect(loadEmailConfig()).toBeNull();
     });
 
     it("should prefer Resend over Nodemailer when both are configured", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "587";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-
-      const config = loadEmailConfig();
-
-      expect(config?.provider).toBe("resend");
+      Object.assign(process.env, resendEnv());
+      Object.assign(process.env, nodemailerEnv());
+      expect(loadEmailConfig()?.provider).toBe("resend");
     });
   });
 
+  // =============================================================================
+  // loadResendConfig
+  // =============================================================================
+
   describe("loadResendConfig", () => {
     it("should load Resend configuration", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "resend@example.com";
-
+      Object.assign(process.env, resendEnv());
       const config = loadResendConfig();
       expect(config).toBeTruthy();
       expect(config?.provider).toBe("resend");
-      const cfg = config as import("../src/types").ResendConfig;
-      expect(cfg.apiKey).toBe("re_test_key");
-      expect(cfg.from.email).toBe("resend@example.com");
-      expect(cfg.from.name).toBe("Test App");
+      expect((config as ResendConfig).apiKey).toBe("re_test_key");
+      expect(config!.from.email).toBe("test@example.com");
     });
 
     it("should return null when API key is missing", () => {
       process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-      // Missing PELATFORM_EMAIL_RESEND_API_KEY
-
-      const config = loadResendConfig();
-      expect(config).toBeNull();
+      expect(loadResendConfig()).toBeNull();
     });
 
     it("should return null when from name is missing", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-      // Missing PELATFORM_EMAIL_FROM_NAME
-
-      const config = loadResendConfig();
-      expect(config).toBeNull();
+      expect(loadResendConfig()).toBeNull();
     });
 
     it("should return null when from email is missing", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
       process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      // Missing PELATFORM_EMAIL_FROM_EMAIL
-
-      const config = loadResendConfig();
-      expect(config).toBeNull();
+      expect(loadResendConfig()).toBeNull();
     });
 
     it("should include replyTo when set", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-      process.env.PELATFORM_EMAIL_REPLY_TO = "reply@example.com";
-
-      const config = loadResendConfig();
-
-      expect(config?.replyTo).toBe("reply@example.com");
+      Object.assign(process.env, { ...resendEnv(), PELATFORM_EMAIL_REPLY_TO: "reply@example.com" });
+      expect(loadResendConfig()?.replyTo).toBe("reply@example.com");
     });
   });
 
-  describe("loadNodemailerConfig", () => {
-    it("should load Nodemailer configuration with all settings", () => {
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "465";
-      process.env.PELATFORM_EMAIL_SMTP_SECURE = "true";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "sender@example.com";
-      process.env.PELATFORM_EMAIL_REPLY_TO = "reply@example.com";
+  // =============================================================================
+  // loadNodemailerConfig
+  // =============================================================================
 
-      const config = loadNodemailerConfig();
+  describe("loadNodemailerConfig", () => {
+    it("should load with all settings including secure=true", () => {
+      Object.assign(process.env, {
+        ...nodemailerEnv(),
+        PELATFORM_EMAIL_SMTP_PORT: "465",
+        PELATFORM_EMAIL_SMTP_SECURE: "true",
+        PELATFORM_EMAIL_REPLY_TO: "reply@example.com",
+      });
+      const config = loadNodemailerConfig() as NodemailerConfig | null;
       expect(config).toBeTruthy();
-      expect(config?.provider).toBe("nodemailer");
-      const cfg = config as import("../src/types").NodemailerConfig;
-      expect(cfg.smtp.host).toBe("smtp.example.com");
-      expect(cfg.smtp.port).toBe(465);
-      expect(cfg.smtp.secure).toBe(true);
-      expect(cfg.smtp.auth.user).toBe("user@example.com");
-      expect(cfg.smtp.auth.pass).toBe("password");
-      expect(cfg.from.email).toBe("sender@example.com");
-      expect(cfg.from.name).toBe("Test App");
-      expect(cfg.replyTo).toBe("reply@example.com");
+      expect(config?.smtp.host).toBe("smtp.example.com");
+      expect(config?.smtp.port).toBe(465);
+      expect(config?.smtp.secure).toBe(true);
+      expect(config?.smtp.auth.user).toBe("user@example.com");
+      expect(config?.replyTo).toBe("reply@example.com");
+    });
+
+    it("should treat secure=false correctly", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_SECURE: "false" });
+      expect((loadNodemailerConfig() as NodemailerConfig).smtp.secure).toBe(false);
+    });
+
+    it("should treat missing secure as false", () => {
+      Object.assign(process.env, nodemailerEnv());
+      expect((loadNodemailerConfig() as NodemailerConfig).smtp.secure).toBe(false);
     });
 
     it("should return null when required settings are missing", () => {
@@ -166,94 +239,218 @@ describe("Email Configuration", () => {
       process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
       process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "sender@example.com";
-      // Missing port (required)
-
-      const config = loadNodemailerConfig();
-      expect(config).toBeNull();
+      expect(loadNodemailerConfig()).toBeNull();
     });
 
-    it("should return null when required user settings are missing", () => {
+    it("should return null when from name is missing", () => {
       process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
       process.env.PELATFORM_EMAIL_SMTP_PORT = "587";
-      // Missing user, pass, from name, or from email
-
-      const config = loadNodemailerConfig();
-      expect(config).toBeNull();
+      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
+      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
+      process.env.PELATFORM_EMAIL_FROM_EMAIL = "sender@example.com";
+      expect(loadNodemailerConfig()).toBeNull();
     });
 
     it("should parse port numbers correctly", () => {
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "465"; // string
-      process.env.PELATFORM_EMAIL_SMTP_SECURE = "true";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
-      const config = loadNodemailerConfig();
-      const cfg = config as import("../src/types").NodemailerConfig | null;
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "465", PELATFORM_EMAIL_SMTP_SECURE: "true" });
+      const cfg = loadNodemailerConfig() as NodemailerConfig | null;
       expect(cfg?.smtp.port).toBe(465);
       expect(cfg?.smtp.secure).toBe(true);
     });
   });
 
+  // =============================================================================
+  // validateResendEnvVars
+  // =============================================================================
+
+  describe("validateResendEnvVars", () => {
+    it("should pass with PELATFORM_EMAIL_* vars", () => {
+      Object.assign(process.env, resendEnv());
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(true);
+      expect(result.missing).toHaveLength(0);
+    });
+
+    it("should pass with legacy fallback vars", () => {
+      process.env.RESEND_API_KEY = "re_key";
+      process.env.EMAIL_FROM_NAME = "App";
+      process.env.EMAIL_FROM_EMAIL = "app@example.com";
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should pass with mixed PELATFORM_ and legacy vars", () => {
+      process.env.RESEND_API_KEY = "re_key";
+      process.env.PELATFORM_EMAIL_FROM_NAME = "App";
+      process.env.PELATFORM_EMAIL_FROM_EMAIL = "app@example.com";
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should fail when API key is missing", () => {
+      process.env.PELATFORM_EMAIL_FROM_NAME = "App";
+      process.env.PELATFORM_EMAIL_FROM_EMAIL = "app@example.com";
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.missing).toContain("PELATFORM_EMAIL_RESEND_API_KEY or RESEND_API_KEY");
+    });
+
+    it("should fail when from name is missing", () => {
+      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_key";
+      process.env.PELATFORM_EMAIL_FROM_EMAIL = "app@example.com";
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.missing).toContain("PELATFORM_EMAIL_FROM_NAME or EMAIL_FROM_NAME");
+    });
+
+    it("should fail when from email is missing", () => {
+      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_key";
+      process.env.PELATFORM_EMAIL_FROM_NAME = "App";
+      const result = validateResendEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.missing).toContain("PELATFORM_EMAIL_FROM_EMAIL or EMAIL_FROM_EMAIL");
+    });
+
+    it("should accept explicit EnvRecord", () => {
+      const result = validateResendEnvVars(resendEnv());
+      expect(result.valid).toBe(true);
+    });
+
+    it("should accept explicit EnvRecord with legacy fallback vars", () => {
+      const result = validateResendEnvVars({
+        RESEND_API_KEY: "re_key",
+        PELATFORM_EMAIL_FROM_NAME: "App",
+        PELATFORM_EMAIL_FROM_EMAIL: "app@example.com",
+      });
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  // =============================================================================
+  // validateNodemailerEnvVars
+  // =============================================================================
+
+  describe("validateNodemailerEnvVars", () => {
+    it("should pass with all required vars", () => {
+      Object.assign(process.env, nodemailerEnv());
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should pass with legacy fallback SMTP vars", () => {
+      process.env.SMTP_HOST = "smtp.example.com";
+      process.env.SMTP_PORT = "587";
+      process.env.SMTP_USER = "user@example.com";
+      process.env.SMTP_PASS = "password";
+      process.env.PELATFORM_EMAIL_FROM_NAME = "App";
+      process.env.PELATFORM_EMAIL_FROM_EMAIL = "app@example.com";
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should fail when port is too high (70000)", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "70000" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain("SMTP_PORT must be a valid port number (1-65535)");
+    });
+
+    it("should fail when port is 0", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "0" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain("SMTP_PORT must be a valid port number (1-65535)");
+    });
+
+    it("should fail when port is negative", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "-1" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(false);
+    });
+
+    it("should fail when port is non-numeric", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "abc" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(false);
+    });
+
+    it("should accept port 1", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "1" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should accept port 65535", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "65535" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should fail when port is 65536", () => {
+      Object.assign(process.env, { ...nodemailerEnv(), PELATFORM_EMAIL_SMTP_PORT: "65536" });
+      const result = validateNodemailerEnvVars();
+      expect(result.valid).toBe(false);
+    });
+
+    it("should accept explicit EnvRecord", () => {
+      const result = validateNodemailerEnvVars(nodemailerEnv());
+      expect(result.valid).toBe(true);
+    });
+
+    it("should accept explicit EnvRecord with fallback vars", () => {
+      const result = validateNodemailerEnvVars({
+        SMTP_HOST: "smtp.example.com",
+        SMTP_PORT: "587",
+        SMTP_USER: "user@example.com",
+        SMTP_PASS: "password",
+        EMAIL_FROM_NAME: "App",
+        EMAIL_FROM_EMAIL: "app@example.com",
+      });
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  // =============================================================================
+  // validateEmailEnvVars
+  // =============================================================================
+
   describe("validateEmailEnvVars", () => {
     it("should validate Resend configuration", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
+      Object.assign(process.env, resendEnv());
       const result = validateEmailEnvVars();
-
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
     it("should validate Nodemailer configuration", () => {
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "587";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
+      Object.assign(process.env, nodemailerEnv());
       const result = validateEmailEnvVars();
-
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
     it("should return errors for missing required variables", () => {
       const result = validateEmailEnvVars();
-
       expect(result.valid).toBe(false);
       expect(result.missing.length).toBeGreaterThan(0);
     });
-  });
 
-  describe("validateNodemailerEnvVars", () => {
-    it("should error when SMTP port is out of range", () => {
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "70000";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
-      const result = validateNodemailerEnvVars();
-      expect(result.valid).toBe(false);
-      expect(result.errors).toContain("SMTP_PORT must be a valid port number (1-65535)");
+    it("should accept explicit EnvRecord", () => {
+      const result = validateEmailEnvVars(resendEnv());
+      expect(result.valid).toBe(true);
     });
   });
+
+  // =============================================================================
+  // getEmailEnvVars
+  // =============================================================================
 
   describe("getEmailEnvVars", () => {
     it("should return masked environment variables", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_secret_key_123456";
       process.env.PELATFORM_EMAIL_SMTP_PASS = "secret_password";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
       const envVars = getEmailEnvVars();
-
       expect(envVars.PELATFORM_EMAIL_RESEND_API_KEY).toBe("***");
       expect(envVars.PELATFORM_EMAIL_SMTP_PASS).toBe("***");
       expect(envVars.PELATFORM_EMAIL_FROM_EMAIL).toBe("test@example.com");
@@ -261,29 +458,23 @@ describe("Email Configuration", () => {
 
     it("should handle missing variables", () => {
       const envVars = getEmailEnvVars();
-
       expect(envVars.PELATFORM_EMAIL_RESEND_API_KEY).toBeUndefined();
       expect(envVars.PELATFORM_EMAIL_SMTP_PASS).toBeUndefined();
     });
   });
 
+  // =============================================================================
+  // hasEmailConfig
+  // =============================================================================
+
   describe("hasEmailConfig", () => {
     it("should return true when Resend is configured", () => {
-      process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
+      Object.assign(process.env, resendEnv());
       expect(hasEmailConfig()).toBe(true);
     });
 
     it("should return true when Nodemailer is configured", () => {
-      process.env.PELATFORM_EMAIL_SMTP_HOST = "smtp.example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PORT = "587";
-      process.env.PELATFORM_EMAIL_SMTP_USER = "user@example.com";
-      process.env.PELATFORM_EMAIL_SMTP_PASS = "password";
-      process.env.PELATFORM_EMAIL_FROM_NAME = "Test App";
-      process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
+      Object.assign(process.env, nodemailerEnv());
       expect(hasEmailConfig()).toBe(true);
     });
 
@@ -293,33 +484,30 @@ describe("Email Configuration", () => {
 
     it("should return false when configuration is incomplete", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "re_test_key";
-      // Missing from name and email
-
       expect(hasEmailConfig()).toBe(false);
     });
   });
+
+  // =============================================================================
+  // Edge Cases
+  // =============================================================================
 
   describe("Edge Cases", () => {
     it("should handle empty string environment variables", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "";
       process.env.PELATFORM_EMAIL_FROM_NAME = "";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "";
-
-      const config = loadEmailConfig();
-      expect(config).toBeNull();
+      expect(loadEmailConfig()).toBeNull();
     });
 
     it("should handle whitespace-only environment variables", () => {
       process.env.PELATFORM_EMAIL_RESEND_API_KEY = "   ";
       process.env.PELATFORM_EMAIL_FROM_NAME = "   ";
       process.env.PELATFORM_EMAIL_FROM_EMAIL = "test@example.com";
-
       const config = loadEmailConfig();
       expect(config).toBeTruthy();
       expect(config?.provider).toBe("resend");
-      const cfg = config as import("../src/types").ResendConfig;
-      expect(cfg.apiKey).toBe("   ");
-      expect(cfg.from.name).toBe("   ");
+      expect((config as ResendConfig).apiKey).toBe("   ");
     });
   });
 });

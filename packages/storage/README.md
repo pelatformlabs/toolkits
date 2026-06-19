@@ -246,6 +246,39 @@ const uploadUrl = await storage.getPresignedUrl({
 - `listFolders(options)` - List folders
 - `folderExists(path)` - Check if folder exists
 
+## Runtime Compatibility
+
+| Export         | Node.js | Bun | CF Workers | Deno | Browser |
+| -------------- | ------- | --- | ---------- | ---- | ------- |
+| `.` (config)   | Yes     | Yes | Yes\*      | Yes  | Yes     |
+| `./helpers`    | Yes     | Yes | Yes        | Yes  | Yes     |
+| `./s3`         | Yes     | Yes | No         | Yes  | No      |
+| `./cloudinary` | Yes     | Yes | No         | Yes  | No      |
+
+\* Pass env via `EnvRecord`: `loadS3Config(myEnv)`.
+
+### `EnvRecord` Pattern
+
+All config functions accept an optional `env` parameter. On Node/Bun it defaults to `process.env`. On other runtimes, pass your environment explicitly:
+
+```typescript
+import { loadS3Config, loadCloudinaryConfig, hasStorageConfig } from "@pelatform/storage";
+
+// Cloudflare Workers
+const config = loadS3Config(ctx.env);
+
+// Deno
+const config = loadCloudinaryConfig(Deno.env.toObject());
+
+// Manual config (works everywhere, no env needed)
+const s3 = createS3({ provider: "aws", region: "us-east-1", ... });
+const cloudinary = createCloudinary({ provider: "cloudinary", cloudName: "...", ... });
+```
+
+> **Note**: `./s3` and `./cloudinary` subpaths require the AWS SDK or Cloudinary SDK
+> peer dependencies respectively, which are Node.js packages. Use these subpaths only in
+> Node.js, Bun, or Deno environments.
+
 ## Links
 
 - [npm Package](https://www.npmjs.com/package/@pelatform/storage)

@@ -1,16 +1,17 @@
+import type { EnvRecord } from "./config";
 import { loadS3Config } from "./config";
 import { S3Service } from "./services/s3";
-import type { S3Config, S3ProviderType } from "./types";
+import type { S3Config } from "./types";
 
+export type { EnvRecord } from "./config";
 // === SERVICE CLASSES ===
 export { S3Service } from "./services/s3";
-
-export const S3_PROVIDER = process.env.PELATFORM_S3_PROVIDER as S3ProviderType;
 
 // === MAIN FACTORY FUNCTIONS (Primary API) ===
 /**
  * Create S3 service using environment variables or manual configuration
  * @param config Optional S3 configuration. If not provided, loads from environment variables
+ * @param env - Optional environment record
  * @returns S3Service instance
  * @throws Error if configuration is invalid or environment variables are missing
  * @public
@@ -57,10 +58,11 @@ export const S3_PROVIDER = process.env.PELATFORM_S3_PROVIDER as S3ProviderType;
  */
 export function createS3(): S3Service;
 export function createS3(config: S3Config): S3Service;
-export function createS3(config?: S3Config): S3Service {
+export function createS3(config: S3Config, env: EnvRecord): S3Service;
+export function createS3(config?: S3Config, env?: EnvRecord): S3Service {
   if (config) {
     return new S3Service(config);
   }
-  const envConfig = loadS3Config();
+  const envConfig = loadS3Config(env);
   return new S3Service(envConfig);
 }

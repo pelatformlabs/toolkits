@@ -4,7 +4,6 @@ import { createNodemailer } from "../../src/index";
 
 describe("Nodemailer Provider", () => {
   beforeEach(() => {
-    // Clear all PELATFORM_EMAIL environment variables
     delete process.env.PELATFORM_EMAIL_SMTP_HOST;
     delete process.env.PELATFORM_EMAIL_SMTP_PORT;
     delete process.env.PELATFORM_EMAIL_SMTP_SECURE;
@@ -13,6 +12,12 @@ describe("Nodemailer Provider", () => {
     delete process.env.PELATFORM_EMAIL_FROM_NAME;
     delete process.env.PELATFORM_EMAIL_FROM_EMAIL;
     delete process.env.PELATFORM_EMAIL_REPLY_TO;
+    delete process.env.SMTP_HOST;
+    delete process.env.SMTP_PORT;
+    delete process.env.SMTP_USER;
+    delete process.env.SMTP_PASS;
+    delete process.env.EMAIL_FROM_NAME;
+    delete process.env.EMAIL_FROM_EMAIL;
   });
 
   describe("createNodemailer", () => {

@@ -11,6 +11,15 @@
   "bugs": {
     "url": "https://github.com/pelatformlabs/toolkits/issues"
   },
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.react.json",
+    "tsconfig.next.json",
+    "tsconfig.node.json",
+    "tsconfig.bun.json",
+    "tsconfig.dom.json",
+    "tsconfig.cf.json"
+  ],
   "keywords": [
     "pelatform",
     "typescript",

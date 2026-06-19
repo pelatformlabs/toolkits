@@ -272,4 +272,39 @@ describe("Provider Implementations", () => {
     expect(result.success).toBe(false);
     expect(result.error).toBe("smtp failed");
   });
+
+  it("NodemailerProvider constructor should throw when smtp is missing", async () => {
+    const { NodemailerProvider } = await import("../../src/providers/nodemailer");
+    expect(
+      () =>
+        new NodemailerProvider({
+          provider: "nodemailer",
+          from: { name: "App", email: "noreply@example.com" },
+        } as any),
+    ).toThrow("SMTP configuration is required for Nodemailer");
+  });
+
+  it("ResendProvider.send should handle unexpected thrown error", async () => {
+    vi.resetModules();
+    const sendMock = vi.fn().mockRejectedValue(new Error("network down"));
+    vi.doMock("resend", () => {
+      function MockResend() {
+        return { emails: { send: sendMock } };
+      }
+      return { Resend: MockResend };
+    });
+    const { ResendProvider } = await import("../../src/providers/resend");
+    const provider = new ResendProvider({
+      provider: "resend",
+      apiKey: "re_test_key",
+      from: { name: "App", email: "noreply@example.com" },
+    });
+    const result = await provider.send({
+      to: "user@example.com",
+      subject: "Err",
+      html: "<p>Err</p>",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toBe("network down");
+  });
 });

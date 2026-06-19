@@ -245,6 +245,22 @@ import { ... } from '@pelatform/utils/server';
 - **Browser**: Storage, cookies, DOM utilities (client-only)
 - **Number**: Formatting, currency, abbreviations
 
+## Runtime Compatibility
+
+| Export              | Node.js  | Bun      | CF Workers | Deno     | Browser   |
+| ------------------- | -------- | -------- | ---------- | -------- | --------- |
+| `.` (main)          | Yes      | Yes      | Yes        | Yes      | Yes       |
+| `./server`          | Yes      | Yes      | No         | Yes      | No        |
+| Browser functions\* | SSR-safe | SSR-safe | SSR-safe   | SSR-safe | Yes       |
+| Constants (env)     | Filled   | Filled   | Undefined  | Filled   | Undefined |
+
+\* `getHeight`, `resizeImage`, `resizeAndCropImage`, `loadImage`, `fileToBase64` — all have runtime guards, return `0` or throw descriptive errors when called outside browser.
+
+### Entry Points
+
+- **`@pelatform/utils`** — Safe everywhere. Constants use runtime-guarded `process.env` access (returns `undefined` when process is unavailable). Browser-only functions have SSR guards.
+- **`@pelatform/utils/server`** — Node.js / Bun / Deno only. Contains `generateRandomString` (node:crypto), JWT utilities (jsonwebtoken), password hashing (bcryptjs), and `parseDatetime` (chrono-node).
+
 ## Links
 
 - [npm Package](https://www.npmjs.com/package/@pelatform/utils)

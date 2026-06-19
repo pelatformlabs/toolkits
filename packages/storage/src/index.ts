@@ -4,13 +4,11 @@
  * Main exports for public API usage
  */
 
-// === MAIN FACTORY FUNCTIONS (Primary API) ===
-// export { createS3, createCloudinary, isStorageConfigured } from './factory';
-
 // === SERVICE CLASSES ===
 // export { S3Service } from './services/s3';
 // export { CloudinaryService } from './services/cloudinary';
 
+export type { EnvRecord } from "./config";
 // === CONFIGURATION UTILITIES ===
 export * from "./config";
 // === PUBLIC TYPES ===
