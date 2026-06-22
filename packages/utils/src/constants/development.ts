@@ -3,6 +3,8 @@
  * Provides environment detection and development-specific configuration values
  */
 
+import { getEnv } from "../env";
+
 /**
  * Node environment variable
  * Indicates the current environment in which the application is running (e.g., 'development', 'production', 'staging').
@@ -22,12 +24,7 @@
  *   : 'http://localhost:3001';
  * ```
  */
-const env =
-  typeof process !== "undefined" && process?.env
-    ? process.env
-    : ({} as Record<string, string | undefined>);
-
-export const NODE_ENV = env.NODE_ENV;
+export const NODE_ENV = getEnv("NODE_ENV");
 
 /**
  * Checks if the application is running in development mode
@@ -111,7 +108,7 @@ export const isProduction = NODE_ENV === "production";
  *   console.log(`Server running on port ${PORT}`);
  * });
  */
-export const PORT = env.PORT || "3000";
+export const PORT = getEnv("PORT") || "3000";
 
 /**
  * The port number on which the api application server runs.
@@ -122,7 +119,7 @@ export const PORT = env.PORT || "3000";
  *   console.log(`Server running on port ${API_PORT}`);
  * });
  */
-export const API_PORT = env.API_PORT || "3001";
+export const API_PORT = getEnv("API_PORT") || "3001";
 
 /**
  * Indicates whether debug mode is enabled (true in development mode).
@@ -143,4 +140,4 @@ export const DEBUG = !!isDevelopment;
  *   consola.debug('Debugging enabled');
  * }
  */
-export const LOG_LEVEL = env.LOG_LEVEL;
+export const LOG_LEVEL = getEnv("LOG_LEVEL");

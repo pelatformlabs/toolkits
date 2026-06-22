@@ -5,7 +5,6 @@
 ### Minor Changes
 
 - [`f6098b5`](https://github.com/pelatformlabs/toolkits/commit/f6098b5906b5520b6dbcdc91d7dc8760b7df5b19) Thanks [@lukmanaviccena](https://github.com/lukmanaviccena)! - Add cross-runtime support (Node.js, Bun, Cloudflare Workers, Deno, browser):
-
   - `EnvRecord` pattern: all config/factory functions accept optional `env` parameter
   - `process.env` access guarded via `typeof process !== "undefined"`
   - NodemailerProvider uses dynamic `await import()` to prevent crashes in non-Node runtimes

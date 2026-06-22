@@ -3,10 +3,7 @@
  * Centralizes all environment variable access for easier management and documentation.
  */
 
-const _env =
-  typeof process !== "undefined" && process?.env
-    ? process.env
-    : ({} as Record<string, string | undefined>);
+import { getEnv } from "../env";
 
 /**
  * Recaptcha site key for client-side verification.
@@ -15,7 +12,7 @@ const _env =
  * @example
  * <Recaptcha siteKey={NEXT_PUBLIC_RECAPTCHA_SITE_KEY} />
  */
-export const NEXT_PUBLIC_RECAPTCHA_SITE_KEY = _env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+export const NEXT_PUBLIC_RECAPTCHA_SITE_KEY = getEnv("NEXT_PUBLIC_RECAPTCHA_SITE_KEY");
 
 /**
  * Slack webhook URLs for different log types.
@@ -31,11 +28,11 @@ export const NEXT_PUBLIC_RECAPTCHA_SITE_KEY = _env.NEXT_PUBLIC_RECAPTCHA_SITE_KE
  * fetch(SLACK_WEBHOOKS.ALERTS, { method: 'POST', body: ... })
  */
 export const SLACK_WEBHOOKS = {
-  ALERTS: _env.SLACK_WEBHOOKS_HOOK_ALERTS,
-  CRON: _env.SLACK_WEBHOOKS_HOOK_CRON,
-  LINKS: _env.SLACK_WEBHOOKS_HOOK_LINKS,
-  SUBSCRIBERS: _env.SLACK_WEBHOOKS_HOOK_SUBSCRIBERS,
-  ERRORS: _env.SLACK_WEBHOOKS_HOOK_ERRORS,
+  ALERTS: getEnv("SLACK_WEBHOOKS_HOOK_ALERTS"),
+  CRON: getEnv("SLACK_WEBHOOKS_HOOK_CRON"),
+  LINKS: getEnv("SLACK_WEBHOOKS_HOOK_LINKS"),
+  SUBSCRIBERS: getEnv("SLACK_WEBHOOKS_HOOK_SUBSCRIBERS"),
+  ERRORS: getEnv("SLACK_WEBHOOKS_HOOK_ERRORS"),
 };
 
 /**

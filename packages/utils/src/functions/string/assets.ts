@@ -3,13 +3,10 @@
  * Provides helpers to construct absolute asset URLs against a configurable asset host.
  */
 
-const _e =
-  typeof process !== "undefined" && process?.env
-    ? process.env
-    : ({} as Record<string, string | undefined>);
+import { getEnv } from "../../env";
 
 const DEFAULT_ASSET_HOST =
-  _e.NEXT_PUBLIC_ASSETS_URL || _e.VITE_ASSETS_URL || "https://assets.pelatform.com";
+  getEnv("NEXT_PUBLIC_ASSETS_URL") || getEnv("VITE_ASSETS_URL") || "https://assets.pelatform.com";
 
 /**
  * Builds an absolute URL for a given asset path using the provided asset host (CDN) base.
@@ -49,7 +46,7 @@ const DEFAULT_ASSET_HOST =
  * ```
  */
 export function assetsUrl(path: string, host: string = DEFAULT_ASSET_HOST): string {
-  const env = _e.NEXT_PUBLIC_ASSETS_URL || _e.VITE_ASSETS_URL;
+  const env = getEnv("NEXT_PUBLIC_ASSETS_URL") || getEnv("VITE_ASSETS_URL");
   const BASE_HOST = env ?? host;
 
   if (!path || typeof path !== "string") {

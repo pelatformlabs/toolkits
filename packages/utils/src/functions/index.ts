@@ -24,6 +24,7 @@ export * from "./browser/storage";
 /************************************
  **** CRYPTO - Crypto and security
  *************************************/
+export * from "./crypto/base-id";
 export * from "./crypto/cuid";
 // export * from './crypto/generate-random-string'; // Commented out - not compatible with Edge Runtime
 export * from "./crypto/hash-string";
